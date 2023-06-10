@@ -12,6 +12,7 @@ import javax.swing.Box;
 import javax.swing.JSlider;
 import javax.swing.JButton;
 import javax.swing.JSeparator;
+import javax.swing.table.DefaultTableModel;
 
 public class PainelConsultaVendas extends JPanel {
 	private JTable table;
@@ -30,6 +31,13 @@ public class PainelConsultaVendas extends JPanel {
 		add(scrollPane);
 		
 		table = new JTable();
+		table.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"#", "Data", "Quantidade de itens", "Valor total"
+			}
+		));
 		scrollPane.setViewportView(table);
 		
 		JLabel lblNewLabel = new JLabel("Contêm: ");
@@ -101,6 +109,10 @@ public class PainelConsultaVendas extends JPanel {
 		JSeparator separator = new JSeparator();
 		separator.setBounds(57, 231, 496, 14);
 		add(separator);
+		
+		JButton btnNewButton_2 = new JButton("Ver produtos");
+		btnNewButton_2.setBounds(287, 566, 107, 21);
+		add(btnNewButton_2);
 
 	}
 }
