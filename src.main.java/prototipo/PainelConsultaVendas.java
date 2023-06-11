@@ -45,7 +45,7 @@ public class PainelConsultaVendas extends JPanel {
 		add(lblNewLabel);
 		
 		txtSkuDoProduto = new JTextField();
-		txtSkuDoProduto.setText("  SKU do produto");
+		txtSkuDoProduto.setText("  EAN do produto");
 		txtSkuDoProduto.setBounds(126, 72, 420, 20);
 		add(txtSkuDoProduto);
 		txtSkuDoProduto.setColumns(10);

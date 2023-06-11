@@ -33,6 +33,7 @@ public class DialogVerProdutos extends JDialog {
 	 * Create the dialog.
 	 */
 	public DialogVerProdutos() {
+		setTitle("Produtos incluídos");
 		setBounds(100, 100, 596, 379);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

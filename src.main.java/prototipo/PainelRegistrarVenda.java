@@ -41,7 +41,7 @@ public class PainelRegistrarVenda extends JPanel {
 		textField.setColumns(10);
 		
 		JTextPane txtpnProduto = new JTextPane();
-		txtpnProduto.setText("Produtos adicionados:\r\n\r\n#01\r\nNome do produto 1 - R$ 2,00\r\nQuantidade: 12 und\r\nTotal: R$ 24,00\r\n\r\n#02\r\nNome do produto 2 - R$ 5,00\r\nQuantidade: 1 und\r\nTotal: R$ 5,00\r\n\r\n\r\n");
+		txtpnProduto.setText("Produtos adicionados:\r\n\r\n#01\r\nNome do produto 1 - R$ 2,00\r\n213432534 (CÓDIGO EAN)\r\nQuantidade: 12 und\r\nTotal: R$ 24,00\r\n\r\n#02\r\nNome do produto 2 - R$ 5,00\r\n2341234123 (CÓDIGO EAN)\r\nQuantidade: 1 und\r\nTotal: R$ 5,00\r\n\r\n\r\n");
 		txtpnProduto.setBounds(45, 289, 334, 219);
 		add(txtpnProduto);
 		
@@ -70,7 +70,7 @@ public class PainelRegistrarVenda extends JPanel {
 		
 		JTextPane txtpnProdutoSelecionadoNome = new JTextPane();
 		txtpnProdutoSelecionadoNome.setEditable(false);
-		txtpnProdutoSelecionadoNome.setText("Produto selecionado:\r\nNome completo do produto exemplo\r\nSKU 654230345\r\nR$ 16,25\r\nQuantidade disponível: 35 und\r\n");
+		txtpnProdutoSelecionadoNome.setText("Produto selecionado:\r\nNome completo do produto exemplo\r\nEAN 654230345\r\nR$ 16,25\r\nQuantidade disponível: 35 und\r\n");
 		txtpnProdutoSelecionadoNome.setBounds(45, 128, 442, 73);
 		txtpnProdutoSelecionadoNome.setBackground(null);
 		add(txtpnProdutoSelecionadoNome);

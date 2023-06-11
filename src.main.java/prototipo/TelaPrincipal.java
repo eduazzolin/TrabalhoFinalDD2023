@@ -29,8 +29,9 @@ public class TelaPrincipal extends JFrame {
 	 * Create the frame.
 	 */
 	public TelaPrincipal() {
+		setTitle("Sistema gerenciador de farmácia");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1037, 666);
+		setBounds(100, 100, 885, 582);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -47,10 +48,13 @@ public class TelaPrincipal extends JFrame {
 		JMenu mnNewMenu_1 = new JMenu("Produtos e Estoque");
 		menuBar.add(mnNewMenu_1);
 		
-		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Gerenciar produtos");
+		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Cadastrar produtos");
 		mnNewMenu_1.add(mntmNewMenuItem_2);
 		
-		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Consultar estoque");
+		JMenuItem mntmNewMenuItem_4 = new JMenuItem("Modificar estoque");
+		mnNewMenu_1.add(mntmNewMenuItem_4);
+		
+		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Consultar produtos");
 		mnNewMenu_1.add(mntmNewMenuItem_3);
 	}
 }
