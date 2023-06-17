@@ -1,4 +1,4 @@
-package view;
+package view.paineis;
 
 import javax.swing.JPanel;
 import com.jgoodies.forms.layout.FormLayout;
@@ -15,7 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JTable;
 import java.awt.Dimension;
 
-public class PainelRegistrarVenda extends JPanel {
+public class PainelConsultarVenda extends JPanel {
 	private JTextField textField;
 	private DatePicker dtInicial;
 	private JTextField textField_1;
@@ -23,7 +23,6 @@ public class PainelRegistrarVenda extends JPanel {
 	private DatePicker dtFinal;
 	private JTable table;
 	private JLabel lbFiltrarConsulta;
-	private JSeparator separator1;
 	private JLabel lbContem;
 	private JLabel lbValorMinimo;
 	private JFormattedTextField ftfValorMinimo;
@@ -36,14 +35,15 @@ public class PainelRegistrarVenda extends JPanel {
 	private JSeparator separator2;
 	private JButton btnVerProdutos;
 	private JButton btnExportar;
+	private JSeparator separator;
 
 	/**
 	 * Create the panel.
 	 */
-	public PainelRegistrarVenda() {
+	public PainelConsultarVenda() {
 		setLayout(new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
-				FormSpecs.DEFAULT_COLSPEC,
+				ColumnSpec.decode("max(35dlu;default):grow"),
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("max(72dlu;default)"),
 				FormSpecs.RELATED_GAP_COLSPEC,
@@ -59,19 +59,19 @@ public class PainelRegistrarVenda extends JPanel {
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("max(50dlu;default)"),
 				FormSpecs.RELATED_GAP_COLSPEC,
-				FormSpecs.DEFAULT_COLSPEC,},
+				ColumnSpec.decode("max(35dlu;default):grow"),},
 			new RowSpec[] {
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				FormSpecs.DEFAULT_ROWSPEC,
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("max(15dlu;default)"),
-				RowSpec.decode("max(7dlu;default)"),
-				RowSpec.decode("8dlu"),
-				FormSpecs.DEFAULT_ROWSPEC,
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
+				RowSpec.decode("max(10dlu;default)"),
+				RowSpec.decode("max(20dlu;default)"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
+				RowSpec.decode("max(20dlu;default)"),
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("max(20dlu;default)"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("max(30dlu;default)"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
@@ -81,17 +81,17 @@ public class PainelRegistrarVenda extends JPanel {
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("max(7dlu;default)"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("default:grow"),
+				RowSpec.decode("max(226dlu;default):grow"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
+				RowSpec.decode("max(22dlu;default)"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,}));
+				RowSpec.decode("max(23dlu;default)"),}));
 		
 		lbFiltrarConsulta = new JLabel("Filtrar consulta:");
 		add(lbFiltrarConsulta, "4, 4, left, bottom");
 		
-		separator1 = new JSeparator();
-		add(separator1, "4, 5, 13, 1, default, center");
+		separator = new JSeparator();
+		add(separator, "4, 6, 13, 1, default, top");
 		
 		lbContem = new JLabel("Contêm:");
 		add(lbContem, "4, 7, right, default");
@@ -138,7 +138,7 @@ public class PainelRegistrarVenda extends JPanel {
 		add(lbResultados, "4, 15");
 		
 		separator2 = new JSeparator();
-		add(separator2, "4, 17, 13, 1");
+		add(separator2, "4, 17, 13, 1, default, top");
 		
 		table = new JTable();
 		add(table, "4, 19, 13, 3, fill, fill");
@@ -148,8 +148,6 @@ public class PainelRegistrarVenda extends JPanel {
 		
 		btnExportar = new JButton("Exportar");
 		add(btnExportar, "16, 23");
-		
-		
 		
 	}
 
