@@ -83,4 +83,18 @@ public class Produto {
 		this.estoque = estoque;
 	}
 
+	@Override
+	public String toString() {
+		return String.format("%-16s", this.getEan()) + " - " + this.getNome();
+	}
+	public String toStringDescricaoCompleta() {
+		return String.format(""
+				+ "Nome: %s\n"
+				+ "Descrição: %.150s\n"
+				+ "EAN: %s\n"
+				+ "Valor unitário: R$ %.2f\n"
+				+ "Quantidade disponível: %d und"
+				, this.getNome(), this.getDescricao(), this.getEan(), this.getValor(), this.getEstoque());
+	}
+
 }
