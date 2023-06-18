@@ -33,6 +33,7 @@ import controller.ProdutoController;
 import controller.VendaController;
 import model.exception.CampoInvalidoException;
 import model.exception.EstoqueInsuficienteException;
+import model.exception.VendaInvalidaException;
 import model.vo.ItemVenda;
 import model.vo.Produto;
 import model.vo.Venda;
@@ -239,13 +240,31 @@ public class PainelRegistrarVenda extends JPanel {
 		btnConfirmar = new JButton("Confirmar");
 		btnConfirmar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// TODO: Aqui a mágica acontece...
+				if (venda.getListaItemVenda() != null && venda.getListaItemVenda().size() > 0) {
+					try {
+						venda = vendaController.cadastrarVenda(venda);
+						JOptionPane.showMessageDialog(btAdicionar, "Venda cadastrada com sucesso!", "Aviso", 1);
+						limparPagina();
+					} catch (VendaInvalidaException e1) {
+						JOptionPane.showMessageDialog(btAdicionar, e1.getMessage(), "Aviso", 1);
+					}
+				}
 			}
 		});
 		btnConfirmar.setEnabled(false);
 		add(btnConfirmar, "14, 32, center, default");
 
 	}
+
+
+	protected void limparPagina() {
+		venda = new Venda();
+		tfTrecho.setText(VALOR_PADRAO_CAMPO_TRECHO);
+		cbSelecionarProduto.setModel(new DefaultComboBoxModel(new String[] {VALOR_PADRAO_COMBOBOX_SELECAO_PRODUTOS}));
+		tfQuantidade.setText("");
+		atualizarTpProdutosAdicionadosEValorTotal();
+	}
+
 
 	protected void acaoBotaoBuscar() {
 		if (tfTrecho.getText().equals(VALOR_PADRAO_CAMPO_TRECHO)) {
