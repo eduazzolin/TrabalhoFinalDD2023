@@ -83,6 +83,8 @@ public class Produto {
 		this.estoque = estoque;
 	}
 
+	
+	// Demais métodos:
 	@Override
 	public String toString() {
 		return String.format("%-16s", this.getEan()) + " - " + this.getNome();

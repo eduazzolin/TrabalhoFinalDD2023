@@ -8,7 +8,7 @@ public class Venda {
 	// Atributos:
 	private int id;
 	private LocalDateTime dataVenda;
-	private ArrayList<ItemVenda> listaItemVenda;
+	private ArrayList<ItemVenda> listaItemVenda = new ArrayList<>();
 
 	// Construtores:
 	public Venda(int id, LocalDateTime dataVenda, ArrayList<ItemVenda> listaItemVenda) {

@@ -5,33 +5,32 @@ public class ItemVenda {
 	// Atributos:
 	private int id;
 	private int idVenda;
-	private int idProduto;
+	private Produto produto;
 	private int qtde;
-	private int valorUnitario;
+	private double valorUnitario;
 
 	// Construtores:
-	public ItemVenda(int id, int idVenda, int idProduto, int qtde, int valorUnitario) {
+	public ItemVenda(Produto produto, int qtde, double valorUnitario) {
+		super();
+		this.produto = produto;
+		this.qtde = qtde;
+		this.valorUnitario = valorUnitario;
+	}
+
+	public ItemVenda(int id, int idVenda, Produto produto, int qtde, double valorUnitario) {
 		super();
 		this.id = id;
 		this.idVenda = idVenda;
-		this.idProduto = idProduto;
+		this.produto = produto;
 		this.qtde = qtde;
 		this.valorUnitario = valorUnitario;
 	}
 
-	public ItemVenda(int idVenda, int idProduto, int qtde, int valorUnitario) {
-		super();
-		this.idVenda = idVenda;
-		this.idProduto = idProduto;
-		this.qtde = qtde;
-		this.valorUnitario = valorUnitario;
-	}
-
+	// Getters e setters:
 	public ItemVenda() {
 		super();
 	}
 
-	// Getters e setters:
 	public int getId() {
 		return id;
 	}
@@ -48,12 +47,12 @@ public class ItemVenda {
 		this.idVenda = idVenda;
 	}
 
-	public int getIdProduto() {
-		return idProduto;
+	public Produto getProduto() {
+		return produto;
 	}
 
-	public void setIdProduto(int idProduto) {
-		this.idProduto = idProduto;
+	public void setProduto(Produto produto) {
+		this.produto = produto;
 	}
 
 	public int getQtde() {
@@ -64,12 +63,11 @@ public class ItemVenda {
 		this.qtde = qtde;
 	}
 
-	public int getValorUnitario() {
+	public double getValorUnitario() {
 		return valorUnitario;
 	}
 
-	public void setValorUnitario(int valorUnitario) {
+	public void setValorUnitario(double valorUnitario) {
 		this.valorUnitario = valorUnitario;
 	}
-
 }
