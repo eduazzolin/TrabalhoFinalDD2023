@@ -87,6 +87,7 @@ public class Produto {
 	public String toString() {
 		return String.format("%-16s", this.getEan()) + " - " + this.getNome();
 	}
+
 	public String toStringDescricaoCompleta() {
 		return String.format(""
 				+ "Nome: %s\n"
