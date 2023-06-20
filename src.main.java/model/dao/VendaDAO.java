@@ -6,12 +6,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
-import model.vo.Venda;
 import model.bo.ItemVendaBO;
+import model.seletor.VendaSeletor;
+import model.vo.Venda;
 
 public class VendaDAO {
 
+	ItemVendaDAO itemVendaDAO = new ItemVendaDAO();
+	
 	public Venda cadastrarVenda(Venda venda) {
 
 		String query = " INSERT INTO VENDA (DATA_VENDA) VALUES (?) ";
@@ -38,6 +42,94 @@ public class VendaDAO {
 		}
 		return venda;
 
+	}
+
+	public ArrayList<Venda> consultarComFiltros(VendaSeletor seletor) {
+		ArrayList<Venda> vendas = new ArrayList<Venda>();
+		Connection conn = Banco.getConnection();
+		String query = " SELECT * FROM VW_LISTA_PRODUTOS_POR_VENDA ";
+
+		if (seletor.temFiltro()) {
+			query += preencherFiltros(query, seletor);
+		}
+		if (seletor.temPaginacao()) {
+			query += " LIMIT " + seletor.getLimite() + " OFFSET " + seletor.getOffset();
+		}
+
+		PreparedStatement pstmt = Banco.getPreparedStatementWithPk(conn, query);
+		ResultSet resultado = null;
+
+		try {
+			resultado = pstmt.executeQuery();
+			while (resultado.next()) {
+				Venda vendaBuscada = montarVendaPeloResultSet(resultado);
+				vendas.add(vendaBuscada);
+			}
+		} catch (SQLException erro) {
+			System.out.println("Erro ao buscar vendas");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeResultSet(resultado);
+			Banco.closePreparedStatement(pstmt);
+			Banco.closeConnection(conn);
+		}
+		return vendas;
+
+	}
+
+	private Venda montarVendaPeloResultSet(ResultSet resultado) throws SQLException {
+		Venda v = new Venda();
+		v.setId(resultado.getInt("ID_VENDA"));
+		v.setDataVenda(LocalDateTime.parse(resultado.getString("DATA_VENDA"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) );
+		// TODO: v.setListaItemVenda(itemVendaDAO.consultarPorIdVenda(v.getId()));
+		
+		return v;
+	}
+
+	private String preencherFiltros(String query, VendaSeletor seletor) {
+		boolean primeiro = true;
+		if (seletor.getEan() != null && seletor.getEan().trim().length() > 0) {
+			if (primeiro) {
+				query += " WHERE ";
+			} else {
+				query += " AND ";
+			}
+			query += " ean = '" + seletor.getEan() + "' ";
+		}
+		if (seletor.getDataInicial() != null) {
+			if (primeiro) {
+				query += " WHERE ";
+			} else {
+				query += " AND ";
+			}
+			query += " DATA_VENDA >= '" + seletor.getDataInicial() + "'";
+		}
+		if (seletor.getDataFinal() != null) {
+			if (primeiro) {
+				query += " WHERE ";
+			} else {
+				query += " AND ";
+			}
+			query += " DATA_VENDA <= '" + seletor.getDataFinal() + "'";
+		}
+		if (seletor.getValorMaximo() != null) {
+			if (primeiro) {
+				query += " WHERE ";
+			} else {
+				query += " AND ";
+			}
+			query += " VALOR_TOTAL <= " + seletor.getValorMaximo();
+		}
+		if (seletor.getValorMinimo() != null) {
+			if (primeiro) {
+				query += " WHERE ";
+			} else {
+				query += " AND ";
+			}
+			query += " VALOR_TOTAL >= " + seletor.getValorMinimo();
+		}
+
+		return null;
 	}
 
 }

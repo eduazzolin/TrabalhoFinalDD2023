@@ -6,6 +6,14 @@ import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
+
+import controller.ItemVendaController;
+import controller.ProdutoController;
+import controller.VendaController;
+import model.seletor.VendaSeletor;
+import model.vo.Venda;
+import view.componentesExternos.JNumberFormatField;
+
 import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JLabel;
 import javax.swing.JSeparator;
@@ -14,9 +22,13 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import java.awt.Dimension;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.awt.event.ActionEvent;
+import view.componentesExternos.JNumberFormatField;
 
 public class PainelConsultarVenda extends JPanel {
-	private JTextField textField;
+	private JTextField tfEan;
 	private DatePicker dtInicial;
 	private JTextField textField_1;
 	private JTextField textField_2;
@@ -25,9 +37,9 @@ public class PainelConsultarVenda extends JPanel {
 	private JLabel lbFiltrarConsulta;
 	private JLabel lbContem;
 	private JLabel lbValorMinimo;
-	private JFormattedTextField ftfValorMinimo;
+	private JNumberFormatField ftfValorMinimo;
 	private JLabel lbValorMaximo;
-	private JFormattedTextField ftfValorMaximo;
+	private JNumberFormatField ftfValorMaximo;
 	private JLabel lbDataInicial;
 	private JLabel lbDataFinal;
 	private JButton btnConsultar;
@@ -36,7 +48,14 @@ public class PainelConsultarVenda extends JPanel {
 	private JButton btnVerProdutos;
 	private JButton btnExportar;
 	private JSeparator separator;
-
+	protected VendaSeletor seletor;
+	private VendaController vendaController = new VendaController();
+	private ItemVendaController itemVendaController = new ItemVendaController();
+	private ProdutoController produtoController = new ProdutoController();
+	private Double valorMaximo;
+	private Double valorMinimo;
+	
+	
 	/**
 	 * Create the panel.
 	 */
@@ -96,20 +115,20 @@ public class PainelConsultarVenda extends JPanel {
 		lbContem = new JLabel("Contêm:");
 		add(lbContem, "4, 7, right, default");
 		
-		textField = new JTextField();
-		add(textField, "6, 7, 11, 1, fill, default");
-		textField.setColumns(10);
+		tfEan = new JTextField();
+		add(tfEan, "6, 7, 11, 1, fill, default");
+		tfEan.setColumns(10);
 		
 		lbValorMinimo = new JLabel("Valor mínimo:");
 		add(lbValorMinimo, "4, 9, right, default");
 		
-		ftfValorMinimo = new JFormattedTextField();
+		ftfValorMinimo = new JNumberFormatField(2);
 		add(ftfValorMinimo, "6, 9, 3, 1, fill, default");
 		
 		lbValorMaximo = new JLabel("Valor máximo:");
 		add(lbValorMaximo, "10, 9, right, default");
 		
-		ftfValorMaximo = new JFormattedTextField();
+		ftfValorMaximo = new JNumberFormatField(2);
 		add(ftfValorMaximo, "12, 9, 5, 1, fill, default");
 		
 		lbDataInicial = new JLabel("Data inicial:");
@@ -131,6 +150,18 @@ public class PainelConsultarVenda extends JPanel {
 		add(dtFinal, "12, 11, 5, 1, fill, default");
 		
 		btnConsultar = new JButton("Consultar");
+		btnConsultar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				seletor = new VendaSeletor();
+				seletor.setDataFinal(dtFinal.getDate());
+				seletor.setDataInicial(dtInicial.getDate());
+				seletor.setEan(tfEan.getText());
+				seletor.setValorMaximo(Double.parseDouble(ftfValorMaximo.getText()));
+				seletor.setValorMinimo(Double.parseDouble(ftfValorMinimo.getText()));
+				// TODO: PAREI AQUI
+				ArrayList<Venda> listaVendas = vendaController.consultarComFiltros(seletor);
+			}
+		});
 		btnConsultar.setMaximumSize(new Dimension(50, 21));
 		add(btnConsultar, "14, 13, 3, 1");
 		

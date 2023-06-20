@@ -1,8 +1,12 @@
 package controller;
 
 import model.exception.VendaInvalidaException;
+import model.seletor.VendaSeletor;
 import model.vo.ItemVenda;
 import model.vo.Venda;
+
+import java.util.ArrayList;
+
 import model.bo.VendaBO;
 
 public class VendaController {
@@ -20,6 +24,11 @@ public class VendaController {
 			}
 		}
 		return venda;
+	}
+
+	public ArrayList<Venda> consultarComFiltros(VendaSeletor seletor) {
+		// tudo ok! 
+		return vendaBO.consultarComFiltros(seletor);
 	}
 
 }

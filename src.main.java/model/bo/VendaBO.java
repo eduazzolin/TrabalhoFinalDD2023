@@ -1,8 +1,12 @@
 package model.bo;
 
 import model.exception.VendaInvalidaException;
+import model.seletor.VendaSeletor;
 import model.vo.ItemVenda;
 import model.vo.Venda;
+
+import java.util.ArrayList;
+
 import model.dao.VendaDAO;
 
 public class VendaBO {
@@ -21,6 +25,11 @@ public class VendaBO {
 //			}
 //		}
 		return vendaDAO.cadastrarVenda(venda);
+	}
+
+	public ArrayList<Venda> consultarComFiltros(VendaSeletor seletor) {
+		// tudo ok!
+		return vendaDAO.consultarComFiltros(seletor);
 	}
 
 }
