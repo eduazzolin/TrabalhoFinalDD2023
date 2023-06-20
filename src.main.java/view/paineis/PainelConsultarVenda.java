@@ -71,6 +71,7 @@ public class PainelConsultarVenda extends JPanel {
 	private String[] nomesColunas = {  "Código", "Data", "Quantidade de itens", "Valor total" };
 	protected ArrayList<Venda> vendas;
 	protected Venda vendaSelecionada;
+	private JButton btnRemover;
 	
 	
 	/**
@@ -91,7 +92,9 @@ public class PainelConsultarVenda extends JPanel {
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("max(57dlu;default)"),
 				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("left:max(25dlu;default):grow"),
+				ColumnSpec.decode("default:grow"),
+				FormSpecs.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("left:max(25dlu;default)"),
 				FormSpecs.RELATED_GAP_COLSPEC,
 				FormSpecs.DEFAULT_COLSPEC,
 				FormSpecs.RELATED_GAP_COLSPEC,
@@ -131,13 +134,13 @@ public class PainelConsultarVenda extends JPanel {
 		add(lbFiltrarConsulta, "4, 4, left, bottom");
 		
 		separator = new JSeparator();
-		add(separator, "4, 6, 15, 1, default, top");
+		add(separator, "4, 6, 17, 1, default, top");
 		
 		lbContem = new JLabel("Contêm:");
 		add(lbContem, "4, 7, right, default");
 		
 		tfEan = new JTextField();
-		add(tfEan, "6, 7, 13, 1, fill, default");
+		add(tfEan, "6, 7, 15, 1, fill, default");
 		tfEan.setColumns(10);
 		
 		lbValorMinimo = new JLabel("Valor mínimo:");
@@ -150,7 +153,7 @@ public class PainelConsultarVenda extends JPanel {
 		add(lbValorMaximo, "12, 9, right, default");
 		
 		ftfValorMaximo = new JNumberFormatField(2);
-		add(ftfValorMaximo, "14, 9, 5, 1, fill, default");
+		add(ftfValorMaximo, "14, 9, 7, 1, fill, default");
 		
 		lbDataInicial = new JLabel("Data inicial:");
 		add(lbDataInicial, "4, 11, right, default");
@@ -168,7 +171,7 @@ public class PainelConsultarVenda extends JPanel {
 		
 		dtFinal = new DatePicker();
 		dtFinal.setBounds(160, 90, 515, 30);
-		add(dtFinal, "14, 11, 5, 1, fill, default");
+		add(dtFinal, "14, 11, 7, 1, fill, default");
 		
 		btnConsultar = new JButton("Consultar");
 		btnConsultar.addActionListener(new ActionListener() {
@@ -183,13 +186,13 @@ public class PainelConsultarVenda extends JPanel {
 			}
 		});
 		btnConsultar.setMaximumSize(new Dimension(50, 21));
-		add(btnConsultar, "16, 13, 3, 1");
+		add(btnConsultar, "18, 13, 3, 1");
 		
 		lbResultados = new JLabel("Resultados:");
 		add(lbResultados, "4, 17");
 		
 		separator2 = new JSeparator();
-		add(separator2, "4, 19, 15, 1, default, top");
+		add(separator2, "4, 19, 17, 1, default, top");
 		
 		table = new JTable();
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -206,7 +209,7 @@ public class PainelConsultarVenda extends JPanel {
 			}
 		});
 		table.setModel(new DefaultTableModel(new Object[][] { nomesColunas, }, nomesColunas));
-		add(table, "4, 21, 15, 3, fill, fill");
+		add(table, "4, 21, 17, 3, fill, fill");
 		
 		btnVoltar = new JButton("<< Voltar");
 		btnVoltar.setEnabled(false);
@@ -238,11 +241,21 @@ public class PainelConsultarVenda extends JPanel {
 				verProdutos.atualizarTabela(vendaSelecionada.getListaItemVenda());
 			}
 		});
+		
+		btnRemover = new JButton("Remover");
+		btnRemover.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO: IMPLEMENTAR 
+				// TODO: ARRUMAR ENABLE
+			}
+		});
+		btnRemover.setEnabled(false);
+		add(btnRemover, "16, 25");
 		btnVerProdutos.setEnabled(false);
-		add(btnVerProdutos, "16, 25");
+		add(btnVerProdutos, "18, 25");
 		
 		btnExportar = new JButton("Exportar");
-		add(btnExportar, "18, 25");
+		add(btnExportar, "20, 25");
 		
 	}
 
