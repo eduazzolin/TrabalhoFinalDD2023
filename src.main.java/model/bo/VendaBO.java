@@ -28,8 +28,13 @@ public class VendaBO {
 	}
 
 	public ArrayList<Venda> consultarComFiltros(VendaSeletor seletor) {
-		// tudo ok!
+		// tudo ok! passa adiante!
 		return vendaDAO.consultarComFiltros(seletor);
+	}
+
+	public int contarTotalRegistrosComFiltros(VendaSeletor seletor) {
+		// tudo ok! passa adiante!
+		return vendaDAO.contarTotalRegistrosComFiltros(seletor);
 	}
 
 }

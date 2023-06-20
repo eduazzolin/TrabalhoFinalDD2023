@@ -11,7 +11,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-public class DialogVerProdutos extends JDialog {
+public class ProtDialogVerProdutos extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTable table;
@@ -21,7 +21,7 @@ public class DialogVerProdutos extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			DialogVerProdutos dialog = new DialogVerProdutos();
+			ProtDialogVerProdutos dialog = new ProtDialogVerProdutos();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -32,7 +32,7 @@ public class DialogVerProdutos extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public DialogVerProdutos() {
+	public ProtDialogVerProdutos() {
 		setTitle("Produtos incluídos");
 		setBounds(100, 100, 596, 379);
 		getContentPane().setLayout(new BorderLayout());

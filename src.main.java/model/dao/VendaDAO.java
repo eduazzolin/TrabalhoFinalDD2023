@@ -47,11 +47,12 @@ public class VendaDAO {
 	public ArrayList<Venda> consultarComFiltros(VendaSeletor seletor) {
 		ArrayList<Venda> vendas = new ArrayList<Venda>();
 		Connection conn = Banco.getConnection();
-		String query = " SELECT * FROM VW_LISTA_PRODUTOS_POR_VENDA ";
+		String query = " SELECT ID_VENDA, DATA_VENDA FROM VW_LISTA_PRODUTOS_POR_VENDA ";
 
 		if (seletor.temFiltro()) {
-			query += preencherFiltros(query, seletor);
+			query = preencherFiltros(query, seletor);
 		}
+		query += "  GROUP BY ID_VENDA ORDER BY 1 DESC ";
 		if (seletor.temPaginacao()) {
 			query += " LIMIT " + seletor.getLimite() + " OFFSET " + seletor.getOffset();
 		}
@@ -76,6 +77,34 @@ public class VendaDAO {
 		return vendas;
 
 	}
+	
+	
+	public int contarTotalRegistrosComFiltros(VendaSeletor seletor) {
+		int total = 0;
+		Connection conexao = Banco.getConnection();
+		String sql = " select count(DISTINCT(ID_VENDA)) FROM VW_LISTA_PRODUTOS_POR_VENDA ";
+		
+		if(seletor.temFiltro()) {
+			sql = preencherFiltros(sql, seletor);
+		}
+		
+		PreparedStatement query = Banco.getPreparedStatement(conexao, sql);
+		try {
+			ResultSet resultado = query.executeQuery();
+			
+			if(resultado.next()) {
+				total = resultado.getInt(1);
+			}
+		}catch (Exception e) {
+			System.out.println("Erro contar o total de vendas" 
+					+ "\n Causa:" + e.getMessage());
+		}finally {
+			Banco.closePreparedStatement(query);
+			Banco.closeConnection(conexao);
+		}
+		
+		return total;
+	}
 
 	private Venda montarVendaPeloResultSet(ResultSet resultado) throws SQLException {
 		Venda v = new Venda();
@@ -95,6 +124,7 @@ public class VendaDAO {
 				query += " AND ";
 			}
 			query += " ean = '" + seletor.getEan() + "' ";
+			primeiro = false;
 		}
 		if (seletor.getDataInicial() != null) {
 			if (primeiro) {
@@ -103,6 +133,7 @@ public class VendaDAO {
 				query += " AND ";
 			}
 			query += " DATA_VENDA >= '" + seletor.getDataInicial() + "'";
+			primeiro = false;
 		}
 		if (seletor.getDataFinal() != null) {
 			if (primeiro) {
@@ -111,6 +142,7 @@ public class VendaDAO {
 				query += " AND ";
 			}
 			query += " DATA_VENDA <= '" + seletor.getDataFinal() + "'";
+			primeiro = false;
 		}
 		if (seletor.getValorMaximo() != null) {
 			if (primeiro) {
@@ -119,6 +151,7 @@ public class VendaDAO {
 				query += " AND ";
 			}
 			query += " VALOR_TOTAL <= " + seletor.getValorMaximo();
+			primeiro = false;
 		}
 		if (seletor.getValorMinimo() != null) {
 			if (primeiro) {
@@ -127,9 +160,10 @@ public class VendaDAO {
 				query += " AND ";
 			}
 			query += " VALOR_TOTAL >= " + seletor.getValorMinimo();
+			primeiro = false;
 		}
 
-		return null;
+		return query;
 	}
 
 }

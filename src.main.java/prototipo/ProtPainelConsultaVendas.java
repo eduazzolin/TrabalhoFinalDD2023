@@ -14,7 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JSeparator;
 import javax.swing.table.DefaultTableModel;
 
-public class PainelConsultaVendas extends JPanel {
+public class ProtPainelConsultaVendas extends JPanel {
 	private JTable table;
 	private JTextField txtSkuDoProduto;
 	private DatePicker dtNascimentoFinal;
@@ -23,7 +23,7 @@ public class PainelConsultaVendas extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public PainelConsultaVendas() {
+	public ProtPainelConsultaVendas() {
 		setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();

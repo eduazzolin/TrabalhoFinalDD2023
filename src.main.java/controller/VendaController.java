@@ -27,8 +27,13 @@ public class VendaController {
 	}
 
 	public ArrayList<Venda> consultarComFiltros(VendaSeletor seletor) {
-		// tudo ok! 
+		// tudo ok! passa adiante!
 		return vendaBO.consultarComFiltros(seletor);
+	}
+
+	public int contarTotalRegistrosComFiltros(VendaSeletor seletor) {
+		// tudo ok! passa adiante!
+		return vendaBO.contarTotalRegistrosComFiltros(seletor);
 	}
 
 }

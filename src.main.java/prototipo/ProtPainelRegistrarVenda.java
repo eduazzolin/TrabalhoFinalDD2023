@@ -10,7 +10,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
-public class PainelRegistrarVenda extends JPanel {
+public class ProtPainelRegistrarVenda extends JPanel {
 	private JTextField textField;
 	private JTextField txtFiltrar;
 	private JTextField textField_1;
@@ -19,7 +19,7 @@ public class PainelRegistrarVenda extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public PainelRegistrarVenda() {
+	public ProtPainelRegistrarVenda() {
 		setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Adicionar produtos:");
