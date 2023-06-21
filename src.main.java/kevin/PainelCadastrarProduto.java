@@ -26,7 +26,7 @@ public class PainelCadastrarProduto extends JPanel {
 		lblNewLabel.setBounds(21, 73, 95, 14);
 		add(lblNewLabel);
 		
-		JLabel lblNewLabel_1 = new JLabel("Descrissão:");
+		JLabel lblNewLabel_1 = new JLabel("Descrição:");
 		lblNewLabel_1.setBounds(21, 239, 95, 14);
 		add(lblNewLabel_1);
 		
