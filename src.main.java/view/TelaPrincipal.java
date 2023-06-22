@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.Container;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,7 +12,10 @@ import javax.swing.JMenuItem;
 import javax.swing.UIManager;
 
 import view.paineis.PainelRegistrarVenda;
+import view.paineis.PainelCadastrarProduto;
+import view.paineis.PainelConsultarEstoque;
 import view.paineis.PainelConsultarVenda;
+import view.paineis.PainelGerenciarProdutos;
 
 public class TelaPrincipal extends JFrame {
 
@@ -25,13 +29,14 @@ public class TelaPrincipal extends JFrame {
 	private JMenuItem mntmConsultarProdutos;
 	private PainelConsultarVenda painelConsultarVenda;
 	protected PainelRegistrarVenda painelRegistrarVenda;
-	
-	
+	protected PainelCadastrarProduto painelCadastrarProduto;
+	protected Container painelGerenciarProdutos;
+	protected Container painelConsultarEstoque;
+
 	/**
 	 * Launch the application.
 	 */
-	
-	
+
 	public static void main(String[] args) {
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -50,7 +55,6 @@ public class TelaPrincipal extends JFrame {
 		});
 	}
 
-
 	/**
 	 * Create the frame.
 	 */
@@ -58,13 +62,13 @@ public class TelaPrincipal extends JFrame {
 		setTitle("Sistema gerenciador de farmácia");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 848, 782);
-		
+
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
-		
+
 		mnVendas = new JMenu("Vendas");
 		menuBar.add(mnVendas);
-		
+
 		mntmRegistrarVendas = new JMenuItem("Registrar");
 		mntmRegistrarVendas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -74,7 +78,7 @@ public class TelaPrincipal extends JFrame {
 			}
 		});
 		mnVendas.add(mntmRegistrarVendas);
-		
+
 		mntmConsultarVendas = new JMenuItem("Consultar");
 		mntmConsultarVendas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -84,17 +88,43 @@ public class TelaPrincipal extends JFrame {
 			}
 		});
 		mnVendas.add(mntmConsultarVendas);
-		
+
 		mnProdutosEstoque = new JMenu("Produtos e Estoque");
 		menuBar.add(mnProdutosEstoque);
-		
+
 		mntmCadastrarProduto = new JMenuItem("Cadastrar produtos");
+		mntmCadastrarProduto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				painelCadastrarProduto = new PainelCadastrarProduto();
+				setContentPane(painelCadastrarProduto);
+				revalidate();
+
+			}
+		});
 		mnProdutosEstoque.add(mntmCadastrarProduto);
-		
-		mntmModificarEstoque = new JMenuItem("Modificar estoque");
+
+		mntmModificarEstoque = new JMenuItem("Gerenciar estoque");
+		mntmModificarEstoque.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				painelGerenciarProdutos = new PainelGerenciarProdutos();
+				setContentPane(painelGerenciarProdutos);
+				revalidate();
+				
+			}
+		});
 		mnProdutosEstoque.add(mntmModificarEstoque);
-		
+
 		mntmConsultarProdutos = new JMenuItem("Consultar produtos");
+		mntmConsultarProdutos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				painelConsultarEstoque = new PainelConsultarEstoque();
+				setContentPane(painelConsultarEstoque);
+				revalidate();
+			}
+		});
 		mnProdutosEstoque.add(mntmConsultarProdutos);
 	}
 }
