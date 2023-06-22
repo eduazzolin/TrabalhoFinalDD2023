@@ -1,4 +1,4 @@
-package kevin;
+package view.paineis;
 
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -52,6 +52,10 @@ public class PainelCadastrarProduto extends JPanel {
 		textField_3.setColumns(10);
 		textField_3.setBounds(139, 170, 287, 20);
 		add(textField_3);
+		
+		JButton btnNewButton = new JButton("Confirmar");
+		btnNewButton.setBounds(390, 353, 89, 23);
+		add(btnNewButton);
 
 	}
 }

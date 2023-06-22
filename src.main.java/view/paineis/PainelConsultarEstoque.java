@@ -1,4 +1,4 @@
-package kevin;
+package view.paineis;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
@@ -30,10 +30,6 @@ public class PainelConsultarEstoque extends JPanel {
 		JButton btnNewButton = new JButton("Consultar");
 		btnNewButton.setBounds(387, 140, 89, 23);
 		add(btnNewButton);
-		
-		JButton btnNewButton_1 = new JButton("Okay");
-		btnNewButton_1.setBounds(556, 409, 89, 23);
-		add(btnNewButton_1);
 		
 		JButton btnNewButton_2 = new JButton("Editar");
 		btnNewButton_2.setBounds(288, 140, 89, 23);

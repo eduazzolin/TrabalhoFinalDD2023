@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import model.bo.ProdutoBO;
 import model.vo.Produto;
 import model.exception.CampoInvalidoException;
+import model.exception.EstoqueInsuficienteException;
 
 public class ProdutoController {
 
@@ -19,4 +20,21 @@ public class ProdutoController {
 		return produtoBO.buscarProdutosPorNomeOuEan(nomeOuEan);
 	}
 
+	public ArrayList<Produto> buscarTodosProdutos() {
+		
+		return produtoBO.buscarTodosProdutos();
+	}
+
+	public int consultarEstoque(int id) {
+		
+		return produtoBO.consultarEstoque(id);
+	}
+
+	public boolean atualizarEstoque(int quantidadeDigitada, Produto produtoSelecionado) throws EstoqueInsuficienteException {
+		
+		if( produtoSelecionado.getEstoque() + quantidadeDigitada < 0) {
+			throw new EstoqueInsuficienteException("Estoque insuficiente");
+		}
+			return produtoBO.atualizarEstoque(quantidadeDigitada , produtoSelecionado);
+	}
 }
