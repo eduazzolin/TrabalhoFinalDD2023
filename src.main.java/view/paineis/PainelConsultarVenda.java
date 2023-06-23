@@ -257,6 +257,7 @@ public class PainelConsultarVenda extends JPanel {
 		
 	}
 
+	
 	/**
 	 * Busca os elementos no banco de dados com os filtros;
 	 * Atualiza a tabela;
@@ -416,8 +417,8 @@ public class PainelConsultarVenda extends JPanel {
 
 	/**
 	 * Valida se a seleção não está no cabeçalho (índice 0);
-	 * Atribui a venda selecionada ao objeto "vendaSelecionada" através do índice da linha e do índice do array "vendas"
-	 * Atualiza os botões "remover" e "VerProdutos"
+	 * Atribui a venda selecionada ao objeto "vendaSelecionada" através do índice da linha e do índice do array "vendas";
+	 * Atualiza os botões "remover" e "VerProdutos";
 	 */
 	private void acaoCliqueTabela() {
 		int indiceSelecionado = table.getSelectedRow();
