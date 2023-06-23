@@ -37,4 +37,9 @@ public class VendaBO {
 		return vendaDAO.contarTotalRegistrosComFiltros(seletor);
 	}
 
+	public boolean removerVenda(Venda v) {
+		// tudo ok! passa adiante!
+		return vendaDAO.removerVenda(v);
+	}
+
 }

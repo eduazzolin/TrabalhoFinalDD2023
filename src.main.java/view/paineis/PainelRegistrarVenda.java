@@ -37,6 +37,8 @@ import model.exception.VendaInvalidaException;
 import model.vo.ItemVenda;
 import model.vo.Produto;
 import model.vo.Venda;
+import javax.swing.SwingConstants;
+import java.awt.Color;
 
 public class PainelRegistrarVenda extends JPanel {
 	private JTextField tfTrecho;
@@ -67,11 +69,13 @@ public class PainelRegistrarVenda extends JPanel {
 			+ "Nome:\n"
 			+ "Descrição:\n"
 			+ "EAN:\n"
-			+ "Valor unitário: R$\n"
-			+ "Quantidade disponível:";
+			+ "Valor unitário: R$\n";
 	private Venda venda = new Venda();
 	private JScrollPane scrollPane;
 	private JTextField tfQuantidade;
+	private JLabel lbHashTag;
+	private JLabel lbEstoque;
+	protected Produto produtoSelecionado;
 	
 	/**
 	 * Create the panel.
@@ -91,7 +95,9 @@ public class PainelRegistrarVenda extends JPanel {
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("max(34dlu;default)"),
 				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("max(49dlu;default)"),
+				ColumnSpec.decode("max(12dlu;default)"),
+				FormSpecs.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("max(54dlu;default)"),
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("right:max(35dlu;default):grow"),},
 			new RowSpec[] {
@@ -104,7 +110,7 @@ public class PainelRegistrarVenda extends JPanel {
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				FormSpecs.DEFAULT_ROWSPEC,
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("max(74dlu;default)"),
+				RowSpec.decode("max(62dlu;default)"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("max(22dlu;default)"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
@@ -136,13 +142,13 @@ public class PainelRegistrarVenda extends JPanel {
 		add(lbAdicionarProdutos, "4, 4, 3, 1");
 		
 		tpDescricaoProdutoSelecionado = new JTextPane();
-		tpDescricaoProdutoSelecionado.setText(VALOR_PADRAO_DESCRICAO_PRODUTO_SELECIONADO);
-		add(tpDescricaoProdutoSelecionado, "4, 10, 11, 1, left, fill");
+		tpDescricaoProdutoSelecionado.setText("Produto Selecionado:\r\nNome:\r\nDescrição:\r\nEAN:\r\nValor unitário: R$");
+		add(tpDescricaoProdutoSelecionado, "4, 10, 13, 1, left, fill");
 		tpDescricaoProdutoSelecionado.setBackground(null);
 		
 		
 		separator = new JSeparator();
-		add(separator, "4, 5, 12, 1, default, top");
+		add(separator, "4, 5, 14, 1, default, top");
 		
 		tfTrecho = new JTextField();
 		tfTrecho.addMouseListener(new MouseAdapter() {
@@ -172,8 +178,17 @@ public class PainelRegistrarVenda extends JPanel {
 		cbSelecionarProduto.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
 				if (cbSelecionarProduto.getSelectedItem() != null && !cbSelecionarProduto.getSelectedItem().equals(VALOR_PADRAO_COMBOBOX_SELECAO_PRODUTOS)) {
-					tpDescricaoProdutoSelecionado.setText("Produto Selecionado:\n" + ((Produto) cbSelecionarProduto.getSelectedItem()).toStringDescricaoCompleta());
-					btAdicionar.setEnabled(true);
+					produtoSelecionado = (Produto) cbSelecionarProduto.getSelectedItem();
+					tpDescricaoProdutoSelecionado.setText("Produto Selecionado:\n" + produtoSelecionado.toStringDescricaoCompleta());
+					if (produtoSelecionado.getEstoque() > 0){
+						lbEstoque.setForeground(new Color(0, 128, 0));
+						lbEstoque.setText("Qtde disponível: " + produtoSelecionado.getEstoque());
+						btAdicionar.setEnabled(true);
+					} else {
+						lbEstoque.setForeground(new Color(128,0, 0));
+						lbEstoque.setText("FORA DE ESTOQUE");
+						btAdicionar.setEnabled(false);
+					}
 				} else {
 					tpDescricaoProdutoSelecionado.setText(VALOR_PADRAO_DESCRICAO_PRODUTO_SELECIONADO);
 					btAdicionar.setEnabled(false);
@@ -182,7 +197,7 @@ public class PainelRegistrarVenda extends JPanel {
 			}
 		});
 		cbSelecionarProduto.setModel(new DefaultComboBoxModel(new String[] {VALOR_PADRAO_COMBOBOX_SELECAO_PRODUTOS}));
-		add(cbSelecionarProduto, "4, 8, 11, 1, fill, default");
+		add(cbSelecionarProduto, "4, 8, 13, 1, fill, default");
 		
 		btnBuscar = new JButton("Buscar");
 		btnBuscar.addActionListener(new ActionListener() {
@@ -190,7 +205,7 @@ public class PainelRegistrarVenda extends JPanel {
 				acaoBotaoBuscar();
 			}
 		});
-		add(btnBuscar, "12, 6, 3, 1");
+		add(btnBuscar, "12, 6, 5, 1");
 
 		tfQuantidade = new JTextField();
 		add(tfQuantidade, "6, 12, fill, default");
@@ -200,11 +215,15 @@ public class PainelRegistrarVenda extends JPanel {
 		lbQuantidade = new JLabel("Quantidade:");
 		add(lbQuantidade, "4, 12, right, default");
 		
+		lbEstoque = new JLabel("");
+		lbEstoque.setForeground(new Color(128, 0, 0));
+		add(lbEstoque, "10, 12");
+		
 		lbResumoDaCompra = new JLabel("Resumo da compra:");
 		add(lbResumoDaCompra, "4, 16, 3, 1");
 		
 		separator_1 = new JSeparator();
-		add(separator_1, "4, 17, 11, 1, default, top");
+		add(separator_1, "4, 17, 13, 1, default, top");
 		
 		scrollPane = new JScrollPane();
 		add(scrollPane, "4, 18, 7, 17, fill, fill");
@@ -213,10 +232,14 @@ public class PainelRegistrarVenda extends JPanel {
 		scrollPane.setViewportView(tpProdutosAdicionados);
 		
 		lbRemoverProduto = new JLabel("Remover Produto:");
-		add(lbRemoverProduto, "14, 20, center, default");
+		add(lbRemoverProduto, "16, 20, center, default");
+		
+		lbHashTag = new JLabel("#");
+		lbHashTag.setHorizontalAlignment(SwingConstants.RIGHT);
+		add(lbHashTag, "14, 22, right, default");
 		
 		tfRemoverProduto = new JTextField();
-		add(tfRemoverProduto, "14, 22, center, default");
+		add(tfRemoverProduto, "16, 22, center, default");
 		tfRemoverProduto.setColumns(10);
 		
 		btnRemover = new JButton("Remover");
@@ -226,14 +249,14 @@ public class PainelRegistrarVenda extends JPanel {
 				acaoBotaoRemover();
 			}
 		});
-		add(btnRemover, "14, 24, center, default");
+		add(btnRemover, "16, 24, center, default");
 		
 		lbValorTotal = new JLabel("Valor total:");
-		add(lbValorTotal, "14, 28, center, default");
+		add(lbValorTotal, "16, 28, center, default");
 		
 		tfValorTotal = new JTextField();
 		tfValorTotal.setEditable(false);
-		add(tfValorTotal, "14, 30, center, default");
+		add(tfValorTotal, "16, 30, center, default");
 		tfValorTotal.setColumns(10);
 		tfValorTotal.setBackground(null);
 		
@@ -252,17 +275,8 @@ public class PainelRegistrarVenda extends JPanel {
 			}
 		});
 		btnConfirmar.setEnabled(false);
-		add(btnConfirmar, "14, 32, center, default");
+		add(btnConfirmar, "16, 32, center, default");
 
-	}
-
-
-	protected void limparPagina() {
-		venda = new Venda();
-		tfTrecho.setText(VALOR_PADRAO_CAMPO_TRECHO);
-		cbSelecionarProduto.setModel(new DefaultComboBoxModel(new String[] {VALOR_PADRAO_COMBOBOX_SELECAO_PRODUTOS}));
-		tfQuantidade.setText("");
-		atualizarTpProdutosAdicionadosEValorTotal();
 	}
 
 
@@ -271,9 +285,13 @@ public class PainelRegistrarVenda extends JPanel {
 			JOptionPane.showMessageDialog(btnBuscar, "Informe um trecho do nome ou EAN do produto.", "Campo inválido", 1);
 		} else {
 			try {
-				cbSelecionarProduto.setFont(new Font("Consolas", Font.PLAIN, 10));
 				listaProdutosComboBox = produtoController.buscarProdutosPorNomeOuEan(tfTrecho.getText());
-				cbSelecionarProduto.setModel(new DefaultComboBoxModel(listaProdutosComboBox.toArray()));
+				if (listaProdutosComboBox.size() > 0) {
+					cbSelecionarProduto.setFont(new Font("Consolas", Font.PLAIN, 10));
+					cbSelecionarProduto.setModel(new DefaultComboBoxModel(listaProdutosComboBox.toArray()));
+				} else {
+					JOptionPane.showMessageDialog(btnBuscar, "Nenhum produto encontrado", "Aviso", 1);
+				}
 			} catch (CampoInvalidoException e1) {
 				JOptionPane.showMessageDialog(btnBuscar, "Informe um trecho do nome ou EAN do produto.", "Campo inválido", 1);
 			}
@@ -295,8 +313,7 @@ public class PainelRegistrarVenda extends JPanel {
 			ItemVenda itemVenda = new ItemVenda(produtoSelecionado, quantidadeDigitada, produtoSelecionado.getValor());
 			venda.getListaItemVenda().add(itemVenda);
 			atualizarTpProdutosAdicionadosEValorTotal();
-			// TODO: ATUALIZAR ESTOQUE
-			
+			limparSelecao();
 		} catch (NumberFormatException e1) {
 			JOptionPane.showMessageDialog(btAdicionar, "Informe um número válido.", "Aviso", 1);
 		} catch (NullPointerException e1) {
@@ -309,6 +326,19 @@ public class PainelRegistrarVenda extends JPanel {
 			JOptionPane.showMessageDialog(btAdicionar, "Selecione um produto válido.", "Aviso", 1);
 			
 		}
+	}
+
+	private void limparSelecao() {
+		tfTrecho.setText(VALOR_PADRAO_CAMPO_TRECHO);
+		cbSelecionarProduto.setModel(new DefaultComboBoxModel(new String[] {VALOR_PADRAO_COMBOBOX_SELECAO_PRODUTOS}));
+		cbSelecionarProduto.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		tfQuantidade.setText("");
+	}
+	
+	protected void limparPagina() {
+		limparSelecao();
+		venda = new Venda();
+		atualizarTpProdutosAdicionadosEValorTotal();
 	}
 
 	protected void acaoBotaoRemover() {

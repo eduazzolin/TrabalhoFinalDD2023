@@ -28,12 +28,14 @@ import controller.ItemVendaController;
 import controller.ProdutoController;
 import controller.VendaController;
 import model.exception.CampoInvalidoException;
+import model.exception.VendaInvalidaException;
 import model.seletor.VendaSeletor;
 import model.vo.ItemVenda;
 import model.vo.Venda;
 import view.componentesExternos.JNumberFormatField;
 import view.dialogs.DialogVerProdutos;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 
 public class PainelConsultarVenda extends JPanel {
 	private JTextField tfEan;
@@ -43,7 +45,7 @@ public class PainelConsultarVenda extends JPanel {
 	private DatePicker dtFinal;
 	private JTable table;
 	private JLabel lbFiltrarConsulta;
-	private JLabel lbContem;
+	private JLabel lbEan;
 	private JLabel lbValorMinimo;
 	private JNumberFormatField ftfValorMinimo;
 	private JLabel lbValorMaximo;
@@ -128,7 +130,7 @@ public class PainelConsultarVenda extends JPanel {
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("max(22dlu;default)"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("max(23dlu;default):grow(2)"),}));
+				RowSpec.decode("max(23dlu;default):grow"),}));
 		
 		lbFiltrarConsulta = new JLabel("Filtrar consulta:");
 		add(lbFiltrarConsulta, "4, 4, left, bottom");
@@ -136,8 +138,8 @@ public class PainelConsultarVenda extends JPanel {
 		separator = new JSeparator();
 		add(separator, "4, 6, 17, 1, default, top");
 		
-		lbContem = new JLabel("Contêm:");
-		add(lbContem, "4, 7, right, default");
+		lbEan = new JLabel("EAN:");
+		add(lbEan, "4, 7, right, default");
 		
 		tfEan = new JTextField();
 		add(tfEan, "6, 7, 15, 1, fill, default");
@@ -176,13 +178,7 @@ public class PainelConsultarVenda extends JPanel {
 		btnConsultar = new JButton("Consultar");
 		btnConsultar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					paginaAtual = 1;
-					totalPaginas = 0;
-					buscarClientesComFiltros();
-				} catch (CampoInvalidoException e1) {
-					JOptionPane.showMessageDialog(btnConsultar, e1.getMessage(), "Campo inválido", 1);
-				}
+				acaoBotaoConsultar();
 			}
 		});
 		btnConsultar.setMaximumSize(new Dimension(50, 21));
@@ -202,9 +198,11 @@ public class PainelConsultarVenda extends JPanel {
 				int indiceSelecionado = table.getSelectedRow();
 				if (indiceSelecionado > 0) {
 					btnVerProdutos.setEnabled(true);
+					btnRemover.setEnabled(true);
 					vendaSelecionada = vendas.get(indiceSelecionado - 1);
 				} else {
 					btnVerProdutos.setEnabled(false);
+					btnRemover.setEnabled(false);
 				}
 			}
 		});
@@ -221,6 +219,7 @@ public class PainelConsultarVenda extends JPanel {
 		add(btnVoltar, "4, 25");
 		
 		lbPaginas = new JLabel("");
+		lbPaginas.setHorizontalAlignment(SwingConstants.CENTER);
 		add(lbPaginas, "6, 25");
 		
 		btnAvancar = new JButton("Avançar >>");
@@ -235,18 +234,14 @@ public class PainelConsultarVenda extends JPanel {
 		btnVerProdutos = new JButton("Ver produtos");
 		btnVerProdutos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DialogVerProdutos verProdutos = new DialogVerProdutos();
-				verProdutos.setLocationRelativeTo(null);
-				verProdutos.setVisible(true);
-				verProdutos.atualizarTabela(vendaSelecionada.getListaItemVenda());
+				acaoBotaoVerProdutos();
 			}
 		});
 		
 		btnRemover = new JButton("Remover");
 		btnRemover.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// TODO: IMPLEMENTAR 
-				// TODO: ARRUMAR ENABLE
+				acaoBotaoRemover();
 			}
 		});
 		btnRemover.setEnabled(false);
@@ -257,6 +252,39 @@ public class PainelConsultarVenda extends JPanel {
 		btnExportar = new JButton("Exportar");
 		add(btnExportar, "20, 25");
 		
+	}
+
+	protected void acaoBotaoConsultar() {
+		try {
+			paginaAtual = 1;
+			totalPaginas = 0;
+			buscarClientesComFiltros();
+		} catch (CampoInvalidoException e1) {
+			JOptionPane.showMessageDialog(btnConsultar, e1.getMessage(), "Campo inválido", 1);
+		}
+	}
+
+	protected void acaoBotaoRemover() {
+		try {
+			if(vendaController.removerVenda(vendaSelecionada)) {
+				JOptionPane.showMessageDialog(btnRemover, "Venda removida com sucesso!", "Sucesso", 1);
+				acaoBotaoConsultar();
+				btnRemover.setEnabled(false);
+				btnVerProdutos.setEnabled(false);
+			} else {
+				JOptionPane.showMessageDialog(btnRemover, "Erro ao remover venda", "Erro", 1);
+			}
+		} catch (VendaInvalidaException e) {
+			JOptionPane.showMessageDialog(btnRemover, e.getMessage(), "Erro", 1);
+		}
+		
+	}
+
+	protected void acaoBotaoVerProdutos() {
+		DialogVerProdutos verProdutos = new DialogVerProdutos();
+		verProdutos.setLocationRelativeTo(null);
+		verProdutos.setVisible(true);
+		verProdutos.atualizarTabela(vendaSelecionada.getListaItemVenda());
 	}
 
 	protected void acaoBotaoVoltar() {
@@ -328,12 +356,8 @@ public class PainelConsultarVenda extends JPanel {
 			Object[] novaLinhaDaTabela = new Object[4];
 			novaLinhaDaTabela[0] = v.getId();
 			novaLinhaDaTabela[1] = v.getDataVenda().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
-			for (ItemVenda iv : v.getListaItemVenda()) {
-				quantidadeProdutos += iv.getQtde();
-				valorTotal += (iv.getValorUnitario() * quantidadeProdutos);
-			}
-			novaLinhaDaTabela[2] = quantidadeProdutos;
-			novaLinhaDaTabela[3] = String.format("R$ %.2f", valorTotal);
+			novaLinhaDaTabela[2] = v.getQtdeItens();
+			novaLinhaDaTabela[3] = String.format("R$ %.2f", v.getValorTotal());
 
 			model.addRow(novaLinhaDaTabela);
 		}
@@ -351,7 +375,7 @@ public class PainelConsultarVenda extends JPanel {
 			totalPaginas++;
 		}
 		
-		lbPaginas.setText(paginaAtual + " / " + totalPaginas);
+		lbPaginas.setText(paginaAtual + " / " + (totalPaginas == 0 ? 1 : totalPaginas));
 	}
 	
 }

@@ -36,4 +36,11 @@ public class VendaController {
 		return vendaBO.contarTotalRegistrosComFiltros(seletor);
 	}
 
+	public boolean removerVenda(Venda v) throws VendaInvalidaException {
+		if (v == null || v.getId() == 0) {
+			throw new VendaInvalidaException("Venda inválida, selecione novamente.");
+		}
+		return vendaBO.removerVenda(v);
+	}
+
 }

@@ -39,4 +39,19 @@ public class ItemVendaDAO {
 		return iv;
 	}
 
+	public boolean removerItemVendaPorIdVenda(int id) {
+		String query = "DELETE FROM ITEM_VENDA WHERE ID_VENDA = " + id;
+		Connection conn = Banco.getConnection();
+		PreparedStatement pstmt = Banco.getPreparedStatement(conn, query);
+		
+		boolean resultado = false;
+		try {
+			resultado = (pstmt.executeUpdate() > 0);
+		} catch (SQLException e) {
+			System.out.println("Erro ao excluir item_venda.");
+			System.out.println("Erro: " + e.getMessage());
+		}
+		return resultado;
+	}
+
 }

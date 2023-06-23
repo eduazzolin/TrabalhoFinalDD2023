@@ -85,8 +85,9 @@ public class PainelGerenciarProdutos extends JPanel {
 						lblQuantidade.setText(String.valueOf(quantidadeEstoque));
 						produtoscombo = produtoController.buscarTodosProdutos();
 						comboBox.setModel(new DefaultComboBoxModel(produtoscombo.toArray()));
+			     	} else {
+			     		JOptionPane.showMessageDialog(btAdicionar, "Erro ao atualizar estoque.", "Aviso", 1);
 			     	}
-					// TODO: ATUALIZAR ESTOQUE
 					
 				} catch (NumberFormatException e1) {
 					JOptionPane.showMessageDialog(btAdicionar, "Informe um número válido.", "Aviso", 1);

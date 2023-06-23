@@ -87,17 +87,16 @@ public class Produto {
 	// Demais métodos:
 	@Override
 	public String toString() {
-		return String.format("%-16s", this.getEan()) + " - " + this.getNome();
+		return String.format("%-16s [%s] %s", this.getEan(),(this.getEstoque()>0 ? "+" : "-"), this.getNome());
 	}
 
 	public String toStringDescricaoCompleta() {
 		return String.format(""
 				+ "Nome: %s\n"
-				+ "Descrição: %.150s\n"
+				+ "Descrição: %.200s\n"
 				+ "EAN: %s\n"
 				+ "Valor unitário: R$ %.2f\n"
-				+ "Quantidade disponível: %d und"
-				, this.getNome(), this.getDescricao(), this.getEan(), this.getValor(), this.getEstoque());
+				, this.getNome(), this.getDescricao(), this.getEan(), this.getValor());
 	}
 
 }
