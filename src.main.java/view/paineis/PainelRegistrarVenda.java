@@ -261,10 +261,12 @@ public class PainelRegistrarVenda extends JPanel {
 
 
 	/**
-	 * Valida se o campo trecho está preenchido comparando com o valor padrão e vendo se não está vazio (controller);
+	 * Busca no banco os produtos com os filtros informados e atribui os resultados ao comboBox:
+	 * 
+	 * Valida se o campo trecho está preenchido, comparando com o valor padrão e vendo se não está vazio (controller);
 	 * Busca no banco os produtos com os filtros informados e atribui os resultados ao ArrayList "listaProdutosComboBox";
-	 * Atribui o ArrayList "listaProdutosComboBox" ao comboBox;
 	 * Altera a fonte do comboBox para uma fonte de largura fixa para acomodar melhor a formatação do texto;
+	 * Atribui o ArrayList "listaProdutosComboBox" ao comboBox;
 	 * Se não retornar nada, exibe mensagem;
 	 */
 	protected void acaoBotaoBuscar() {
@@ -282,14 +284,17 @@ public class PainelRegistrarVenda extends JPanel {
 			} catch (CampoInvalidoException e1) {
 				JOptionPane.showMessageDialog(btnBuscar, "Informe um trecho do nome ou EAN do produto.", "Campo inválido", 1);
 			}
-		}		
+		}
+		// TODO: SUBTRAIR DO ESTOQUE OS PRODUTOS QUE JÁ ESTÃO NO CARRINHO!
 	}
 
 	/**
+	 * Adiciona o produto selecionado à venda:
+	 * 
 	 * Valida a quantidade digitada convertendo para Integer e capturando ParseException caso não seja número;
 	 * Valida a quantidade digitada conferindo se é > 0;
 	 * Valida a quantidade digitada conferindo se é <= estoque;
-	 * Valida se a seleção do comboBox está correta;
+	 * Valida se a seleção do comboBox está correta (ClassCastException);
 	 * Cria um objeto ItemVenda a partir do produtoSelecionado e da quantidade digitada;
 	 * Adiciona o  objeto ItemVenda ao ArrayList "listaItemVenda" do objeto Venda "venda";
 	 * Atualiza o textPane "produtosAdicionados" e o textField "valorTotal";
@@ -299,6 +304,9 @@ public class PainelRegistrarVenda extends JPanel {
 		int quantidadeDigitada = 0;
 		try {
 			quantidadeDigitada = Integer.parseInt(tfQuantidade.getText());
+			if (cbSelecionarProduto.getSelectedItem() == null) {
+				throw new ClassCastException();
+			}
 			if (quantidadeDigitada > ((Produto) cbSelecionarProduto.getSelectedItem()).getEstoque()){
 				throw new EstoqueInsuficienteException("");
 			}
@@ -332,6 +340,8 @@ public class PainelRegistrarVenda extends JPanel {
 	}
 	
 	/**
+	 * Reseta a página inteira:
+	 * 
 	 * Atribui o valor padrão ao textField do trecho e ao comboBox;
 	 * Reseta o objeto Venda "venda";
 	 * Atualiza o restante dos elementos baseado na venda vazia;
@@ -343,6 +353,8 @@ public class PainelRegistrarVenda extends JPanel {
 	}
 
 	/**
+	 * Remove o produto selecionado da venda:
+	 * 
 	 * Valida o textField remover convertendo para Integer e capturando ParseException caso não seja número;
 	 * Valida o textField remover conferindo se está dentro da quantidade de itens;
 	 * Valida se a venda não está vazia;
@@ -369,6 +381,8 @@ public class PainelRegistrarVenda extends JPanel {
 	}
 
 	/**
+	 * Atualiza o textPane de produtos adicionados e o valor total:
+	 * 
 	 * Atualiza o textPane de produtos adicionados e o textField valorTotal baseado no ArrayList listaItemVenda do objeto venda;
 	 * Ativa ou desativa os botões "remover" e "confirmar" baseado na quantidade de itens no ArrayList;
 	 */
@@ -413,6 +427,8 @@ public class PainelRegistrarVenda extends JPanel {
 	}
 
 	/**
+	 * Detecta alterações na seleção do comboBox para atribuir o item ao objeto Produto "produtoSelecionado":
+	 * 
 	 * Valida se a seleção está em um objeto Produto;
 	 * Atribui o produto selecionado ao objeto Produto "produtoSelecionado";
 	 * Atualiza o textPane de descrição do produto;
@@ -438,8 +454,10 @@ public class PainelRegistrarVenda extends JPanel {
 	}
 
 	/**
-	 * Valida se a venda não está vazia;
 	 * Cadastra a venda (e os itemVenda) no banco;
+	 * 
+	 * Valida se a venda não está vazia;
+	 * Cadastra no banco;
 	 * Limpa a tela;
 	 */
 	private void acaoBotaoConfirmar() {

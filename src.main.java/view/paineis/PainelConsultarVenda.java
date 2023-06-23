@@ -257,26 +257,29 @@ public class PainelConsultarVenda extends JPanel {
 		
 	}
 
-	
 	/**
-	 * Busca os elementos no banco de dados com os filtros;
+	 * Busca os elementos no banco de dados com os filtros:
+	 * 
+	 * Valida se os campos "máximos" são maiores que os "mínimos".
+	 * Busca no banco com os filtros;
 	 * Atualiza a tabela;
 	 * Atualiza a paginação;
-	 * Valida se os campos "máximos" são maiores que os "mínimos".
 	 */
 	protected void acaoBotaoConsultar() {
 		try {
 			paginaAtual = 1;
 			totalPaginas = 0;
-			buscarClientesComFiltrosEAtualizarTabela();
+			buscarVendasComFiltrosEAtualizarTabela();
 		} catch (CampoInvalidoException e1) {
 			JOptionPane.showMessageDialog(btnConsultar, e1.getMessage(), "Campo inválido", 1);
 		}
 	}
 
 	/**
-	 * Remove do banco de dados a venda selecionada e seus respectivos ITEM_VENDAs;
+	 * Remove do banco de dados a venda selecionada e seus respectivos ITEM_VENDAs:
+	 * 
 	 * Valida se a seleção está funcionando;
+	 * Remove do banco de dados;
 	 * Atualiza a tabela e os botões "remover" e "ver produtos".
 	 */
 	protected void acaoBotaoRemover() {
@@ -296,8 +299,9 @@ public class PainelConsultarVenda extends JPanel {
 	}
 
 	/**
+	 * Abre o dialog "DialogVerProdutos" que consiste em uma tabela que mostra os produtos incluídos na venda:
+	 * 
 	 * Abre o dialog "DialogVerProdutos" passando o ArrayList "listaItemVenda" do objeto vendaSelecionada;
-	 * O dialog consiste em uma tabela que mostra os produtos incluídos na venda;
 	 */
 	protected void acaoBotaoVerProdutos() {
 		DialogVerProdutos verProdutos = new DialogVerProdutos();
@@ -307,20 +311,40 @@ public class PainelConsultarVenda extends JPanel {
 	}
 
 	/**
+	 * Retorna à página anterior:
+	 * 
 	 * Diminui 1 no atributo paginaAtual e refaz a busca;
 	 * Atualiza a tabela, o label de página e os botões "avançar" e "voltar";
 	 */
 	protected void acaoBotaoVoltar() {
 		paginaAtual--;
 		try {
-			buscarClientesComFiltrosEAtualizarTabela();
+			buscarVendasComFiltrosEAtualizarTabela();
 		} catch (CampoInvalidoException e) {
 			JOptionPane.showMessageDialog(btnConsultar, e.getMessage(), "Campo inválido", 1);
 		}
 		lbPaginas.setText(paginaAtual + " / " + totalPaginas);
 		ativarOuDesativarBotoesVoltarAvancar();
 	}
-
+	
+	/**
+	 * Avança para a página seguinte:
+	 * 
+	 * Aumenta 1 no atributo paginaAtual e refaz a busca;
+	 * Atualiza a tabela, o label de página e os botões "avançar" e "voltar";
+	 */
+	protected void acaoBotaoAvancar() {
+		paginaAtual++;
+		try {
+			buscarVendasComFiltrosEAtualizarTabela();
+		} catch (CampoInvalidoException e) {
+			JOptionPane.showMessageDialog(btnConsultar, e.getMessage(), "Campo inválido", 1);
+		}
+		lbPaginas.setText(paginaAtual + " / " + totalPaginas);
+		ativarOuDesativarBotoesVoltarAvancar();
+		
+	}
+	
 	/**
 	 * Ativa ou desativa os botões de navegação a partir da validação das páginas.
 	 */
@@ -329,23 +353,11 @@ public class PainelConsultarVenda extends JPanel {
 		btnAvancar.setEnabled(paginaAtual < totalPaginas);
 	}
 
-	/**
-	 * Aumenta 1 no atributo paginaAtual e refaz a busca;
-	 * Atualiza a tabela, o label de página e os botões "avançar" e "voltar";
-	 */
-	protected void acaoBotaoAvancar() {
-		paginaAtual++;
-		try {
-			buscarClientesComFiltrosEAtualizarTabela();
-		} catch (CampoInvalidoException e) {
-			JOptionPane.showMessageDialog(btnConsultar, e.getMessage(), "Campo inválido", 1);
-		}
-		lbPaginas.setText(paginaAtual + " / " + totalPaginas);
-		ativarOuDesativarBotoesVoltarAvancar();
-		
-	}
+
 
 	/**
+	 * Busca vendas no banco com os filtros e atribui o resultado à tabela:
+	 * 
 	 * Cria um objeto seletor a partir dos filtros inseridos e atributos de paginação;
 	 * Valida os valores máximos dos filtros para confirmar se eles não são menores que os mínimos;
 	 * Se os campos de valor estiverem com 0 (valor padrão) atribui "null";
@@ -353,7 +365,7 @@ public class PainelConsultarVenda extends JPanel {
 	 * Atualiza a tabela, a paginação e os botões de navegação;
 	 * @throws CampoInvalidoException;
 	 */
-	private void buscarClientesComFiltrosEAtualizarTabela() throws CampoInvalidoException {
+	private void buscarVendasComFiltrosEAtualizarTabela() throws CampoInvalidoException {
 		// criação do seletor e validação:
 		seletor = new VendaSeletor();
 		seletor.setLimite(TAMANHO_PAGINA);
@@ -387,6 +399,8 @@ public class PainelConsultarVenda extends JPanel {
 	}
 	
 	/**
+	 * Atualiza a tabela baseada no ArrayList "vendas":
+	 * 
 	 * Limpa a tabela deixando somente o cabeçalho padrão;
 	 * Pega a referência do model da tabela e adiciona nele uma linha para cada Venda no ArrayList vendas;
 	 */
@@ -404,6 +418,8 @@ public class PainelConsultarVenda extends JPanel {
 	}
 	
 	/**
+	 * Calcula e atualiza os atributos e labels de paginação:
+	 * 
 	 * Busca no banco quantas linhas retornam com os filtros;
 	 * Calcula o total de páginas dividindo o total de linhas pelo tamanho da página
 	 * Caso o resultado seja um número decimal, o total é arredondado para cima;
@@ -416,6 +432,8 @@ public class PainelConsultarVenda extends JPanel {
 	}
 
 	/**
+	 * Atribui a venda da linha selecionada ao objeto "vendaSelecionada":
+	 * 
 	 * Valida se a seleção não está no cabeçalho (índice 0);
 	 * Atribui a venda selecionada ao objeto "vendaSelecionada" através do índice da linha e do índice do array "vendas";
 	 * Atualiza os botões "remover" e "VerProdutos";
