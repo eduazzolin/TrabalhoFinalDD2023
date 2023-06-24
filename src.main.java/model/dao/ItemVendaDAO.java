@@ -6,12 +6,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import model.bo.ItemVendaBO;
 import model.vo.ItemVenda;
+import model.vo.Produto;
 
 public class ItemVendaDAO {
 
+	ProdutoDAO produtoDAO = new ProdutoDAO();
+	
 	public ItemVenda cadastrarItemVenda(ItemVenda iv) {
 		String query = " INSERT INTO ITEM_VENDA (ID_VENDA, ID_PRODUTO, QTDE_PRODUTO, VALOR_UNITARIO) VALUES (?, ?, ?, ?) ";
 		Connection conn = Banco.getConnection();
@@ -52,6 +56,32 @@ public class ItemVendaDAO {
 			System.out.println("Erro: " + e.getMessage());
 		}
 		return resultado;
+	}
+
+	public ArrayList<ItemVenda> consultarPorIdVenda(int idVenda) {
+		ArrayList<ItemVenda> itemVendas = new ArrayList<>();
+		Connection conn = Banco.getConnection();
+		String query = " select * from item_venda where id_venda = " + idVenda;
+
+		PreparedStatement stmt = Banco.getPreparedStatement(conn, query);
+		try {
+			ResultSet resultado = stmt.executeQuery();
+			while (resultado.next()) {
+				ItemVenda ivBuscado = new ItemVenda();
+				ivBuscado.setId(resultado.getInt("ID_ITEM_VENDA"));
+				ivBuscado.setIdVenda(idVenda);
+				ivBuscado.setProduto(produtoDAO.buscarProdutoPorId(resultado.getInt("ID_PRODUTO")));
+				ivBuscado.setQtde(resultado.getInt("QTDE_PRODUTO"));
+				ivBuscado.setValorUnitario(resultado.getDouble("VALOR_UNITARIO"));
+				itemVendas.add(ivBuscado);
+			}
+		} catch (Exception e) {
+			System.out.println("Erro ao buscar item_venda. \n Causa:" + e.getMessage());
+		} finally {
+			Banco.closePreparedStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return itemVendas;
 	}
 
 }

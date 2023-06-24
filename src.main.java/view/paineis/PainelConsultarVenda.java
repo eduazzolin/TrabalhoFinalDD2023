@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -249,9 +250,35 @@ public class PainelConsultarVenda extends JPanel {
 		});
 		
 		btnExportar = new JButton("Exportar");
+		btnExportar.setEnabled(false);
 		add(btnExportar, "20, 25");
 		btnExportar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				int escolhaTipoRelatorio = JOptionPane.showOptionDialog(null, "Qual tipo de relatório você deseja gerar?", "Tipo de relatório", 
+						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null,  
+						new String[] {"Relatório somente com vendas", "Relatório com vendas e lista de produtos"}, null);
+				if (escolhaTipoRelatorio >= 0) {
+					JFileChooser janelaSelecaoDestinoArquivo = new JFileChooser();
+					janelaSelecaoDestinoArquivo.setDialogTitle("Selecione um destino para a planilha...");
+					int opcaoSelecionada = janelaSelecaoDestinoArquivo.showSaveDialog(null);
+					if (opcaoSelecionada == JFileChooser.APPROVE_OPTION) {
+						String caminhoEscolhido = janelaSelecaoDestinoArquivo.getSelectedFile().getAbsolutePath();
+						String resultado = "Erro ao gerar relatório.";
+						try {
+							if (escolhaTipoRelatorio == 0) {
+								resultado = vendaController.gerarPlanilhaSomenteVendas(vendas, caminhoEscolhido);
+							} 
+							if (escolhaTipoRelatorio == 1) {
+								resultado = vendaController.gerarPlanilhaVendasComProdutos(vendas, caminhoEscolhido);
+							}
+							JOptionPane.showMessageDialog(null, resultado);
+						} catch (CampoInvalidoException e1) {
+							JOptionPane.showConfirmDialog(null, e1.getMessage(), "Atenção", JOptionPane.WARNING_MESSAGE);
+						} catch (VendaInvalidaException e1) {
+						JOptionPane.showConfirmDialog(null, e1.getMessage(), "Atenção", JOptionPane.WARNING_MESSAGE);
+						}
+					}
+				}
 			}
 		});
 		
@@ -306,8 +333,9 @@ public class PainelConsultarVenda extends JPanel {
 	protected void acaoBotaoVerProdutos() {
 		DialogVerProdutos verProdutos = new DialogVerProdutos();
 		verProdutos.setLocationRelativeTo(null);
+		verProdutos.atualizarTabelaELabel(vendaSelecionada);
 		verProdutos.setVisible(true);
-		verProdutos.atualizarTabela(vendaSelecionada.getListaItemVenda());
+		
 	}
 
 	/**
@@ -362,7 +390,7 @@ public class PainelConsultarVenda extends JPanel {
 	 * Valida os valores máximos dos filtros para confirmar se eles não são menores que os mínimos;
 	 * Se os campos de valor estiverem com 0 (valor padrão) atribui "null";
 	 * Busca no banco com os filtros e atribui o resultado ao ArrayList "vendas";
-	 * Atualiza a tabela, a paginação e os botões de navegação;
+	 * Atualiza a tabela, a paginação e os botões de navegação e exportar;
 	 * @throws CampoInvalidoException;
 	 */
 	private void buscarVendasComFiltrosEAtualizarTabela() throws CampoInvalidoException {
@@ -389,13 +417,14 @@ public class PainelConsultarVenda extends JPanel {
 		atualizarTabela();
 		atualizarQuantidadePaginas();
 		ativarOuDesativarBotoesVoltarAvancar();
+		btnExportar.setEnabled(vendas != null && vendas.size()>0);
 	}
 
 	/**
 	 * Deixa a tabela somente com o cabeçalho padrão;
 	 */
 	private void limparTabela() {
-		table.setModel(new DefaultTableModel(new Object[][] { nomesColunas, }, nomesColunas));
+		table.setModel(new DefaultTableModel(new Object[][] { nomesColunas }, nomesColunas));
 	}
 	
 	/**

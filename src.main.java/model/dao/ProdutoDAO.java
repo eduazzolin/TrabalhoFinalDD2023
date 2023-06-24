@@ -62,6 +62,32 @@ public class ProdutoDAO {
 		}
 		return produtos;
 	}
+	
+	public Produto buscarProdutoPorId(int id) {
+		Produto produtoBuscado = null;
+		Connection conn = Banco.getConnection();
+		String query = " select * from produto where id_produto = " + id;
+		
+		PreparedStatement stmt = Banco.getPreparedStatement(conn, query);
+		try {
+			ResultSet resultado = stmt.executeQuery();
+			while (resultado.next()) {
+				produtoBuscado = new Produto();
+				produtoBuscado.setId(resultado.getInt("ID_PRODUTO"));
+				produtoBuscado.setNome(resultado.getString("NOME"));
+				produtoBuscado.setDescricao(resultado.getString("DESCRICAO"));
+				produtoBuscado.setEan(resultado.getString("EAN"));
+				produtoBuscado.setEstoque(resultado.getInt("ESTOQUE"));
+				produtoBuscado.setValor(resultado.getDouble("VALOR"));
+			}
+		} catch (Exception e) {
+			System.out.println("Erro ao buscar produtos. \n Causa:" + e.getMessage());
+		} finally {
+			Banco.closePreparedStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return produtoBuscado;
+	}
 
 	public int ConstularEstoque(int id) {
 		int estoque = 0;

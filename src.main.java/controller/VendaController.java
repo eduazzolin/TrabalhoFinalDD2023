@@ -1,6 +1,8 @@
 package controller;
 
+import model.exception.CampoInvalidoException;
 import model.exception.VendaInvalidaException;
+import model.gerador.GeradorPlanilha;
 import model.seletor.VendaSeletor;
 import model.vo.ItemVenda;
 import model.vo.Venda;
@@ -41,6 +43,29 @@ public class VendaController {
 			throw new VendaInvalidaException("Venda inválida, selecione novamente.");
 		}
 		return vendaBO.removerVenda(v);
+	}
+
+	public String gerarPlanilhaSomenteVendas(ArrayList<Venda> vendas, String destinoArquivo) throws CampoInvalidoException, VendaInvalidaException {
+		if(destinoArquivo == null || destinoArquivo.trim().isEmpty()) {
+			throw new CampoInvalidoException("Preencha todos os campos");
+		}
+		if(vendas == null) {
+			throw new VendaInvalidaException("Erro: a venda está vazia");
+		}
+		
+		GeradorPlanilha gerador = new GeradorPlanilha();
+		return gerador.gerarPlanilhaSomenteVendas(vendas, destinoArquivo);
+	}
+	public String gerarPlanilhaVendasComProdutos(ArrayList<Venda> vendas, String destinoArquivo) throws CampoInvalidoException, VendaInvalidaException {
+		if(destinoArquivo == null || destinoArquivo.trim().isEmpty()) {
+			throw new CampoInvalidoException("Preencha todos os campos");
+		}
+		if(vendas == null) {
+			throw new VendaInvalidaException("Erro: a venda está vazia");
+		}
+		
+		GeradorPlanilha gerador = new GeradorPlanilha();
+		return gerador.gerarPlanilhaVendasComProdutos(vendas, destinoArquivo);
 	}
 
 }

@@ -15,17 +15,34 @@ import javax.swing.table.DefaultTableModel;
 
 import model.vo.ItemVenda;
 import model.vo.Produto;
+import model.vo.Venda;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.RowSpec;
+import com.jgoodies.forms.layout.FormSpecs;
+import javax.swing.UIManager;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 public class DialogVerProdutos extends JDialog {
-
-	private final JPanel contentPanel = new JPanel();
+	private String[] nomesColunas = { "EAN", "Produto", "Qtde", "Valor Unitário", "Valor Total" };
 	private JTable tbVerProdutos;
-	private String[] nomesColunas = {  "EAN", "Produto", "Qtde", "Valor Unitário", "Valor Total" };
+	private JScrollPane scrollPane;
+	private JButton cancelButton;
+	private JLabel lblDescVenda;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		try {
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
 		try {
 			DialogVerProdutos dialog = new DialogVerProdutos();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -40,50 +57,64 @@ public class DialogVerProdutos extends JDialog {
 	 */
 	public DialogVerProdutos() {
 		setTitle("Produtos incluídos");
-		setBounds(100, 100, 596, 379);
-		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		contentPanel.setLayout(null);
+		setBounds(100, 100, 943, 460);
+		getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
+				FormSpecs.DEFAULT_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("max(366px;default):grow"),
+				FormSpecs.DEFAULT_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("20px"),},
+			new RowSpec[] {
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("max(196px;default):grow"),
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("21px"),
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("max(11dlu;default)"),}));
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 10, 562, 291);
-		contentPanel.add(scrollPane);
+		scrollPane = new JScrollPane();
+		getContentPane().add(scrollPane, "3, 3, 3, 1, fill, fill");
 		
 		tbVerProdutos = new JTable();
-		tbVerProdutos.setModel(new DefaultTableModel(new Object[][] { nomesColunas, }, nomesColunas));
+		tbVerProdutos.setModel(new DefaultTableModel(new Object[][] {  }, nomesColunas));
 		scrollPane.setViewportView(tbVerProdutos);
-		{
-			JPanel btVoltar = new JPanel();
-			btVoltar.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(btVoltar, BorderLayout.SOUTH);
-			{
-				JButton cancelButton = new JButton("Voltar");
-				cancelButton.setActionCommand("Cancel");
-				btVoltar.add(cancelButton);
+		
+		lblDescVenda = new JLabel("");
+		lblDescVenda.setHorizontalAlignment(SwingConstants.CENTER);
+		getContentPane().add(lblDescVenda, "3, 6");
+		
+		cancelButton = new JButton("Voltar");
+		getContentPane().add(cancelButton, "4, 6, left, top");
+		cancelButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
 			}
-		}
+		});
+		
+		
 	}
-	
-	public void atualizarTabela(ArrayList<ItemVenda> listaItemVenda) {
+
+	public void atualizarTabelaELabel(Venda v) {
 		this.limparTabela();
 		DefaultTableModel model = (DefaultTableModel) tbVerProdutos.getModel();
 
-		for (ItemVenda iv : listaItemVenda) {
+		for (ItemVenda iv : v.getListaItemVenda()) {
 			Object[] novaLinhaDaTabela = new Object[5];
 			novaLinhaDaTabela[0] = iv.getProduto().getEan();
 			novaLinhaDaTabela[1] = iv.getProduto().getNome();
 			novaLinhaDaTabela[2] = iv.getQtde();
 			novaLinhaDaTabela[3] = String.format("R$ %.2f", iv.getValorUnitario());
-			novaLinhaDaTabela[4] = iv.getQtde()*iv.getProduto().getValor();
+			novaLinhaDaTabela[4] = String.format("R$ %.2f", iv.getQtde() * iv.getProduto().getValor());
 			model.addRow(novaLinhaDaTabela);
 		}
+		lblDescVenda.setText(v.toString());
 	}
 
 	private void limparTabela() {
-		tbVerProdutos.setModel(new DefaultTableModel(new Object[][] { nomesColunas, }, nomesColunas));
-		
+		tbVerProdutos.setModel(new DefaultTableModel(new Object[][] { }, nomesColunas));
+
 	}
-	
-	
 }

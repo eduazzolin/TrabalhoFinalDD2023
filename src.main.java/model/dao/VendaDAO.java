@@ -129,7 +129,7 @@ public class VendaDAO {
 		v.setDataVenda(LocalDateTime.parse(resultado.getString("DATA_VENDA"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) );
 		v.setQtdeItens(resultado.getInt("QTDE_ITENS"));
 		v.setValorTotal(resultado.getDouble("VALOR_TOTAL"));
-//		TODO: v.setListaItemVenda(itemVendaDAO.consultarPorIdVenda(v.getId()));
+		v.setListaItemVenda(itemVendaDAO.consultarPorIdVenda(v.getId()));
 		return v;
 	}
 

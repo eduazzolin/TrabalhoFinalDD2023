@@ -1,6 +1,7 @@
 package model.vo;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Venda {
@@ -73,6 +74,13 @@ public class Venda {
 
 	public void setQtdeItens(Integer qtdeItens) {
 		this.qtdeItens = qtdeItens;
+	}
+
+	@Override
+	public String toString() {
+		return "Venda #" + id + "  |  " + dataVenda.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")) 
+		+ "  |  Valor Total " + String.format("R$ %.2f", this.getValorTotal()) + "  |  "
+				+ qtdeItens + " ite" + (qtdeItens > 1 ? "ns" : "m");
 	}
 
 }
