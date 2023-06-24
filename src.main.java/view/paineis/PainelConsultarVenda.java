@@ -172,6 +172,16 @@ public class PainelConsultarVenda extends JPanel {
 		lbDataInicial = new JLabel("Data inicial:");
 		add(lbDataInicial, "4, 11, right, default");
 
+		lbPaginas = new JLabel("");
+		lbPaginas.setHorizontalAlignment(SwingConstants.CENTER);
+		add(lbPaginas, "6, 25");
+		
+		lbResultados = new JLabel("Resultados:");
+		add(lbResultados, "4, 17");
+		
+		separator2 = new JSeparator();
+		add(separator2, "4, 19, 17, 1, default, top");
+		
 		dtInicial = new DatePicker();
 		dtInicial.setBounds(160, 90, 515, 30);
 		add(dtInicial, "6, 11, 5, 1, fill, default");
@@ -192,12 +202,6 @@ public class PainelConsultarVenda extends JPanel {
 			}
 		});
 		
-		lbResultados = new JLabel("Resultados:");
-		add(lbResultados, "4, 17");
-		
-		separator2 = new JSeparator();
-		add(separator2, "4, 19, 17, 1, default, top");
-		
 		table = new JTable();
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setModel(new DefaultTableModel(new Object[][] { nomesColunas, }, nomesColunas));
@@ -217,10 +221,6 @@ public class PainelConsultarVenda extends JPanel {
 				acaoBotaoVoltar();
 			}
 		});
-		
-		lbPaginas = new JLabel("");
-		lbPaginas.setHorizontalAlignment(SwingConstants.CENTER);
-		add(lbPaginas, "6, 25");
 		
 		btnAvancar = new JButton("Avançar >>");
 		btnAvancar.setEnabled(false);
@@ -254,31 +254,7 @@ public class PainelConsultarVenda extends JPanel {
 		add(btnExportar, "20, 25");
 		btnExportar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int escolhaTipoRelatorio = JOptionPane.showOptionDialog(null, "Qual tipo de relatório você deseja gerar?", "Tipo de relatório", 
-						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null,  
-						new String[] {"Relatório somente com vendas", "Relatório com vendas e lista de produtos"}, null);
-				if (escolhaTipoRelatorio >= 0) {
-					JFileChooser janelaSelecaoDestinoArquivo = new JFileChooser();
-					janelaSelecaoDestinoArquivo.setDialogTitle("Selecione um destino para a planilha...");
-					int opcaoSelecionada = janelaSelecaoDestinoArquivo.showSaveDialog(null);
-					if (opcaoSelecionada == JFileChooser.APPROVE_OPTION) {
-						String caminhoEscolhido = janelaSelecaoDestinoArquivo.getSelectedFile().getAbsolutePath();
-						String resultado = "Erro ao gerar relatório.";
-						try {
-							if (escolhaTipoRelatorio == 0) {
-								resultado = vendaController.gerarPlanilhaSomenteVendas(vendas, caminhoEscolhido);
-							} 
-							if (escolhaTipoRelatorio == 1) {
-								resultado = vendaController.gerarPlanilhaVendasComProdutos(vendas, caminhoEscolhido);
-							}
-							JOptionPane.showMessageDialog(null, resultado);
-						} catch (CampoInvalidoException e1) {
-							JOptionPane.showConfirmDialog(null, e1.getMessage(), "Atenção", JOptionPane.WARNING_MESSAGE);
-						} catch (VendaInvalidaException e1) {
-						JOptionPane.showConfirmDialog(null, e1.getMessage(), "Atenção", JOptionPane.WARNING_MESSAGE);
-						}
-					}
-				}
+				acaoBotaoExportar();
 			}
 		});
 		
@@ -476,6 +452,42 @@ public class PainelConsultarVenda extends JPanel {
 		} else {
 			btnVerProdutos.setEnabled(false);
 			btnRemover.setEnabled(false);
+		}
+	}
+
+	/**
+	 * Exporta os resultados para uma planilha excel .xlsx:
+	 * 
+	 * Exibe um JOptionPane perguntando o tipo do relatório;
+	 * Exibe um JOptionPane perguntando onde quer salvar;
+	 * Valida se o destino foi escolhido e se a venda não está vazia;
+	 * Exporta a planilha;
+	 */
+	private void acaoBotaoExportar() {
+		int escolhaTipoRelatorio = JOptionPane.showOptionDialog(null, "Qual tipo de relatório você deseja gerar?", "Tipo de relatório", 
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null,  
+				new String[] {"Relatório somente com vendas", "Relatório com vendas e lista de produtos"}, null);
+		if (escolhaTipoRelatorio >= 0) {
+			JFileChooser janelaSelecaoDestinoArquivo = new JFileChooser();
+			janelaSelecaoDestinoArquivo.setDialogTitle("Selecione um destino para a planilha...");
+			int opcaoSelecionada = janelaSelecaoDestinoArquivo.showSaveDialog(null);
+			if (opcaoSelecionada == JFileChooser.APPROVE_OPTION) {
+				String caminhoEscolhido = janelaSelecaoDestinoArquivo.getSelectedFile().getAbsolutePath();
+				String resultado = "Erro ao gerar relatório.";
+				try {
+					if (escolhaTipoRelatorio == 0) {
+						resultado = vendaController.gerarPlanilhaSomenteVendas(vendas, caminhoEscolhido);
+					} 
+					if (escolhaTipoRelatorio == 1) {
+						resultado = vendaController.gerarPlanilhaVendasComProdutos(vendas, caminhoEscolhido);
+					}
+					JOptionPane.showMessageDialog(null, resultado);
+				} catch (CampoInvalidoException e1) {
+					JOptionPane.showConfirmDialog(null, e1.getMessage(), "Atenção", JOptionPane.WARNING_MESSAGE);
+				} catch (VendaInvalidaException e1) {
+				JOptionPane.showConfirmDialog(null, e1.getMessage(), "Atenção", JOptionPane.WARNING_MESSAGE);
+				}
+			}
 		}
 	}
 	

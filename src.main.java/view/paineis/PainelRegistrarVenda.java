@@ -10,6 +10,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -92,7 +93,7 @@ public class PainelRegistrarVenda extends JPanel {
 	public PainelRegistrarVenda() {
 		setLayout(new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("max(28dlu;default):grow"),
+				ColumnSpec.decode("31dlu"),
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("center:max(42dlu;default)"),
 				FormSpecs.RELATED_GAP_COLSPEC,
@@ -108,10 +109,10 @@ public class PainelRegistrarVenda extends JPanel {
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("max(54dlu;default)"),
 				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("right:max(35dlu;default):grow"),},
+				ColumnSpec.decode("right:31dlu"),},
 			new RowSpec[] {
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				new RowSpec(RowSpec.TOP, Sizes.bounded(Sizes.PREFERRED, Sizes.constant("10dlu", false), Sizes.constant("30dlu", false)), 1),
+				new RowSpec(RowSpec.TOP, Sizes.bounded(Sizes.PREFERRED, Sizes.constant("10dlu", false), Sizes.constant("30dlu", false)), 0),
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				FormSpecs.DEFAULT_ROWSPEC,
 				RowSpec.decode("max(8dlu;default)"),
@@ -145,7 +146,7 @@ public class PainelRegistrarVenda extends JPanel {
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("default:grow"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("max(17dlu;default):grow"),}));
+				RowSpec.decode("max(29dlu;default)"),}));
 		
 		// declaração dos componentes visuais:
 		lbAdicionarProdutos = new JLabel("Adicionar produtos:");
@@ -156,46 +157,6 @@ public class PainelRegistrarVenda extends JPanel {
 		add(tpDescricaoProdutoSelecionado, "4, 10, 13, 1, left, fill");
 		tpDescricaoProdutoSelecionado.setBackground(null);
 		
-		separator = new JSeparator();
-		add(separator, "4, 5, 14, 1, default, top");
-		
-		tfTrecho = new JTextField();
-		tfTrecho.setText(VALOR_PADRAO_CAMPO_TRECHO);
-		add(tfTrecho, "4, 6, 7, 1, fill, default");
-		tfTrecho.setColumns(10);
-		tfTrecho.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				acaoCliqueTrecho();
-			}
-		});
-		
-		btAdicionar = new JButton("Adicionar");
-		btAdicionar.setEnabled(false);
-		add(btAdicionar, "8, 12");
-		btAdicionar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				acaoBotaoAdicionar();
-			}
-		});
-		
-		cbSelecionarProduto = new JComboBox<Object>(new String[] {VALOR_PADRAO_COMBOBOX_SELECAO_PRODUTOS});
-		add(cbSelecionarProduto, "4, 8, 13, 1, fill, default");
-		cbSelecionarProduto.addPropertyChangeListener(new PropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent evt) {
-				acaoComboBoxSelecionarProduto();
-			}
-		});
-		
-		btnBuscar = new JButton("Buscar");
-		add(btnBuscar, "12, 6, 5, 1");
-		btnBuscar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				acaoBotaoBuscar();
-			}
-		});
-
 		tfQuantidade = new JTextField();
 		add(tfQuantidade, "6, 12, fill, default");
 		tfQuantidade.setColumns(10);
@@ -230,14 +191,8 @@ public class PainelRegistrarVenda extends JPanel {
 		add(tfRemoverProduto, "16, 22, center, default");
 		tfRemoverProduto.setColumns(10);
 		
-		btnRemover = new JButton("Remover");
-		btnRemover.setEnabled(false);
-		add(btnRemover, "16, 24, center, default");
-		btnRemover.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				acaoBotaoRemover();
-			}
-		});
+		separator = new JSeparator();
+		add(separator, "4, 5, 14, 1, default, top");
 		
 		lbValorTotal = new JLabel("Valor total:");
 		add(lbValorTotal, "16, 28, center, default");
@@ -247,6 +202,52 @@ public class PainelRegistrarVenda extends JPanel {
 		add(tfValorTotal, "16, 30, center, default");
 		tfValorTotal.setColumns(10);
 		tfValorTotal.setBackground(null);
+		
+		cbSelecionarProduto = new JComboBox<Object>(new String[] {VALOR_PADRAO_COMBOBOX_SELECAO_PRODUTOS});
+		add(cbSelecionarProduto, "4, 8, 13, 1, fill, default");
+		cbSelecionarProduto.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				acaoComboBoxSelecionarProduto();
+			}
+		});
+		
+		tfTrecho = new JTextField();
+		tfTrecho.setText(VALOR_PADRAO_CAMPO_TRECHO);
+		add(tfTrecho, "4, 6, 7, 1, fill, default");
+		tfTrecho.setColumns(10);
+		tfTrecho.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				acaoCliqueTrecho();
+			}
+		});
+		
+		btAdicionar = new JButton("Adicionar");
+		btAdicionar.setEnabled(false);
+		add(btAdicionar, "8, 12");
+		btAdicionar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				acaoBotaoAdicionar();
+			}
+		});
+		
+		btnBuscar = new JButton("Buscar");
+		add(btnBuscar, "12, 6, 5, 1");
+		btnBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				acaoBotaoBuscar();
+			}
+		});
+
+		btnRemover = new JButton("Remover");
+		btnRemover.setEnabled(false);
+		add(btnRemover, "16, 24, center, default");
+		btnRemover.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				acaoBotaoRemover();
+			}
+		});
 		
 		btnConfirmar = new JButton("Confirmar");
 		btnConfirmar.setEnabled(false);
@@ -264,7 +265,8 @@ public class PainelRegistrarVenda extends JPanel {
 	 * Busca no banco os produtos com os filtros informados e atribui os resultados ao comboBox:
 	 * 
 	 * Valida se o campo trecho está preenchido, comparando com o valor padrão e vendo se não está vazio (controller);
-	 * Busca no banco os produtos com os filtros informados e atribui os resultados ao ArrayList "listaProdutosComboBox";
+	 * Busca no banco os produtos com os filtros informados e subtrai dos seus estoques os produtos do carrinho;
+	 * Atribui os resultados ao ArrayList "listaProdutosComboBox";
 	 * Altera a fonte do comboBox para uma fonte de largura fixa para acomodar melhor a formatação do texto;
 	 * Atribui o ArrayList "listaProdutosComboBox" ao comboBox;
 	 * Se não retornar nada, exibe mensagem;
@@ -276,6 +278,14 @@ public class PainelRegistrarVenda extends JPanel {
 			try {
 				listaProdutosComboBox = produtoController.buscarProdutosPorNomeOuEan(tfTrecho.getText());
 				if (listaProdutosComboBox.size() > 0) {
+					// subtraindo do estoque dos produtos da lista, os itens do carrinho:
+					for(Produto pCombo : listaProdutosComboBox) {
+						for(ItemVenda iv : venda.getListaItemVenda()) {
+							if (pCombo.getId() == iv.getProduto().getId()) {
+								pCombo.setEstoque(pCombo.getEstoque()-iv.getQtde());
+							}
+						}
+					}
 					cbSelecionarProduto.setFont(new Font("Consolas", Font.PLAIN, 10));
 					cbSelecionarProduto.setModel(new DefaultComboBoxModel(listaProdutosComboBox.toArray()));
 				} else {
@@ -285,7 +295,6 @@ public class PainelRegistrarVenda extends JPanel {
 				JOptionPane.showMessageDialog(btnBuscar, "Informe um trecho do nome ou EAN do produto.", "Campo inválido", 1);
 			}
 		}
-		// TODO: SUBTRAIR DO ESTOQUE OS PRODUTOS QUE JÁ ESTÃO NO CARRINHO!
 	}
 
 	/**
@@ -337,6 +346,7 @@ public class PainelRegistrarVenda extends JPanel {
 		cbSelecionarProduto.setModel(new DefaultComboBoxModel(new String[] {VALOR_PADRAO_COMBOBOX_SELECAO_PRODUTOS}));
 		cbSelecionarProduto.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		tfQuantidade.setText("");
+		lbEstoque.setText("");
 	}
 	
 	/**
