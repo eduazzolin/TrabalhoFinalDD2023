@@ -20,25 +20,31 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 
 public class PainelGerenciarProdutos extends JPanel {
+	
 	private JTextField tfQuantidade;
+	private JLabel lblQuantidade;
+	private JComboBox comboBox;
+	private JLabel lbSelecionarProduto;
+	private JLabel lbQuantidade;
+	private JButton btSubtrair;
+	private JLabel lbQuantidadeAtual;
 
     ProdutoController produtoController = new ProdutoController();
-
 	private ArrayList<Produto> produtoscombo;
 
-	protected Object telaPrincipal;
-    
+	// TODO: Colocar algo sobre os podutos desativados
+	
 	/**
 	 * Create the panel.
 	 */
 	public PainelGerenciarProdutos() {
 		setLayout(null);
 		
-		JLabel lblQuantidade = new JLabel("Numero");
+		lblQuantidade = new JLabel("Numero");
 		lblQuantidade.setBounds(334, 149, 125, 14);
 		add(lblQuantidade);
 		
-		JComboBox comboBox = new JComboBox();
+		comboBox = new JComboBox();
 		comboBox.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
 				
@@ -53,13 +59,13 @@ public class PainelGerenciarProdutos extends JPanel {
 		comboBox.setBounds(77, 88, 454, 22);
 		add(comboBox);
 		
-		JLabel lblNewLabel = new JLabel("Selecionar Produto:");
-		lblNewLabel.setBounds(77, 63, 96, 14);
-		add(lblNewLabel);
+		lbSelecionarProduto = new JLabel("Selecionar Produto:");
+		lbSelecionarProduto.setBounds(77, 63, 96, 14);
+		add(lbSelecionarProduto);
 		
-		JLabel lblNewLabel_1 = new JLabel("Selecionar Quantidade:");
-		lblNewLabel_1.setBounds(77, 121, 119, 14);
-		add(lblNewLabel_1);
+		lbQuantidade = new JLabel("Selecionar Quantidade:");
+		lbQuantidade.setBounds(77, 121, 119, 14);
+		add(lbQuantidade);
 		
 		tfQuantidade = new JTextField();
 		tfQuantidade.setBounds(77, 146, 133, 20);
@@ -102,7 +108,7 @@ public class PainelGerenciarProdutos extends JPanel {
 		btAdicionar.setBounds(77, 203, 89, 23);
 		add(btAdicionar);
 		
-		JButton btSubtrair = new JButton("Subtrair");
+		btSubtrair = new JButton("Subtrair");
 		btSubtrair.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int quantidadeDigitada = 0;
@@ -122,8 +128,6 @@ public class PainelGerenciarProdutos extends JPanel {
 						lblQuantidade.setText(String.valueOf(quantidadeEstoque));
 						
 			     	}
-			     	
-					// TODO: ATUALIZAR ESTOQUE
 					
 				} catch (NumberFormatException e1) {
 					JOptionPane.showMessageDialog(btAdicionar, "Informe um número válido.", "Aviso", 1);
@@ -139,9 +143,9 @@ public class PainelGerenciarProdutos extends JPanel {
 		btSubtrair.setBounds(176, 203, 89, 23);
 		add(btSubtrair);
 		
-		JLabel lblNewLabel_2 = new JLabel("Quantidade Atual:");
-		lblNewLabel_2.setBounds(334, 121, 125, 14);
-		add(lblNewLabel_2);
+		lbQuantidadeAtual = new JLabel("Quantidade Atual:");
+		lbQuantidadeAtual.setBounds(334, 121, 125, 14);
+		add(lbQuantidadeAtual);
 
 	}
 }

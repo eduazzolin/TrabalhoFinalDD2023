@@ -1,6 +1,6 @@
 package view.paineis;
 
-import java.awt.Component;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,9 +8,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -22,6 +20,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
 
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
@@ -38,8 +37,6 @@ import model.exception.VendaInvalidaException;
 import model.vo.ItemVenda;
 import model.vo.Produto;
 import model.vo.Venda;
-import javax.swing.SwingConstants;
-import java.awt.Color;
 
 public class PainelRegistrarVenda extends JPanel {
 	
@@ -211,7 +208,7 @@ public class PainelRegistrarVenda extends JPanel {
 			}
 		});
 		
-		tfTrecho = new JTextField();
+		tfTrecho = new JTextField(); // TODO: ADICIONAR 'ENTER'?
 		tfTrecho.setText(VALOR_PADRAO_CAMPO_TRECHO);
 		add(tfTrecho, "4, 6, 7, 1, fill, default");
 		tfTrecho.setColumns(10);
@@ -453,7 +450,7 @@ public class PainelRegistrarVenda extends JPanel {
 				lbEstoque.setText("Qtde disponível: " + produtoSelecionado.getEstoque());
 				btAdicionar.setEnabled(true);
 			} else {
-				lbEstoque.setForeground(new Color(128,0, 0));
+				lbEstoque.setForeground(new Color(128, 0, 0));
 				lbEstoque.setText("FORA DE ESTOQUE");
 				btAdicionar.setEnabled(false);
 			}

@@ -107,8 +107,8 @@ public class DialogVerProdutos extends JDialog {
 			novaLinhaDaTabela[1] = iv.getProduto().getNome();
 			novaLinhaDaTabela[2] = iv.getQtde();
 			novaLinhaDaTabela[3] = String.format("R$ %.2f", iv.getValorUnitario());
-			novaLinhaDaTabela[4] = String.format("R$ %.2f", iv.getQtde() * iv.getProduto().getValor());
-			novaLinhaDaTabela[5] = (iv.getProduto().isAtivo) ? "Ativo" : "Desativado";
+			novaLinhaDaTabela[4] = String.format("R$ %.2f", iv.getQtde() * iv.getValorUnitario());
+			novaLinhaDaTabela[5] = (iv.getProduto().isAtivo()) ? "Ativo" : "Desativado";
 			model.addRow(novaLinhaDaTabela);
 		}
 		lblDescVenda.setText(v.toString());

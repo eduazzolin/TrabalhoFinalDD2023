@@ -16,7 +16,20 @@ public class VendaController {
 	private VendaBO vendaBO = new VendaBO();
 	
 	public Venda cadastrarVenda(Venda venda) throws VendaInvalidaException {
+		// validações pré insert:
+		if (venda.getListaItemVenda() == null || venda.getListaItemVenda().size()==0) {
+			throw new VendaInvalidaException("Erro: A venda não pode estar vazia!");
+		}
+		for (ItemVenda iv : venda.getListaItemVenda()) {
+			if (!iv.getProduto().isAtivo()) {
+				throw new VendaInvalidaException("Erro: A venda possui produtos desativados!");
+			}
+		}
+		
+		// insert
 		venda = vendaBO.cadastrarVenda(venda);
+		
+		// validações pós insert:
 		if (venda.getId() == 0) {
 			throw new VendaInvalidaException("Erro ao cadastrar venda!");
 		}
