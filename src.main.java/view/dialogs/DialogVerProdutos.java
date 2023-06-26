@@ -28,7 +28,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 public class DialogVerProdutos extends JDialog {
-	private String[] nomesColunas = { "EAN", "Produto", "Qtde", "Valor Unitário", "Valor Total" };
+	private String[] nomesColunas = { "EAN", "Produto", "Qtde", "Valor Unitário", "Valor Total", "Status" };
 	private JTable tbVerProdutos;
 	private JScrollPane scrollPane;
 	private JButton cancelButton;
@@ -102,12 +102,13 @@ public class DialogVerProdutos extends JDialog {
 		DefaultTableModel model = (DefaultTableModel) tbVerProdutos.getModel();
 
 		for (ItemVenda iv : v.getListaItemVenda()) {
-			Object[] novaLinhaDaTabela = new Object[5];
+			Object[] novaLinhaDaTabela = new Object[6];
 			novaLinhaDaTabela[0] = iv.getProduto().getEan();
 			novaLinhaDaTabela[1] = iv.getProduto().getNome();
 			novaLinhaDaTabela[2] = iv.getQtde();
 			novaLinhaDaTabela[3] = String.format("R$ %.2f", iv.getValorUnitario());
 			novaLinhaDaTabela[4] = String.format("R$ %.2f", iv.getQtde() * iv.getProduto().getValor());
+			novaLinhaDaTabela[5] = (iv.getProduto().isAtivo) ? "Ativo" : "Desativado";
 			model.addRow(novaLinhaDaTabela);
 		}
 		lblDescVenda.setText(v.toString());

@@ -8,9 +8,9 @@ import model.dao.ProdutoDAO;
 public class ProdutoBO {
 	
 	private ProdutoDAO produtoDAO = new ProdutoDAO();
-	public ArrayList<Produto> buscarProdutosPorNomeOuEan(String nomeOuEan) {
+	public ArrayList<Produto> buscarProdutosAtivosPorNomeOuEan(String nomeOuEan) {
 		// Tudo ok, passa adiante!
-		return produtoDAO.buscarProdutosPorNomeOuEan(nomeOuEan);
+		return produtoDAO.buscarProdutosAtivosPorNomeOuEan(nomeOuEan);
 	}
 	public ArrayList<Produto> buscarTodosProdutos() {
 		

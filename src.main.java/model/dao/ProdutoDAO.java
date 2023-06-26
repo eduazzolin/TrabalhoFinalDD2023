@@ -9,10 +9,10 @@ import model.vo.Produto;
 
 public class ProdutoDAO {
 
-	public ArrayList<Produto> buscarProdutosPorNomeOuEan(String nomeOuEan) {
+	public ArrayList<Produto> buscarProdutosAtivosPorNomeOuEan(String nomeOuEan) {
 		ArrayList<Produto> produtos = new ArrayList<>();
 		Connection conn = Banco.getConnection();
-		String query = " select * from produto where nome like '%" + nomeOuEan + "%' or ean like '%" + nomeOuEan + "%' ORDER BY NOME ASC ";
+		String query = " select * from produto where ativo = TRUE and (nome like '%" + nomeOuEan + "%' or ean like '%" + nomeOuEan + "%') ORDER BY NOME ASC ";
 
 		PreparedStatement stmt = Banco.getPreparedStatement(conn, query);
 		try {
@@ -25,6 +25,7 @@ public class ProdutoDAO {
 				produtoBuscado.setEan(resultado.getString("EAN"));
 				produtoBuscado.setEstoque(resultado.getInt("ESTOQUE"));
 				produtoBuscado.setValor(resultado.getDouble("VALOR"));
+				produtoBuscado.setAtivo(resultado.getBoolean("ATIVO"));
 				produtos.add(produtoBuscado);
 			}
 		} catch (Exception e) {
@@ -52,6 +53,7 @@ public class ProdutoDAO {
 				produtoBuscado.setEan(resultado.getString("EAN"));
 				produtoBuscado.setEstoque(resultado.getInt("ESTOQUE"));
 				produtoBuscado.setValor(resultado.getDouble("VALOR"));
+				produtoBuscado.setAtivo(resultado.getBoolean("ATIVO"));
 				produtos.add(produtoBuscado);
 			}
 		} catch (Exception e) {
@@ -79,6 +81,7 @@ public class ProdutoDAO {
 				produtoBuscado.setEan(resultado.getString("EAN"));
 				produtoBuscado.setEstoque(resultado.getInt("ESTOQUE"));
 				produtoBuscado.setValor(resultado.getDouble("VALOR"));
+				produtoBuscado.setAtivo(resultado.getBoolean("ATIVO"));
 			}
 		} catch (Exception e) {
 			System.out.println("Erro ao buscar produtos. \n Causa:" + e.getMessage());

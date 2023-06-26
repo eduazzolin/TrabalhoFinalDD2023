@@ -11,13 +11,13 @@ public class ProdutoController {
 
 	private ProdutoBO produtoBO = new ProdutoBO();
 	
-	public ArrayList<Produto> buscarProdutosPorNomeOuEan(String nomeOuEan) throws CampoInvalidoException{
+	public ArrayList<Produto> buscarProdutosAtivosPorNomeOuEan(String nomeOuEan) throws CampoInvalidoException{
 		
 		// verificar se o nome é válido:
 		if (nomeOuEan.trim().length() == 0) {
 			throw new CampoInvalidoException("Campo inválido");
 		}
-		return produtoBO.buscarProdutosPorNomeOuEan(nomeOuEan);
+		return produtoBO.buscarProdutosAtivosPorNomeOuEan(nomeOuEan);
 	}
 
 	public ArrayList<Produto> buscarTodosProdutos() {

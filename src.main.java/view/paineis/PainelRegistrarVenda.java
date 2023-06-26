@@ -262,7 +262,7 @@ public class PainelRegistrarVenda extends JPanel {
 
 
 	/**
-	 * Busca no banco os produtos com os filtros informados e atribui os resultados ao comboBox:
+	 * Busca no banco os produtos ativos com os filtros informados e atribui os resultados ao comboBox:
 	 * 
 	 * Valida se o campo trecho está preenchido, comparando com o valor padrão e vendo se não está vazio (controller);
 	 * Busca no banco os produtos com os filtros informados e subtrai dos seus estoques os produtos do carrinho;
@@ -276,7 +276,7 @@ public class PainelRegistrarVenda extends JPanel {
 			JOptionPane.showMessageDialog(btnBuscar, "Informe um trecho do nome ou EAN do produto.", "Campo inválido", 1);
 		} else {
 			try {
-				listaProdutosComboBox = produtoController.buscarProdutosPorNomeOuEan(tfTrecho.getText());
+				listaProdutosComboBox = produtoController.buscarProdutosAtivosPorNomeOuEan(tfTrecho.getText());
 				if (listaProdutosComboBox.size() > 0) {
 					// subtraindo do estoque dos produtos da lista, os itens do carrinho:
 					for(Produto pCombo : listaProdutosComboBox) {

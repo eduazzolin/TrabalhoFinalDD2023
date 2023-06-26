@@ -9,9 +9,10 @@ public class Produto {
 	private String ean;
 	private double valor;
 	private int estoque;
+	private boolean ativo;
 
 	// Construtores:
-	public Produto(int id, String nome, String descricao, String ean, double valor, int estoque) {
+	public Produto(int id, String nome, String descricao, String ean, double valor, int estoque, boolean ativo) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -19,15 +20,17 @@ public class Produto {
 		this.ean = ean;
 		this.valor = valor;
 		this.estoque = estoque;
+		this.ativo = ativo;
 	}
 
-	public Produto(String nome, String descricao, String ean, double valor, int estoque) {
+	public Produto(String nome, String descricao, String ean, double valor, int estoque, boolean ativo) {
 		super();
 		this.nome = nome;
 		this.descricao = descricao;
 		this.ean = ean;
 		this.valor = valor;
 		this.estoque = estoque;
+		this.ativo = ativo;
 	}
 
 	public Produto() {
@@ -81,6 +84,14 @@ public class Produto {
 
 	public void setEstoque(int estoque) {
 		this.estoque = estoque;
+	}
+
+	public boolean isAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(boolean ativo) {
+		this.ativo = ativo;
 	}
 
 	
