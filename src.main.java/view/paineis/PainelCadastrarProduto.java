@@ -2,6 +2,9 @@ package view.paineis;
 
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import model.vo.Produto;
+
 import javax.swing.JLabel;
 import javax.swing.JButton;
 
@@ -13,8 +16,9 @@ public class PainelCadastrarProduto extends JPanel {
 
 	/**
 	 * Create the panel.
+	 * @param produto 
 	 */
-	public PainelCadastrarProduto() {
+	public PainelCadastrarProduto(Produto produto) {
 		setLayout(null);
 		
 		textField = new JTextField();

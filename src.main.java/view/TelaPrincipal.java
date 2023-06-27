@@ -11,6 +11,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.UIManager;
 
+import model.vo.Produto;
 import view.paineis.PainelRegistrarVenda;
 import view.paineis.PainelCadastrarProduto;
 import view.paineis.PainelConsultarEstoque;
@@ -30,8 +31,8 @@ public class TelaPrincipal extends JFrame {
 	private PainelConsultarVenda painelConsultarVenda;
 	protected PainelRegistrarVenda painelRegistrarVenda;
 	protected PainelCadastrarProduto painelCadastrarProduto;
-	protected Container painelGerenciarProdutos;
-	protected Container painelConsultarEstoque;
+	protected PainelGerenciarProdutos painelGerenciarProdutos;
+	protected PainelConsultarEstoque painelConsultarEstoque;
 
 	/**
 	 * Launch the application.
@@ -95,8 +96,8 @@ public class TelaPrincipal extends JFrame {
 		mntmCadastrarProduto = new JMenuItem("Cadastrar produtos");
 		mntmCadastrarProduto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				painelCadastrarProduto = new PainelCadastrarProduto();
+				Produto novoProduto = new Produto();
+				painelCadastrarProduto = new PainelCadastrarProduto(novoProduto);
 				setContentPane(painelCadastrarProduto);
 				revalidate();
 
@@ -121,8 +122,19 @@ public class TelaPrincipal extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				painelConsultarEstoque = new PainelConsultarEstoque();
+				painelConsultarEstoque.getBtnEditar().addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						Produto produtoSelecionado = painelConsultarEstoque.getProdutoSelecionado();
+						painelCadastrarProduto = new PainelCadastrarProduto(produtoSelecionado);
+						painelCadastrarProduto.setVisible(true);
+						setContentPane(painelCadastrarProduto);
+						revalidate();
+					}
+				});
 				setContentPane(painelConsultarEstoque);
 				revalidate();
+				
 			}
 		});
 		mnProdutosEstoque.add(mntmConsultarProdutos);

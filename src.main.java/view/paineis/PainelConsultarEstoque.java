@@ -4,11 +4,19 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
+
+import model.vo.Produto;
+
 import javax.swing.JTextArea;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class PainelConsultarEstoque extends JPanel {
 
+	private JButton btnEditar;
+	private Produto produtoSelecionado;
+	
 	/**
 	 * Create the panel.
 	 */
@@ -31,13 +39,29 @@ public class PainelConsultarEstoque extends JPanel {
 		btnNewButton.setBounds(387, 140, 89, 23);
 		add(btnNewButton);
 		
-		JButton btnNewButton_2 = new JButton("Editar");
-		btnNewButton_2.setBounds(288, 140, 89, 23);
-		add(btnNewButton_2);
+		btnEditar = new JButton("Editar");
+		btnEditar.setBounds(288, 140, 89, 23);
+		add(btnEditar);
 		
 		JButton btnNewButton_3 = new JButton("Excluir");
 		btnNewButton_3.setBounds(189, 140, 89, 23);
 		add(btnNewButton_3);
 
 	}
+
+	public JButton getBtnEditar() {
+		return btnEditar;
+	}
+
+	public void setBtnEditar(JButton btnEditar) {
+		this.btnEditar = btnEditar;
+	}
+	public Produto getProdutoSelecionado() {
+		return produtoSelecionado;
+	}
+
+	public void setProdutoSelecionado(Produto produtoSelecionado) {
+		this.produtoSelecionado = produtoSelecionado;
+	}
+
 }
