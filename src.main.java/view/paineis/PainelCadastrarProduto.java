@@ -19,13 +19,20 @@ public class PainelCadastrarProduto extends JPanel {
 	private JTextField txtDescricao;
 	private JTextField txtPreco;
 	private JTextField txtCodigo;
-//
 	
 	protected Produto produtoNovo;
 	
 	/**
 	 * Create the panel.
 	 * @param produto 
+	 */
+	
+	/*
+	 * esse produto passado por parametro pode ser o que vem da classe PainelConsultarEstoque quando a pessoa clica em editar
+	 * ou pode ser um produto vazio de quando a pessoa abre este painel pelo menu.
+	 * para saber se vai ser cadastro ou edição, é só ver se ele veio com id.
+	 * se ele tiver id tem que atualizar, se ele não tiver daí é para cadastrar
+	 * se for pra atualizar da para preencher já os campos com os atributos dele.
 	 */
 	public PainelCadastrarProduto(Produto produto) {
 		setLayout(null);
