@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+import model.bo.ItemVendaBO;
 import model.vo.Produto;
 
 public class ProdutoDAO {
@@ -131,6 +132,20 @@ public class ProdutoDAO {
 			Banco.closeConnection(conn);
 		}
 		return retorno;
+	}
+
+	public Produto criarProduto(Produto produtoNovo) {
+		String query = "INSERT INTO PRODUTO (NOME, DESCRICAO, EAN, VALOR, ESTOQUE) VALUES ('" + produtoNovo.getNome() + "',"
+				+ " '"+ produtoNovo.getDescricao() + "', "+ produtoNovo.getEan() + ", "+ produtoNovo.getValor() +", 0);";
+		Connection conn = Banco.getConnection();
+
+		PreparedStatement stmt = Banco.getPreparedStatement(conn, query);
+		pstmt.execute();
+		resultado = pstmt.getGeneratedKeys();
+		if (resultado.next()) {
+			venda.setId(resultado.getInt(1));
+		}
+		return null;
 	}
 
 }

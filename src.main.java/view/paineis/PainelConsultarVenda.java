@@ -483,9 +483,9 @@ public class PainelConsultarVenda extends JPanel {
 					}
 					JOptionPane.showMessageDialog(null, resultado);
 				} catch (CampoInvalidoException e1) {
-					JOptionPane.showConfirmDialog(null, e1.getMessage(), "Atenção", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Atenção", JOptionPane.WARNING_MESSAGE);
 				} catch (VendaInvalidaException e1) {
-				JOptionPane.showConfirmDialog(null, e1.getMessage(), "Atenção", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "Atenção", JOptionPane.WARNING_MESSAGE);
 				}
 			}
 		}

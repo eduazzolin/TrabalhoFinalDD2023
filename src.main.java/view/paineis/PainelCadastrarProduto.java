@@ -3,17 +3,26 @@ package view.paineis;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import controller.ProdutoController;
+import model.exception.CampoInvalidoException;
 import model.vo.Produto;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.awt.event.ActionEvent;
 
 public class PainelCadastrarProduto extends JPanel {
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-
+	private JTextField txtProduto;
+	private JTextField txtDescricao;
+	private JTextField txtPreco;
+	private JTextField txtCodigo;
+//
+	
+	protected Produto produtoNovo;
+	
 	/**
 	 * Create the panel.
 	 * @param produto 
@@ -21,10 +30,10 @@ public class PainelCadastrarProduto extends JPanel {
 	public PainelCadastrarProduto(Produto produto) {
 		setLayout(null);
 		
-		textField = new JTextField();
-		textField.setBounds(139, 70, 287, 20);
-		add(textField);
-		textField.setColumns(10);
+		txtProduto = new JTextField();
+		txtProduto.setBounds(139, 70, 287, 20);
+		add(txtProduto);
+		txtProduto.setColumns(10);
 		
 		JLabel lblNewLabel = new JLabel("Nome do Produto:");
 		lblNewLabel.setBounds(21, 73, 95, 14);
@@ -35,15 +44,15 @@ public class PainelCadastrarProduto extends JPanel {
 		lblNewLabel_1.setBounds(21, 239, 95, 14);
 		add(lblNewLabel_1);
 		
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		textField_1.setBounds(139, 236, 287, 85);
-		add(textField_1);
+		txtDescricao = new JTextField();
+		txtDescricao.setColumns(10);
+		txtDescricao.setBounds(139, 236, 287, 85);
+		add(txtDescricao);
 		
-		textField_2 = new JTextField();
-		textField_2.setColumns(10);
-		textField_2.setBounds(139, 118, 287, 20);
-		add(textField_2);
+		txtPreco = new JTextField();
+		txtPreco.setColumns(10);
+		txtPreco.setBounds(139, 118, 287, 20);
+		add(txtPreco);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("Preço:");
 		lblNewLabel_1_1.setBounds(21, 121, 95, 14);
@@ -53,14 +62,49 @@ public class PainelCadastrarProduto extends JPanel {
 		lblNewLabel_1_1_1.setBounds(21, 173, 95, 14);
 		add(lblNewLabel_1_1_1);
 		
-		textField_3 = new JTextField();
-		textField_3.setColumns(10);
-		textField_3.setBounds(139, 170, 287, 20);
-		add(textField_3);
+		txtCodigo = new JTextField();
+		txtCodigo.setColumns(10);
+		txtCodigo.setBounds(139, 170, 287, 20);
+		add(txtCodigo);
 		
-		JButton btnNewButton = new JButton("Confirmar");
-		btnNewButton.setBounds(390, 353, 89, 23);
-		add(btnNewButton);
+		JButton btnConfirmar = new JButton("Confirmar");
+		btnConfirmar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					acaoBotaoConfirmar();
+				} catch (CampoInvalidoException e1) {
+					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Atenção", JOptionPane.WARNING_MESSAGE);
+				}
+			}
 
+		});
+		btnConfirmar.setBounds(390, 353, 89, 23);
+		add(btnConfirmar);
+
+	}
+	private void acaoBotaoConfirmar() throws CampoInvalidoException {
+		
+			 if(txtProduto.getText().isEmpty()) {
+				 throw new CampoInvalidoException("Nome do produto não informado");
+			    }
+			    	if(txtPreco.getText().isEmpty()) {
+						 throw new CampoInvalidoException("Preço não informado");
+			    	}
+			    	 if(txtCodigo.getText().isEmpty()) {
+						 throw new CampoInvalidoException("Código não informado");
+					 }
+							 if(txtDescricao.getText().isEmpty()) {
+								 throw new CampoInvalidoException("Descrição não informada");
+							 }
+							 
+							 
+							 produtoNovo.setNome(txtProduto.getText());
+							 produtoNovo.setDescricao(txtDescricao.getText());
+							 produtoNovo.setValor(Double.parseDouble(txtPreco.getText()));
+							 produtoNovo.setEan(txtCodigo.getText());
+							
+							produtoNovo = ProdutoController.criarProduto(produtoNovo);
+							 
 	}
 }
