@@ -473,7 +473,7 @@ public class PainelRegistrarVenda extends JPanel {
 				venda = vendaController.cadastrarVenda(venda);
 				JOptionPane.showMessageDialog(btAdicionar, "Venda cadastrada com sucesso!", "Aviso", 1);
 				limparPagina();
-			} catch (VendaInvalidaException e1) {
+			} catch (VendaInvalidaException | EstoqueInsuficienteException e1) {
 				JOptionPane.showMessageDialog(btAdicionar, e1.getMessage(), "Aviso", 1);
 			}
 		}

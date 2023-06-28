@@ -1,6 +1,7 @@
 package controller;
 
 import model.exception.CampoInvalidoException;
+import model.exception.EstoqueInsuficienteException;
 import model.exception.VendaInvalidaException;
 import model.gerador.GeradorPlanilha;
 import model.seletor.VendaSeletor;
@@ -15,7 +16,7 @@ public class VendaController {
 
 	private VendaBO vendaBO = new VendaBO();
 	
-	public Venda cadastrarVenda(Venda venda) throws VendaInvalidaException {
+	public Venda cadastrarVenda(Venda venda) throws VendaInvalidaException, EstoqueInsuficienteException {
 		// validações pré insert:
 		if (venda.getListaItemVenda() == null || venda.getListaItemVenda().size()==0) {
 			throw new VendaInvalidaException("Erro: A venda não pode estar vazia!");

@@ -41,5 +41,5 @@ public class ProdutoController {
 	public Produto criarProduto(Produto produtoNovo) {
 		
 		return produtoBO.criarProduto(produtoNovo);
-	}
+	} 
 }

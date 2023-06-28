@@ -13,7 +13,8 @@ public class ProdutoDAO {
 	public ArrayList<Produto> buscarProdutosAtivosPorNomeOuEan(String nomeOuEan) {
 		ArrayList<Produto> produtos = new ArrayList<>();
 		Connection conn = Banco.getConnection();
-		String query = " select * from produto where ativo = TRUE and (nome like '%" + nomeOuEan + "%' or ean like '%" + nomeOuEan + "%') ORDER BY NOME ASC ";
+		String query = " select * from produto where ativo = TRUE and (nome like '%" + nomeOuEan + "%' or ean like '%"
+				+ nomeOuEan + "%') ORDER BY NOME ASC ";
 
 		PreparedStatement stmt = Banco.getPreparedStatement(conn, query);
 		try {
@@ -65,12 +66,12 @@ public class ProdutoDAO {
 		}
 		return produtos;
 	}
-	
+
 	public Produto buscarProdutoPorId(int id) {
 		Produto produtoBuscado = null;
 		Connection conn = Banco.getConnection();
 		String query = " select * from produto where id_produto = " + id;
-		
+
 		PreparedStatement stmt = Banco.getPreparedStatement(conn, query);
 		try {
 			ResultSet resultado = stmt.executeQuery();
@@ -102,7 +103,7 @@ public class ProdutoDAO {
 		try {
 			ResultSet resultado = stmt.executeQuery();
 			while (resultado.next()) {
-			estoque=resultado.getInt(1);
+				estoque = resultado.getInt(1);
 			}
 		} catch (Exception e) {
 			System.out.println("Erro ao buscar produtos. \n Causa:" + e.getMessage());
@@ -115,14 +116,15 @@ public class ProdutoDAO {
 
 	public boolean atualizarEstoque(int quantidadeDigitada, Produto produtoSelecionado) {
 		boolean retorno = false;
-		
-		String query = "update produto set estoque = estoque + " + quantidadeDigitada + " where id_produto = " + produtoSelecionado.getId();
-		
+
+		String query = "update produto set estoque = estoque + " + quantidadeDigitada + " where id_produto = "
+				+ produtoSelecionado.getId();
+
 		Connection conn = Banco.getConnection();
 
 		PreparedStatement stmt = Banco.getPreparedStatement(conn, query);
 		try {
-			if(stmt.executeUpdate(query)== 1) {
+			if (stmt.executeUpdate(query) == 1) {
 				retorno = true;
 			}
 		} catch (Exception e) {
@@ -135,8 +137,9 @@ public class ProdutoDAO {
 	}
 
 	public Produto criarProduto(Produto produtoNovo) {
-		String query = "INSERT INTO PRODUTO (NOME, DESCRICAO, EAN, VALOR, ESTOQUE) VALUES ('" + produtoNovo.getNome() + "',"
-				+ " '"+ produtoNovo.getDescricao() + "', "+ produtoNovo.getEan() + ", "+ produtoNovo.getValor() +", 0);";
+		String query = "INSERT INTO PRODUTO (NOME, DESCRICAO, EAN, VALOR, ESTOQUE) VALUES ('" + produtoNovo.getNome()
+				+ "'," + " '" + produtoNovo.getDescricao() + "', " + produtoNovo.getEan() + ", "
+				+ produtoNovo.getValor() + ", 0);";
 		Connection conn = Banco.getConnection();
 
 		PreparedStatement stmt = Banco.getPreparedStatement(conn, query);
@@ -146,6 +149,32 @@ public class ProdutoDAO {
 			venda.setId(resultado.getInt(1));
 		}
 		return null;
+	} 
+
+	public Produto consultarPorId(int id) {
+		Produto produtoBuscado = new Produto();
+		Connection conn = Banco.getConnection();
+		String query = " select * from produto where id_produto = " + id;
+
+		PreparedStatement stmt = Banco.getPreparedStatement(conn, query);
+		try {
+			ResultSet resultado = stmt.executeQuery();
+			while (resultado.next()) {
+				produtoBuscado.setId(resultado.getInt("ID_PRODUTO"));
+				produtoBuscado.setNome(resultado.getString("NOME"));
+				produtoBuscado.setDescricao(resultado.getString("DESCRICAO"));
+				produtoBuscado.setEan(resultado.getString("EAN"));
+				produtoBuscado.setEstoque(resultado.getInt("ESTOQUE"));
+				produtoBuscado.setValor(resultado.getDouble("VALOR"));
+				produtoBuscado.setAtivo(resultado.getBoolean("ATIVO"));
+			}
+		} catch (Exception e) {
+			System.out.println("Erro ao buscar produto. \n Causa:" + e.getMessage());
+		} finally {
+			Banco.closePreparedStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return produtoBuscado;		
 	}
 
 }

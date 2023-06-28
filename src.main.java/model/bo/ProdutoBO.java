@@ -27,6 +27,6 @@ public class ProdutoBO {
 	public Produto criarProduto(Produto produtoNovo) {
 		
 		return produtoDAO.criarProduto(produtoNovo);
-	}
+	} 
 
 }

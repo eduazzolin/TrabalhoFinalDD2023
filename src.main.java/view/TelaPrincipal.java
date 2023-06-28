@@ -48,6 +48,7 @@ public class TelaPrincipal extends JFrame {
 			public void run() {
 				try {
 					TelaPrincipal frame = new TelaPrincipal();
+					frame.setLocationRelativeTo(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
