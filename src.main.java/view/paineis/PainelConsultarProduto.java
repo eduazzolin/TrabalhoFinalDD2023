@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -20,7 +19,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
-import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
@@ -31,13 +29,12 @@ import controller.ItemVendaController;
 import controller.ProdutoController;
 import controller.VendaController;
 import model.exception.CampoInvalidoException;
+import model.exception.ProdutoInvalidoException;
 import model.exception.VendaInvalidaException;
 import model.seletor.ProdutoSeletor;
-import model.seletor.VendaSeletor;
 import model.vo.Produto;
 import model.vo.Venda;
 import view.componentesExternos.JNumberFormatField;
-import view.dialogs.DialogVerProdutos;
 
 public class PainelConsultarProduto extends JPanel {
 	
@@ -54,33 +51,31 @@ public class PainelConsultarProduto extends JPanel {
 	private JNumberFormatField ftfValorMinimo;
 	private JNumberFormatField ftfValorMaximo;
 	private JButton btnConsultar;
-	private JButton btnVerProdutos;
+	private JButton btnEditar;
 	private JButton btnExportar;
 	private JButton btnVoltar;
 	private JButton btnAvancar;
 	private JButton btnRemover;
 	private JSeparator separator;
 	private JSeparator separator2;
+	private JTextField txtProduto;
 	
 	// classes mvc:
 	protected ProdutoSeletor seletor;
-	private VendaController vendaController = new VendaController();
-	private ItemVendaController itemVendaController = new ItemVendaController();
 	private ProdutoController produtoController = new ProdutoController();
 	
 	// atributos simples:
 	private Double valorMaximo;
 	private Double valorMinimo;
 	private String[] nomesColunas = {  "ID", "NOME", "DESCRIÇÃO", "EAN" , "VALOR", "ESTOQUE","ATIVO"};
-	protected ArrayList<Venda> vendas;
 	protected Venda vendaSelecionada;
+	private ArrayList<Produto> produtos;
 	
 	// atributos da paginação
 	private final int TAMANHO_PAGINA = 15;
 	private int paginaAtual = 1;
 	private int totalPaginas = 0;
-	private JTextField txtProduto;
-	private ArrayList<Produto> produto;
+	private Produto produtoSelecionado;
 	
 	
 	/**
@@ -97,7 +92,9 @@ public class PainelConsultarProduto extends JPanel {
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("max(72dlu;default)"),
 				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("max(25dlu;default):grow"),
+				ColumnSpec.decode("max(71dlu;default)"),
+				FormSpecs.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("max(25dlu;default):grow(50)"),
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("max(57dlu;default)"),
 				FormSpecs.RELATED_GAP_COLSPEC,
@@ -131,9 +128,9 @@ public class PainelConsultarProduto extends JPanel {
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("max(7dlu;default)"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("max(7dlu;default)"),
+				RowSpec.decode("max(0dlu;default)"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("max(179dlu;default)"),
+				RowSpec.decode("max(230dlu;default)"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("max(22dlu;default)"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
@@ -149,32 +146,32 @@ public class PainelConsultarProduto extends JPanel {
 		add(lbFiltrarConsulta, "4, 4, left, bottom");
 		
 		separator = new JSeparator();
-		add(separator, "4, 6, 17, 1, default, top");
+		add(separator, "4, 6, 19, 1, default, top");
 		
 		lbEan = new JLabel("EAN:");
 		add(lbEan, "4, 9, right, default");
 		
 		tfEan = new JTextField();
-		add(tfEan, "6, 9, 15, 1, fill, default");
+		add(tfEan, "6, 9, 17, 1, fill, default");
 		tfEan.setColumns(10);
 		
 		lbValorMinimo = new JLabel("Valor mínimo:");
 		add(lbValorMinimo, "4, 11, right, default");
 		
 		ftfValorMinimo = new JNumberFormatField(2);
-		add(ftfValorMinimo, "6, 11, 5, 1, fill, default");
+		add(ftfValorMinimo, "6, 11, 6, 1, fill, default");
 		
 		lbValorMaximo = new JLabel("Valor máximo:");
-		add(lbValorMaximo, "12, 11, right, default");
+		add(lbValorMaximo, "14, 11, right, default");
 		
 		ftfValorMaximo = new JNumberFormatField(2);
-		add(ftfValorMaximo, "14, 11, 7, 1, fill, default");
+		add(ftfValorMaximo, "16, 11, 7, 1, fill, default");
 		
 		lbDataInicial = new JLabel("Nome do Produto:");
 		add(lbDataInicial, "4, 8, right, default");
 		
 		txtProduto = new JTextField();
-		add(txtProduto, "6, 8, 15, 1, fill, default");
+		add(txtProduto, "6, 8, 17, 1, fill, default");
 		txtProduto.setColumns(10);
 
 		lbPaginas = new JLabel("");
@@ -185,11 +182,11 @@ public class PainelConsultarProduto extends JPanel {
 		add(lbResultados, "4, 17");
 		
 		separator2 = new JSeparator();
-		add(separator2, "4, 19, 17, 1, default, top");
+		add(separator2, "4, 19, 19, 1, default, top");
 		
 		btnConsultar = new JButton("Consultar");
 		btnConsultar.setMaximumSize(new Dimension(50, 21));
-		add(btnConsultar, "18, 13, 3, 1");
+		add(btnConsultar, "20, 13, 3, 1");
 		btnConsultar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				acaoBotaoConsultar();
@@ -199,13 +196,14 @@ public class PainelConsultarProduto extends JPanel {
 		table = new JTable();
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setModel(new DefaultTableModel(new Object[][] { nomesColunas, }, nomesColunas));
-		add(table, "4, 21, 17, 3, fill, fill");
+		add(table, "4, 21, 19, 3, fill, fill");
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				acaoCliqueTabela();
 			}
 		});
+		limparTabela();
 		
 		btnVoltar = new JButton("<< Voltar");
 		btnVoltar.setEnabled(false);
@@ -225,27 +223,22 @@ public class PainelConsultarProduto extends JPanel {
 			}
 		});
 		
-		btnVerProdutos = new JButton("Ver produtos");
-		btnVerProdutos.setEnabled(false);
-		add(btnVerProdutos, "18, 25");
-		btnVerProdutos.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				acaoBotaoVerProdutos();
-			}
-		});
-		
 		btnRemover = new JButton("Remover");
 		btnRemover.setEnabled(false);
-		add(btnRemover, "16, 25");
+		add(btnRemover, "18, 25");
 		btnRemover.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				acaoBotaoRemover();
 			}
 		});
 		
+		btnEditar = new JButton("   Editar   ");
+		btnEditar.setEnabled(false);
+		add(btnEditar, "20, 25");
+		
 		btnExportar = new JButton("Exportar");
 		btnExportar.setEnabled(false);
-		add(btnExportar, "20, 25");
+		add(btnExportar, "22, 25");
 		btnExportar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				acaoBotaoExportar();
@@ -273,38 +266,25 @@ public class PainelConsultarProduto extends JPanel {
 	}
 
 	/**
-	 * Remove do banco de dados a venda selecionada e seus respectivos ITEM_VENDAs:
+	 * Desativa o produto selecionado no banco de dados:
 	 * 
 	 * Valida se a seleção está funcionando;
-	 * Remove do banco de dados;
+	 * Marca como false o atributo "ativo" no banco de dados;
 	 * Atualiza a tabela e os botões "remover" e "ver produtos".
 	 */
 	protected void acaoBotaoRemover() {
-		try {
-			if(vendaController.removerVenda(vendaSelecionada)) {
-				JOptionPane.showMessageDialog(btnRemover, "Venda removida com sucesso!", "Sucesso", 1);
-				acaoBotaoConsultar();
-				btnRemover.setEnabled(false);
-				btnVerProdutos.setEnabled(false);
-			} else {
-				JOptionPane.showMessageDialog(btnRemover, "Erro ao remover venda", "Erro", 1);
-			}
-		} catch (VendaInvalidaException e) {
-			JOptionPane.showMessageDialog(btnRemover, e.getMessage(), "Erro", 1);
-		}
-		
-	}
-
-	/**
-	 * Abre o dialog "DialogVerProdutos" que consiste em uma tabela que mostra os produtos incluídos na venda:
-	 * 
-	 * Abre o dialog "DialogVerProdutos" passando o ArrayList "listaItemVenda" do objeto vendaSelecionada;
-	 */
-	protected void acaoBotaoVerProdutos() {
-		DialogVerProdutos verProdutos = new DialogVerProdutos();
-		verProdutos.setLocationRelativeTo(null);
-		verProdutos.atualizarTabelaELabel(vendaSelecionada);
-		verProdutos.setVisible(true);
+//		try {
+//			if(vendaController.removerVenda(vendaSelecionada)) {
+//				JOptionPane.showMessageDialog(btnRemover, "Venda removida com sucesso!", "Sucesso", 1);
+//				acaoBotaoConsultar();
+//				btnRemover.setEnabled(false);
+//				btnEditar.setEnabled(false);
+//			} else {
+//				JOptionPane.showMessageDialog(btnRemover, "Erro ao remover venda", "Erro", 1);
+//			}
+//		} catch (VendaInvalidaException e) {
+//			JOptionPane.showMessageDialog(btnRemover, e.getMessage(), "Erro", 1);
+//		}
 		
 	}
 
@@ -351,15 +331,13 @@ public class PainelConsultarProduto extends JPanel {
 		btnAvancar.setEnabled(paginaAtual < totalPaginas);
 	}
 
-
-
 	/**
-	 * Busca vendas no banco com os filtros e atribui o resultado à tabela:
+	 * Busca produtos no banco com os filtros e atribui o resultado à tabela:
 	 * 
 	 * Cria um objeto seletor a partir dos filtros inseridos e atributos de paginação;
 	 * Valida os valores máximos dos filtros para confirmar se eles não são menores que os mínimos;
 	 * Se os campos de valor estiverem com 0 (valor padrão) atribui "null";
-	 * Busca no banco com os filtros e atribui o resultado ao ArrayList "vendas";
+	 * Busca no banco com os filtros e atribui o resultado ao ArrayList "produtos";
 	 * Atualiza a tabela, a paginação e os botões de navegação e exportar;
 	 * @throws CampoInvalidoException;
 	 */
@@ -380,38 +358,46 @@ public class PainelConsultarProduto extends JPanel {
 		seletor.setValorMinimo(valorMinimo > 0 ? valorMinimo : null);
 		
 		// busca no banco e atualização:
-		produto = produtoController.consultarComFiltros(seletor);
+		produtos = produtoController.consultarComFiltros(seletor);
 		atualizarTabela();
 		atualizarQuantidadePaginas();
 		ativarOuDesativarBotoesVoltarAvancar();
-		btnExportar.setEnabled(vendas != null && vendas.size()>0);
+		btnExportar.setEnabled(produtos != null && produtos.size()>0);
 	}
 
 	/**
-	 * Deixa a tabela somente com o cabeçalho padrão;
+	 * Deixa a tabela somente com o cabeçalho e tamanhos padrão;
 	 */
 	private void limparTabela() {
 		table.setModel(new DefaultTableModel(new Object[][] { nomesColunas }, nomesColunas));
+		table.getColumnModel().getColumn(0).setMaxWidth(20);
+		table.getColumnModel().getColumn(1).setMaxWidth(900);
+		table.getColumnModel().getColumn(2).setMaxWidth(900);
+		table.getColumnModel().getColumn(3).setMaxWidth(200);
+		table.getColumnModel().getColumn(4).setMaxWidth(100);
+		table.getColumnModel().getColumn(5).setMaxWidth(100);
+		table.getColumnModel().getColumn(6).setMaxWidth(100);
+		table.setRowHeight(20);
 	}
 	
 	/**
-	 * Atualiza a tabela baseada no ArrayList "vendas":
+	 * Atualiza a tabela baseada no ArrayList "produtos":
 	 * 
-	 * Limpa a tabela deixando somente o cabeçalho padrão;
-	 * Pega a referência do model da tabela e adiciona nele uma linha para cada Venda no ArrayList vendas;
+	 * Limpa a tabela;
+	 * Pega a referência do model da tabela e adiciona nele uma linha para cada produto no ArrayList produtos;
 	 */
 	private void atualizarTabela() {
 		this.limparTabela();
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
-		for (Produto p : this.produto) {
+		for (Produto p : this.produtos) {
 			Object[] novaLinhaDaTabela = new Object[7];
 			novaLinhaDaTabela[0] = p.getId();
 			novaLinhaDaTabela[1] = p.getNome();
 			novaLinhaDaTabela[2] = p.getDescricao();
 			novaLinhaDaTabela[3] = p.getEan();
-			novaLinhaDaTabela[6] = (p.isAtivo() ? "Ativo" : "Desativado");
-			novaLinhaDaTabela[5] = p.getEstoque();
 			novaLinhaDaTabela[4] = String.format("R$ %.2f", p.getValor());
+			novaLinhaDaTabela[5] = p.getEstoque();
+			novaLinhaDaTabela[6] = (p.isAtivo() ? "Ativo" : "Desativado");
 			model.addRow(novaLinhaDaTabela);
 		}
 	}
@@ -426,25 +412,28 @@ public class PainelConsultarProduto extends JPanel {
 	 */
 	private void atualizarQuantidadePaginas() {
 		int totalRegistros = produtoController.contarTotalRegistrosComFiltros(seletor);
-		totalPaginas = (int) Math.ceil(totalRegistros / TAMANHO_PAGINA);
+		totalPaginas = totalRegistros / TAMANHO_PAGINA;
+		if(totalRegistros % TAMANHO_PAGINA > 0) { 
+			totalPaginas++;
+		}
 		lbPaginas.setText(paginaAtual + " / " + (totalPaginas == 0 ? 1 : totalPaginas));
 	}
 
 	/**
-	 * Atribui a venda da linha selecionada ao objeto "vendaSelecionada":
+	 * Atribui o produto da linha selecionada ao objeto "produtoSelecionado":
 	 * 
 	 * Valida se a seleção não está no cabeçalho (índice 0);
-	 * Atribui a venda selecionada ao objeto "vendaSelecionada" através do índice da linha e do índice do array "vendas";
-	 * Atualiza os botões "remover" e "VerProdutos";
+	 * Atribui o produto selecionado ao objeto "produtoSelecionado" através do índice da linha e do índice do array "produtos";
+	 * Atualiza os botões "remover" e "editar";
 	 */
 	private void acaoCliqueTabela() {
 		int indiceSelecionado = table.getSelectedRow();
 		if (indiceSelecionado > 0) {
-			btnVerProdutos.setEnabled(true);
+			btnEditar.setEnabled(true);
 			btnRemover.setEnabled(true);
-			vendaSelecionada = vendas.get(indiceSelecionado - 1);
+			produtoSelecionado = produtos.get(indiceSelecionado - 1);
 		} else {
-			btnVerProdutos.setEnabled(false);
+			btnEditar.setEnabled(false);
 			btnRemover.setEnabled(false);
 		}
 	}
@@ -452,37 +441,55 @@ public class PainelConsultarProduto extends JPanel {
 	/**
 	 * Exporta os resultados para uma planilha excel .xlsx:
 	 * 
-	 * Exibe um JOptionPane perguntando o tipo do relatório;
 	 * Exibe um JOptionPane perguntando onde quer salvar;
-	 * Valida se o destino foi escolhido e se a venda não está vazia;
+	 * Busca no banco os resultados com os filtros porém sem paginação
+	 * Valida se o destino foi escolhido e se a consulta não está vazia;
 	 * Exporta a planilha;
 	 */
 	private void acaoBotaoExportar() {
-		int escolhaTipoRelatorio = JOptionPane.showOptionDialog(null, "Qual tipo de relatório você deseja gerar?", "Tipo de relatório", 
-				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null,  
-				new String[] {"Relatório somente com vendas", "Relatório com vendas e lista de produtos"}, null);
-		if (escolhaTipoRelatorio >= 0) {
-			JFileChooser janelaSelecaoDestinoArquivo = new JFileChooser();
-			janelaSelecaoDestinoArquivo.setDialogTitle("Selecione um destino para a planilha...");
-			int opcaoSelecionada = janelaSelecaoDestinoArquivo.showSaveDialog(null);
-			if (opcaoSelecionada == JFileChooser.APPROVE_OPTION) {
-				String caminhoEscolhido = janelaSelecaoDestinoArquivo.getSelectedFile().getAbsolutePath();
-				String resultado = "Erro ao gerar relatório.";
-				try {
-					if (escolhaTipoRelatorio == 0) {
-						resultado = vendaController.gerarPlanilhaSomenteVendas(vendas, caminhoEscolhido);
-					} 
-					if (escolhaTipoRelatorio == 1) {
-						resultado = vendaController.gerarPlanilhaVendasComProdutos(vendas, caminhoEscolhido);
-					}
-					JOptionPane.showMessageDialog(null, resultado);
-				} catch (CampoInvalidoException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(), "Atenção", JOptionPane.WARNING_MESSAGE);
-				} catch (VendaInvalidaException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), "Atenção", JOptionPane.WARNING_MESSAGE);
+		JFileChooser janelaSelecaoDestinoArquivo = new JFileChooser();
+		janelaSelecaoDestinoArquivo.setDialogTitle("Selecione um destino para a planilha...");
+		int opcaoSelecionada = janelaSelecaoDestinoArquivo.showSaveDialog(null);
+		if (opcaoSelecionada == JFileChooser.APPROVE_OPTION) {
+			String caminhoEscolhido = janelaSelecaoDestinoArquivo.getSelectedFile().getAbsolutePath();
+			String resultado = "Erro ao gerar relatório.";
+			try {
+				ProdutoSeletor seletorParaExportar = new ProdutoSeletor();
+				valorMinimo = ftfValorMinimo.getValue().doubleValue();
+				valorMaximo = ftfValorMaximo.getValue().doubleValue();
+
+				if (valorMinimo > valorMaximo) {
+					throw new CampoInvalidoException("Valor mínimo não pode ser maior que o valor máximo.");
 				}
+				seletorParaExportar.setNome(txtProduto.getText());
+				seletorParaExportar.setEan(tfEan.getText());
+				seletorParaExportar.setValorMaximo(valorMaximo > 0 ? valorMaximo : null);
+				seletorParaExportar.setValorMinimo(valorMinimo > 0 ? valorMinimo : null);
+				ArrayList<Produto> produtosParaExportar = produtoController.consultarComFiltros(seletorParaExportar);
+				resultado = produtoController.gerarPlanilhaProdutos(produtosParaExportar, caminhoEscolhido);
+				JOptionPane.showMessageDialog(null, resultado);
+			} catch (CampoInvalidoException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "Atenção", JOptionPane.WARNING_MESSAGE);
+			} catch (ProdutoInvalidoException e1) {
+			JOptionPane.showMessageDialog(null, e1.getMessage(), "Atenção", JOptionPane.WARNING_MESSAGE);
 			}
 		}
+	}
+
+	public JButton getBtnEditar() {
+		return btnEditar;
+	}
+
+	public void setBtnEditar(JButton btnEditar) {
+		this.btnEditar = btnEditar;
+	}
+
+	public Produto getProdutoSelecionado() {
+		return produtoSelecionado;
+	}
+
+	public void setProdutoSelecionado(Produto produtoSelecionado) {
+		this.produtoSelecionado = produtoSelecionado;
 	}
 	
 }

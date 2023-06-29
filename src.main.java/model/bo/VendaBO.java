@@ -67,4 +67,8 @@ public class VendaBO {
 		return vendaDAO.removerVenda(v);
 	}
 
+	public ArrayList<Venda> buscarVendasSemPaginacaoComFiltros(VendaSeletor seletor) {
+		return vendaDAO.buscarVendasSemPaginacaoComFiltros(seletor);
+	}
+
 }

@@ -244,25 +244,17 @@ public class ProdutoDAO {
 
 	public int contarTotalRegistrosComFiltros(ProdutoSeletor seletor) {
 		int quantidade = 0;
-		
 		Connection conn = Banco.getConnection();
 		String query = " SELECT COUNT(*) FROM produto ";
-
-		
 		if (seletor.temFiltro()) {
 			query = preencherFiltros(query, seletor);
 		}
-		query += "  GROUP BY ID_PRODUTO ORDER BY 1 DESC ";
-		if (seletor.temPaginacao()) {
-			query += " LIMIT " + seletor.getLimite() + " OFFSET " + seletor.getOffset();
-		}
-
 		PreparedStatement pstmt = Banco.getPreparedStatementWithPk(conn, query);
 		ResultSet resultado = null;
 		try {
 			resultado = pstmt.executeQuery();
-			while (resultado.next()) {
-            quantidade = resultado.getInt(1);
+			if (resultado.next()) {
+				quantidade = resultado.getInt(1);
 			}
 		} catch (SQLException erro) {
 			System.out.println("Erro ao buscar vendas");

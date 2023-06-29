@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.Container;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -47,6 +48,7 @@ public class TelaPrincipal extends JFrame {
 			public void run() {
 				try {
 					TelaPrincipal frame = new TelaPrincipal();
+					frame.setLocationRelativeTo(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -61,7 +63,7 @@ public class TelaPrincipal extends JFrame {
 	public TelaPrincipal() {
 		setTitle("Sistema gerenciador de farmácia");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 848, 782);
+		setBounds(100, 100, 887, 782);
 
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -122,16 +124,16 @@ public class TelaPrincipal extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				painelConsultarProduto = new PainelConsultarProduto();
-//				painelConsultarProduto.getBtnEditar().addActionListener(new ActionListener() {
-//					@Override
-//					public void actionPerformed(ActionEvent e) {
-//						Produto produtoSelecionado = painelConsultarProduto.getProdutoSelecionado();
-//						painelCadastrarProduto = new PainelCadastrarProduto(produtoSelecionado);
-//						painelCadastrarProduto.setVisible(true);
-//						setContentPane(painelCadastrarProduto);
-//						revalidate();
-//					}
-//				});
+				painelConsultarProduto.getBtnEditar().addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						Produto produtoSelecionado = painelConsultarProduto.getProdutoSelecionado();
+						painelCadastrarProduto = new PainelCadastrarProduto(produtoSelecionado);
+						painelCadastrarProduto.setVisible(true);
+						setContentPane(painelCadastrarProduto);
+						revalidate();
+					}
+				});
 				setContentPane(painelConsultarProduto);
 				revalidate();
 				

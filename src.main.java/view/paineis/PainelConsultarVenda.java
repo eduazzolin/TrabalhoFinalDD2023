@@ -66,7 +66,6 @@ public class PainelConsultarVenda extends JPanel {
 	// classes mvc:
 	protected VendaSeletor seletor;
 	private VendaController vendaController = new VendaController();
-	private ItemVendaController itemVendaController = new ItemVendaController();
 	private ProdutoController produtoController = new ProdutoController();
 	
 	// atributos simples:
@@ -122,7 +121,7 @@ public class PainelConsultarVenda extends JPanel {
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("max(20dlu;default)"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("max(30dlu;default)"),
+				RowSpec.decode("max(21dlu;default)"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("default:grow"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
@@ -132,7 +131,7 @@ public class PainelConsultarVenda extends JPanel {
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("max(7dlu;default)"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("max(179dlu;default)"),
+				RowSpec.decode("max(223dlu;default)"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("max(22dlu;default)"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
@@ -212,6 +211,7 @@ public class PainelConsultarVenda extends JPanel {
 				acaoCliqueTabela();
 			}
 		});
+		limparTabela();
 		
 		btnVoltar = new JButton("<< Voltar");
 		btnVoltar.setEnabled(false);
@@ -374,19 +374,7 @@ public class PainelConsultarVenda extends JPanel {
 		seletor = new VendaSeletor();
 		seletor.setLimite(TAMANHO_PAGINA);
 		seletor.setPagina(paginaAtual);
-		valorMinimo = ftfValorMinimo.getValue().doubleValue();
-		valorMaximo = ftfValorMaximo.getValue().doubleValue();
-		if (dtFinal.getDate() != null && dtInicial.getDate() != null && dtFinal.getDate().isBefore(dtInicial.getDate())) {
-			throw new CampoInvalidoException("Data final não pode ser anterior à data inicial.");
-		}
-		if (valorMinimo > valorMaximo) {
-			throw new CampoInvalidoException("Valor mínimo não pode ser maior que o valor máximo.");
-		}
-		seletor.setDataFinal(dtFinal.getDate());
-		seletor.setDataInicial(dtInicial.getDate());
-		seletor.setEan(tfEan.getText());
-		seletor.setValorMaximo(valorMaximo > 0 ? valorMaximo : null);
-		seletor.setValorMinimo(valorMinimo > 0 ? valorMinimo : null);
+		preencherSeletor(seletor);
 		
 		// busca no banco e atualização:
 		vendas = vendaController.consultarComFiltros(seletor);
@@ -396,11 +384,28 @@ public class PainelConsultarVenda extends JPanel {
 		btnExportar.setEnabled(vendas != null && vendas.size()>0);
 	}
 
+	private void preencherSeletor(VendaSeletor s) throws CampoInvalidoException {
+		valorMinimo = ftfValorMinimo.getValue().doubleValue();
+		valorMaximo = ftfValorMaximo.getValue().doubleValue();
+		if (dtFinal.getDate() != null && dtInicial.getDate() != null && dtFinal.getDate().isBefore(dtInicial.getDate())) {
+			throw new CampoInvalidoException("Data final não pode ser anterior à data inicial.");
+		}
+		if (valorMinimo > valorMaximo) {
+			throw new CampoInvalidoException("Valor mínimo não pode ser maior que o valor máximo.");
+		}
+		s.setDataFinal(dtFinal.getDate());
+		s.setDataInicial(dtInicial.getDate());
+		s.setEan(tfEan.getText());
+		s.setValorMaximo(valorMaximo > 0 ? valorMaximo : null);
+		s.setValorMinimo(valorMinimo > 0 ? valorMinimo : null);
+	}
+
 	/**
 	 * Deixa a tabela somente com o cabeçalho padrão;
 	 */
 	private void limparTabela() {
 		table.setModel(new DefaultTableModel(new Object[][] { nomesColunas }, nomesColunas));
+		table.setRowHeight(20);
 	}
 	
 	/**
@@ -432,7 +437,10 @@ public class PainelConsultarVenda extends JPanel {
 	 */
 	private void atualizarQuantidadePaginas() {
 		int totalRegistros = vendaController.contarTotalRegistrosComFiltros(seletor);
-		totalPaginas = (int) Math.ceil(totalRegistros / TAMANHO_PAGINA);
+		totalPaginas = totalRegistros / TAMANHO_PAGINA;
+		if(totalRegistros % TAMANHO_PAGINA > 0) { 
+			totalPaginas++;
+		}
 		lbPaginas.setText(paginaAtual + " / " + (totalPaginas == 0 ? 1 : totalPaginas));
 	}
 
@@ -460,7 +468,8 @@ public class PainelConsultarVenda extends JPanel {
 	 * 
 	 * Exibe um JOptionPane perguntando o tipo do relatório;
 	 * Exibe um JOptionPane perguntando onde quer salvar;
-	 * Valida se o destino foi escolhido e se a venda não está vazia;
+	 * Busca no banco os resultados com os filtros porém sem paginação
+	 * Valida se o destino foi escolhido e se a consulta não está vazia;
 	 * Exporta a planilha;
 	 */
 	private void acaoBotaoExportar() {
@@ -475,11 +484,14 @@ public class PainelConsultarVenda extends JPanel {
 				String caminhoEscolhido = janelaSelecaoDestinoArquivo.getSelectedFile().getAbsolutePath();
 				String resultado = "Erro ao gerar relatório.";
 				try {
+					VendaSeletor seletorParaExportar = new VendaSeletor();
+					preencherSeletor(seletorParaExportar);
+					ArrayList<Venda> vendasParaExportar = vendaController.consultarComFiltros(seletorParaExportar);
 					if (escolhaTipoRelatorio == 0) {
-						resultado = vendaController.gerarPlanilhaSomenteVendas(vendas, caminhoEscolhido);
+						resultado = vendaController.gerarPlanilhaSomenteVendas(vendasParaExportar, caminhoEscolhido);
 					} 
 					if (escolhaTipoRelatorio == 1) {
-						resultado = vendaController.gerarPlanilhaVendasComProdutos(vendas, caminhoEscolhido);
+						resultado = vendaController.gerarPlanilhaVendasComProdutos(vendasParaExportar, caminhoEscolhido);
 					}
 					JOptionPane.showMessageDialog(null, resultado);
 				} catch (CampoInvalidoException e1) {

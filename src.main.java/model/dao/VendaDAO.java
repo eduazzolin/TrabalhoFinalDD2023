@@ -202,4 +202,41 @@ public class VendaDAO {
 		return resultado;
 	}
 
+	public ArrayList<Venda> buscarVendasSemPaginacaoComFiltros(VendaSeletor seletor) {
+		ArrayList<Venda> vendas = new ArrayList<Venda>();
+		Connection conn = Banco.getConnection();
+		String query = " SELECT VENDA.ID_VENDA, VENDA.DATA_VENDA, VENDA.VALOR_TOTAL, VENDA.QTDE_ITENS FROM VENDA "
+				+ " LEFT JOIN ITEM_VENDA ON ITEM_VENDA.ID_VENDA = VENDA.ID_VENDA "
+				+ " LEFT JOIN PRODUTO ON ITEM_VENDA.ID_PRODUTO = PRODUTO.ID_PRODUTO ";
+		
+		// os joins foram em função do filtro de ean
+		
+		
+		if (seletor.temFiltro()) {
+			query = preencherFiltros(query, seletor);
+		}
+		query += "  GROUP BY ID_VENDA ORDER BY 1 DESC ";
+		if (seletor.temPaginacao()) {
+			query += " LIMIT " + seletor.getLimite() + " OFFSET " + seletor.getOffset();
+		}
+
+		PreparedStatement pstmt = Banco.getPreparedStatementWithPk(conn, query);
+		ResultSet resultado = null;
+		try {
+			resultado = pstmt.executeQuery();
+			while (resultado.next()) {
+				Venda vendaBuscada = montarVendaPeloResultSet(resultado);
+				vendas.add(vendaBuscada);
+			}
+		} catch (SQLException erro) {
+			System.out.println("Erro ao buscar vendas");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeResultSet(resultado);
+			Banco.closePreparedStatement(pstmt);
+			Banco.closeConnection(conn);
+		}
+		return vendas;
+	}
+
 }

@@ -7,6 +7,8 @@ import model.dao.ProdutoDAO;
 import model.vo.Produto;
 import model.exception.CampoInvalidoException;
 import model.exception.EstoqueInsuficienteException;
+import model.exception.ProdutoInvalidoException;
+import model.gerador.GeradorPlanilha;
 import model.seletor.ProdutoSeletor;
 
 public class ProdutoController {
@@ -53,5 +55,17 @@ public class ProdutoController {
 	public int contarTotalRegistrosComFiltros(ProdutoSeletor seletor) {
 		ProdutoDAO produtoDAO = new ProdutoDAO();
 		return produtoDAO.contarTotalRegistrosComFiltros(seletor);
+	}
+
+	public String gerarPlanilhaProdutos(ArrayList<Produto> produtos, String destinoArquivo) throws CampoInvalidoException, ProdutoInvalidoException {
+		if (destinoArquivo == null || destinoArquivo.trim().isEmpty()) {
+			throw new CampoInvalidoException("Preencha todos os campos");
+		}
+		if (produtos == null) {
+			throw new ProdutoInvalidoException("Erro: a consulta está vazia");
+		}
+
+		GeradorPlanilha gerador = new GeradorPlanilha();
+		return gerador.gerarPlanilhaProdutos(produtos, destinoArquivo);
 	}
 }
