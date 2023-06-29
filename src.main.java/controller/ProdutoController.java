@@ -3,9 +3,11 @@ package controller;
 import java.util.ArrayList;
 
 import model.bo.ProdutoBO;
+import model.dao.ProdutoDAO;
 import model.vo.Produto;
 import model.exception.CampoInvalidoException;
 import model.exception.EstoqueInsuficienteException;
+import model.seletor.ProdutoSeletor;
 
 public class ProdutoController {
 
@@ -41,5 +43,15 @@ public class ProdutoController {
 	public Produto criarProduto(Produto produtoNovo) {
 		
 		return produtoBO.criarProduto(produtoNovo);
-	} 
+	}
+
+	public ArrayList<Produto> consultarComFiltros(ProdutoSeletor seletor) {
+		
+		return produtoBO.consultarComFiltros(seletor);
+	}
+
+	public int contarTotalRegistrosComFiltros(ProdutoSeletor seletor) {
+		ProdutoDAO produtoDAO = new ProdutoDAO();
+		return produtoDAO.contarTotalRegistrosComFiltros(seletor);
+	}
 }

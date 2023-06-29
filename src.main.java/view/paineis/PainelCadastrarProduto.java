@@ -20,7 +20,8 @@ public class PainelCadastrarProduto extends JPanel {
 	private JTextField txtPreco;
 	private JTextField txtCodigo;
 	
-	protected Produto produtoNovo;
+	protected Produto produtoNovo = new Produto();
+	private ProdutoController produtoController = new ProdutoController();
 	
 	/**
 	 * Create the panel.
@@ -111,7 +112,7 @@ public class PainelCadastrarProduto extends JPanel {
 							 produtoNovo.setValor(Double.parseDouble(txtPreco.getText()));
 							 produtoNovo.setEan(txtCodigo.getText());
 							
-							produtoNovo = ProdutoController.criarProduto(produtoNovo);
+							produtoNovo = produtoController.criarProduto(produtoNovo);
 							 
 	}
 }

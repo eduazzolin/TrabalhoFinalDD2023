@@ -1,6 +1,5 @@
 package view;
 
-import java.awt.Container;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,11 +11,11 @@ import javax.swing.JMenuItem;
 import javax.swing.UIManager;
 
 import model.vo.Produto;
-import view.paineis.PainelRegistrarVenda;
 import view.paineis.PainelCadastrarProduto;
-import view.paineis.PainelConsultarEstoque;
+import view.paineis.PainelConsultarProduto;
 import view.paineis.PainelConsultarVenda;
 import view.paineis.PainelGerenciarProdutos;
+import view.paineis.PainelRegistrarVenda;
 
 public class TelaPrincipal extends JFrame {
 
@@ -32,7 +31,7 @@ public class TelaPrincipal extends JFrame {
 	protected PainelRegistrarVenda painelRegistrarVenda;
 	protected PainelCadastrarProduto painelCadastrarProduto;
 	protected PainelGerenciarProdutos painelGerenciarProdutos;
-	protected PainelConsultarEstoque painelConsultarEstoque;
+	private PainelConsultarProduto painelConsultarProduto;
 
 	/**
 	 * Launch the application.
@@ -48,7 +47,6 @@ public class TelaPrincipal extends JFrame {
 			public void run() {
 				try {
 					TelaPrincipal frame = new TelaPrincipal();
-					frame.setLocationRelativeTo(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -120,20 +118,21 @@ public class TelaPrincipal extends JFrame {
 
 		mntmConsultarProdutos = new JMenuItem("Consultar produtos");
 		mntmConsultarProdutos.addActionListener(new ActionListener() {
+
 			public void actionPerformed(ActionEvent e) {
 				
-				painelConsultarEstoque = new PainelConsultarEstoque();
-				painelConsultarEstoque.getBtnEditar().addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						Produto produtoSelecionado = painelConsultarEstoque.getProdutoSelecionado();
-						painelCadastrarProduto = new PainelCadastrarProduto(produtoSelecionado);
-						painelCadastrarProduto.setVisible(true);
-						setContentPane(painelCadastrarProduto);
-						revalidate();
-					}
-				});
-				setContentPane(painelConsultarEstoque);
+				painelConsultarProduto = new PainelConsultarProduto();
+//				painelConsultarProduto.getBtnEditar().addActionListener(new ActionListener() {
+//					@Override
+//					public void actionPerformed(ActionEvent e) {
+//						Produto produtoSelecionado = painelConsultarProduto.getProdutoSelecionado();
+//						painelCadastrarProduto = new PainelCadastrarProduto(produtoSelecionado);
+//						painelCadastrarProduto.setVisible(true);
+//						setContentPane(painelCadastrarProduto);
+//						revalidate();
+//					}
+//				});
+				setContentPane(painelConsultarProduto);
 				revalidate();
 				
 			}

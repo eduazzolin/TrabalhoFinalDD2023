@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import model.vo.Produto;
 import model.dao.ProdutoDAO;
+import model.seletor.ProdutoSeletor;
 
 public class ProdutoBO {
 	
@@ -27,6 +28,10 @@ public class ProdutoBO {
 	public Produto criarProduto(Produto produtoNovo) {
 		
 		return produtoDAO.criarProduto(produtoNovo);
-	} 
+	}
+	public ArrayList<Produto> consultarComFiltros(ProdutoSeletor seletor) {
+		
+		return produtoDAO.consultarComFiltos(seletor);
+	}
 
 }

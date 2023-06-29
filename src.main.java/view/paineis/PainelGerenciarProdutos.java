@@ -104,8 +104,7 @@ public class PainelGerenciarProdutos extends JPanel {
 						int quantidadeEstoque = 0;
 						quantidadeEstoque = produtoController.consultarEstoque(((Produto) comboBox.getSelectedItem()).getId());
 						lblQuantidade.setText(String.valueOf(quantidadeEstoque));
-						produtoscombo = produtoController.buscarTodosProdutos();
-						comboBox.setModel(new DefaultComboBoxModel(produtoscombo.toArray()));
+
 					} else {
 						JOptionPane.showMessageDialog(btAdicionar, "Erro ao atualizar estoque.", "Aviso", 1);
 					}
