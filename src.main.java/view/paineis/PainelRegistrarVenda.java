@@ -208,7 +208,7 @@ public class PainelRegistrarVenda extends JPanel {
 			}
 		});
 		
-		tfTrecho = new JTextField(); // TODO: ADICIONAR 'ENTER'?
+		tfTrecho = new JTextField(); 
 		tfTrecho.setText(VALOR_PADRAO_CAMPO_TRECHO);
 		add(tfTrecho, "4, 6, 7, 1, fill, default");
 		tfTrecho.setColumns(10);

@@ -45,7 +45,7 @@ public class PainelConsultarProduto extends JPanel {
 	private JLabel lbEan;
 	private JLabel lbValorMinimo;
 	private JLabel lbValorMaximo;
-	private JLabel lbDataInicial;
+	private JLabel lbNome;
 	private JLabel lbResultados;
 	private JLabel lbPaginas;
 	private JNumberFormatField ftfValorMinimo;
@@ -137,10 +137,6 @@ public class PainelConsultarProduto extends JPanel {
 				RowSpec.decode("max(23dlu;default):grow"),}));
 		
 		
-		// Configurações da parte de DATAS do componente
-		DatePickerSettings dateSettings = new DatePickerSettings();
-		dateSettings.setAllowKeyboardEditing(false);
-		
 		// declaração dos componentes visuais:
 		lbFiltrarConsulta = new JLabel("Filtrar consulta:");
 		add(lbFiltrarConsulta, "4, 4, left, bottom");
@@ -167,8 +163,8 @@ public class PainelConsultarProduto extends JPanel {
 		ftfValorMaximo = new JNumberFormatField(2);
 		add(ftfValorMaximo, "16, 11, 7, 1, fill, default");
 		
-		lbDataInicial = new JLabel("Nome do Produto:");
-		add(lbDataInicial, "4, 8, right, default");
+		lbNome = new JLabel("Nome do Produto:");
+		add(lbNome, "4, 8, right, default");
 		
 		txtProduto = new JTextField();
 		add(txtProduto, "6, 8, 17, 1, fill, default");
@@ -235,6 +231,8 @@ public class PainelConsultarProduto extends JPanel {
 		btnEditar = new JButton("   Editar   ");
 		btnEditar.setEnabled(false);
 		add(btnEditar, "20, 25");
+		// o action listener do botão editar está na tela principal
+		// para poder mandar o objeto para o painel "PainelCadastrarProduto"
 		
 		btnExportar = new JButton("Exportar");
 		btnExportar.setEnabled(false);

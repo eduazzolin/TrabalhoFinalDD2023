@@ -18,6 +18,11 @@ import model.vo.Produto;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.FormSpecs;
+import com.jgoodies.forms.layout.RowSpec;
+import javax.swing.JSeparator;
 
 public class PainelGerenciarProdutos extends JPanel {
 	
@@ -31,41 +36,54 @@ public class PainelGerenciarProdutos extends JPanel {
     ProdutoController produtoController = new ProdutoController();
 	private ArrayList<Produto> produtoscombo;
 
-	// TODO: Colocar algo sobre os podutos desativados
-	
 	/**
 	 * Create the panel.
 	 */
 	public PainelGerenciarProdutos() {
-		setLayout(null);
+		setLayout(new FormLayout(new ColumnSpec[] {
+				ColumnSpec.decode("31px"),
+				ColumnSpec.decode("96px"),
+				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+				ColumnSpec.decode("89px"),
+				ColumnSpec.decode("69px"),
+				FormSpecs.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("197px"),
+				ColumnSpec.decode("31dlu:grow"),},
+			new RowSpec[] {
+				RowSpec.decode("top:max(23dlu;default)"),
+				RowSpec.decode("14px"),
+				FormSpecs.UNRELATED_GAP_ROWSPEC,
+				RowSpec.decode("22px"),
+				FormSpecs.UNRELATED_GAP_ROWSPEC,
+				RowSpec.decode("14px"),
+				FormSpecs.UNRELATED_GAP_ROWSPEC,
+				RowSpec.decode("20px"),
+				RowSpec.decode("37px"),
+				RowSpec.decode("23px"),
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("default:grow"),}));
 		
 		lblQuantidade = new JLabel("Numero");
-		lblQuantidade.setBounds(334, 149, 125, 14);
-		add(lblQuantidade);
+		add(lblQuantidade, "7, 8, fill, center");
 		
 		lbSelecionarProduto = new JLabel("Selecionar Produto:");
-		lbSelecionarProduto.setBounds(77, 63, 96, 14);
-		add(lbSelecionarProduto);
+		add(lbSelecionarProduto, "2, 2, fill, fill");
 		
 		lbSelecionarQuantidade = new JLabel("Selecionar Quantidade:");
-		lbSelecionarQuantidade.setBounds(77, 121, 119, 14);
-		add(lbSelecionarQuantidade);
+		add(lbSelecionarQuantidade, "2, 6, 3, 1, left, fill");
 		
 		tfQuantidade = new JTextField();
-		tfQuantidade.setBounds(77, 146, 133, 20);
-		add(tfQuantidade);
+		add(tfQuantidade, "2, 8, 3, 1, left, fill");
 		tfQuantidade.setColumns(10);
 		
 		lbQuantidadeAtual = new JLabel("Quantidade Atual:");
-		lbQuantidadeAtual.setBounds(334, 121, 125, 14);
-		add(lbQuantidadeAtual);
+		add(lbQuantidadeAtual, "7, 6, left, fill");
 		
 		
 		produtoscombo = produtoController.buscarTodosProdutos(); // busca os produtos no banco e armazena em um ArrayList
 		comboBox = new JComboBox();
 		comboBox.setModel(new DefaultComboBoxModel(produtoscombo.toArray()));
-		comboBox.setBounds(77, 88, 454, 22);
-		add(comboBox);
+		add(comboBox, "2, 4, 6, 1, fill, fill");
 		comboBox.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
 				// Ação de seleção de item:
@@ -86,8 +104,7 @@ public class PainelGerenciarProdutos extends JPanel {
 		 * Atualiza o comboBox
 		 */
 		JButton btAdicionar = new JButton("Adicionar");
-		btAdicionar.setBounds(77, 203, 89, 23);
-		add(btAdicionar);
+		add(btAdicionar, "2, 10, fill, fill");
 		btAdicionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int quantidadeDigitada = 0;
@@ -132,8 +149,7 @@ public class PainelGerenciarProdutos extends JPanel {
 		 * Atualiza o comboBox
 		 */
 		btSubtrair = new JButton("Subtrair");
-		btSubtrair.setBounds(176, 203, 89, 23);
-		add(btSubtrair);
+		add(btSubtrair, "4, 10, fill, fill");
 		btSubtrair.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int quantidadeDigitada = 0;
