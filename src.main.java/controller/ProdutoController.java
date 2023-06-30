@@ -68,4 +68,8 @@ public class ProdutoController {
 		GeradorPlanilha gerador = new GeradorPlanilha();
 		return gerador.gerarPlanilhaProdutos(produtos, destinoArquivo);
 	}
+
+	public boolean editarProduto(Produto produtoNovo) {
+		return produtoBO.editarProduto(produtoNovo);
+	}
 }

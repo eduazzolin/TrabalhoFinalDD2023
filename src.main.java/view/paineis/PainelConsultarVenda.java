@@ -390,7 +390,7 @@ public class PainelConsultarVenda extends JPanel {
 		if (dtFinal.getDate() != null && dtInicial.getDate() != null && dtFinal.getDate().isBefore(dtInicial.getDate())) {
 			throw new CampoInvalidoException("Data final não pode ser anterior à data inicial.");
 		}
-		if (valorMinimo > valorMaximo) {
+		if (valorMinimo > valorMaximo && valorMaximo != 0) {
 			throw new CampoInvalidoException("Valor mínimo não pode ser maior que o valor máximo.");
 		}
 		s.setDataFinal(dtFinal.getDate());

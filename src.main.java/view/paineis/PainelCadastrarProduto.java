@@ -6,6 +6,7 @@ import javax.swing.JTextField;
 import controller.ProdutoController;
 import model.exception.CampoInvalidoException;
 import model.vo.Produto;
+import view.componentesExternos.JNumberFormatField;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -24,19 +25,19 @@ import javax.swing.JTextArea;
 
 public class PainelCadastrarProduto extends JPanel {
 	private JTextField txtProduto;
-	private JTextField txtPreco;
 	private JTextField txtCodigo;
-	
-	protected Produto produtoNovo = new Produto();
 	private ProdutoController produtoController = new ProdutoController();
 	private JTextArea txtDescricao;
 	private JButton btnConfirmar;
-	private Component lblNewLabel_1_1_1;
-	private Component lblNewLabel_1_1;
-	private JLabel lblNewLabel_1;
-	private JLabel lblNewLabel;
+	private Component lbCodigo;
+	private Component lbPreco;
+	private JLabel lbDescricao;
+	private JLabel lbNomeProduto;
 	private JSeparator separator;
 	private JLabel lbTitulo;
+	
+	protected Produto produtoNovo = new Produto();
+	private JNumberFormatField txtPreco;
 	
 	/**
 	 * Create the panel.
@@ -51,6 +52,7 @@ public class PainelCadastrarProduto extends JPanel {
 	 * se for pra atualizar da para preencher já os campos com os atributos dele.
 	 */
 	public PainelCadastrarProduto(Produto produto) {
+		produtoNovo = produto;
 		setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("31px"),
 				ColumnSpec.decode("95px"),
@@ -73,7 +75,7 @@ public class PainelCadastrarProduto extends JPanel {
 				RowSpec.decode("25px"),
 				RowSpec.decode("max(27dlu;default)"),}));
 		
-		lbTitulo = new JLabel((produto.getId() == 0 ? "Cadastrar produto" : "Editar produto"));
+		lbTitulo = new JLabel("Cadastrar produto");
 		lbTitulo.setVerticalAlignment(SwingConstants.BOTTOM);
 		lbTitulo.setHorizontalAlignment(SwingConstants.LEFT);
 		add(lbTitulo, "2, 1, 4, 1");
@@ -89,22 +91,22 @@ public class PainelCadastrarProduto extends JPanel {
 		add(txtProduto, "5, 3, fill, fill");
 		txtProduto.setColumns(10);
 		
-		lblNewLabel = new JLabel("Nome do Produto:");
-		add(lblNewLabel, "2, 3, fill, center");
+		lbNomeProduto = new JLabel("Nome do Produto:");
+		add(lbNomeProduto, "2, 3, fill, center");
 		
 
-		lblNewLabel_1 = new JLabel("Descrição:");
-		add(lblNewLabel_1, "2, 9, fill, top");
+		lbDescricao = new JLabel("Descrição:");
+		add(lbDescricao, "2, 9, fill, top");
 		
-		txtPreco = new JTextField();
-		txtPreco.setColumns(10);
+		txtPreco = new JNumberFormatField(2);
+		txtPreco.setHorizontalAlignment(SwingConstants.LEFT);
 		add(txtPreco, "5, 5, fill, fill");
 		
-		lblNewLabel_1_1 = new JLabel("Preço:");
-		add(lblNewLabel_1_1, "2, 5, fill, center");
+		lbPreco = new JLabel("Preço:");
+		add(lbPreco, "2, 5, fill, center");
 		
-		lblNewLabel_1_1_1 = new JLabel("Codigo do Produto:");
-		add(lblNewLabel_1_1_1, "2, 7, fill, center");
+		lbCodigo = new JLabel("Codigo do Produto:");
+		add(lbCodigo, "2, 7, fill, center");
 		
 		txtCodigo = new JTextField();
 		txtCodigo.setColumns(10);
@@ -124,10 +126,31 @@ public class PainelCadastrarProduto extends JPanel {
 		
 
 		add(btnConfirmar, "5, 12, right, fill");
+		
+		preencherCamposQuandoForEdicao(produto);
 
 	}
+	
+	
+	/**
+	 * Confere se o produto do construtor tem id ou não
+	 * Se tiver, significa que é edição então os campos 
+	 * da tela são preenchidos.
+	 * @param produto 
+	 */
+	private void preencherCamposQuandoForEdicao(Produto p) {
+		if (p.getId() > 0) {
+			txtProduto.setText(p.getNome());
+			txtPreco.setText(String.format("R$ %.2f", p.getValor()));
+			txtCodigo.setText(p.getEan());
+			txtDescricao.setText(p.getDescricao());
+		}
+	}
+
+
+
 	private void acaoBotaoConfirmar() throws CampoInvalidoException {
-		
+	
 			 if(txtProduto.getText().isEmpty()) {
 				 throw new CampoInvalidoException("Nome do produto não informado");
 			    }
@@ -141,13 +164,20 @@ public class PainelCadastrarProduto extends JPanel {
 								 throw new CampoInvalidoException("Descrição não informada");
 							 }
 							 
-							 
 							 produtoNovo.setNome(txtProduto.getText());
 							 produtoNovo.setDescricao(txtDescricao.getText());
-							 produtoNovo.setValor(Double.parseDouble(txtPreco.getText()));
+							 produtoNovo.setValor(txtPreco.getValue().doubleValue());
 							 produtoNovo.setEan(txtCodigo.getText());
 							
-							produtoNovo = produtoController.criarProduto(produtoNovo);
+								if(produtoNovo.getId() == 0) {
+									produtoNovo = produtoController.criarProduto(produtoNovo);
+								} else {
+									if(produtoController.editarProduto(produtoNovo)) {
+										JOptionPane.showMessageDialog(null, "Produto atualizado com sucesos!", "Atualização", 1);
+									} else {
+										JOptionPane.showMessageDialog(null, "Erro ao atualizar produto!", "Erro", 1);
+									}
+								}
 							 
 	}
 }

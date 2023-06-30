@@ -226,7 +226,7 @@ public class ProdutoDAO {
 			} else {
 				query += " AND ";
 			}
-			query += " VALOR_TOTAL <= " + seletor.getValorMaximo();
+			query += " VALOR <= " + seletor.getValorMaximo();
 			primeiro = false;
 		}
 		if (seletor.getValorMinimo() != null) {
@@ -235,7 +235,7 @@ public class ProdutoDAO {
 			} else {
 				query += " AND ";
 			}
-			query += " VALOR_TOTAL >= " + seletor.getValorMinimo();
+			query += " VALOR >= " + seletor.getValorMinimo();
 			primeiro = false;
 		}
 
@@ -266,6 +266,31 @@ public class ProdutoDAO {
 		}
 		return quantidade;
 		
+	}
+
+	public boolean editarProduto(Produto p) {
+		Connection conn = Banco.getConnection();
+		String query = "UPDATE PRODUTO SET "
+				+ " NOME = ?,"
+				+ " DESCRICAO = ?,"
+				+ " EAN = ?,"
+				+ " VALOR = ?"
+				+ " WHERE ID_PRODUTO = ?";
+		PreparedStatement pstmt = Banco.getPreparedStatement(conn, query);
+		
+		boolean resultado = false;
+		try {
+			pstmt.setString(1, p.getNome());
+			pstmt.setString(2, p.getDescricao());
+			pstmt.setString(3, p.getEan());
+			pstmt.setDouble(4, p.getValor());
+			pstmt.setInt(5, p.getId());
+			resultado = (pstmt.executeUpdate() > 0);
+		} catch (SQLException e) {
+			System.out.println("Erro ao atualizar produto.");
+			System.out.println("Erro: " + e.getMessage());
+		}
+		return resultado;
 	}
 
 }

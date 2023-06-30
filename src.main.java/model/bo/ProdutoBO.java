@@ -33,5 +33,8 @@ public class ProdutoBO {
 		
 		return produtoDAO.consultarComFiltos(seletor);
 	}
+	public boolean editarProduto(Produto produtoNovo) {
+		return produtoDAO.editarProduto(produtoNovo);
+	}
 
 }

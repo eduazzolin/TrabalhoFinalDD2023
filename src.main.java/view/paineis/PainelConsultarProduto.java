@@ -347,7 +347,7 @@ public class PainelConsultarProduto extends JPanel {
 		valorMinimo = ftfValorMinimo.getValue().doubleValue();
 		valorMaximo = ftfValorMaximo.getValue().doubleValue();
 
-		if (valorMinimo > valorMaximo) {
+		if (valorMinimo > valorMaximo && valorMaximo > 0) {
 			throw new CampoInvalidoException("Valor mínimo não pode ser maior que o valor máximo.");
 		}
 		seletor.setNome(txtProduto.getText());
@@ -456,7 +456,7 @@ public class PainelConsultarProduto extends JPanel {
 				valorMinimo = ftfValorMinimo.getValue().doubleValue();
 				valorMaximo = ftfValorMaximo.getValue().doubleValue();
 
-				if (valorMinimo > valorMaximo) {
+				if (valorMinimo > valorMaximo && valorMaximo > 0) {
 					throw new CampoInvalidoException("Valor mínimo não pode ser maior que o valor máximo.");
 				}
 				seletorParaExportar.setNome(txtProduto.getText());
