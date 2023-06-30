@@ -15,6 +15,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import model.vo.ItemVenda;
+import model.vo.Produto;
 import model.vo.Venda;
 
 public class GeradorPlanilha {
@@ -125,6 +126,10 @@ public class GeradorPlanilha {
 		}
 		
 		return mensagem;
+	}
+	public String gerarPlanilhaProdutos(ArrayList<Produto> produtos, String destinoArquivo) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
