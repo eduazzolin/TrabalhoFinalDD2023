@@ -138,6 +138,7 @@ public class PainelConsultarProduto extends JPanel {
 		
 		
 		// declaração dos componentes visuais:
+		
 		lbFiltrarConsulta = new JLabel("Filtrar consulta:");
 		add(lbFiltrarConsulta, "4, 4, left, bottom");
 		
@@ -224,7 +225,12 @@ public class PainelConsultarProduto extends JPanel {
 		add(btnRemover, "18, 25");
 		btnRemover.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				acaoBotaoRemover();
+				try {
+					acaoBotaoRemover();
+				} catch (ProdutoInvalidoException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		
@@ -270,19 +276,15 @@ public class PainelConsultarProduto extends JPanel {
 	 * Marca como false o atributo "ativo" no banco de dados;
 	 * Atualiza a tabela e os botões "remover" e "ver produtos".
 	 */
-	protected void acaoBotaoRemover() {
-//		try {
-//			if(vendaController.removerVenda(vendaSelecionada)) {
-//				JOptionPane.showMessageDialog(btnRemover, "Venda removida com sucesso!", "Sucesso", 1);
-//				acaoBotaoConsultar();
-//				btnRemover.setEnabled(false);
-//				btnEditar.setEnabled(false);
-//			} else {
-//				JOptionPane.showMessageDialog(btnRemover, "Erro ao remover venda", "Erro", 1);
-//			}
-//		} catch (VendaInvalidaException e) {
-//			JOptionPane.showMessageDialog(btnRemover, e.getMessage(), "Erro", 1);
-//		}
+	protected void acaoBotaoRemover() throws ProdutoInvalidoException {
+		if(produtoController.removerProduto(produtoSelecionado)) {
+			JOptionPane.showMessageDialog(btnRemover, "Produto removida com sucesso!", "Sucesso", 1);
+			acaoBotaoConsultar();
+			btnRemover.setEnabled(false);
+			btnEditar.setEnabled(false);
+		} else {
+			JOptionPane.showMessageDialog(btnRemover, "Erro ao remover venda", "Erro", 1);
+		}
 		
 	}
 

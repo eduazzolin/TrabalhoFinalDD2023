@@ -141,14 +141,15 @@ public class ProdutoDAO {
 
 	public Produto criarProduto(Produto produtoNovo) {
 		boolean retorno = false;
-		
-		String query = "INSERT INTO PRODUTO (NOME, DESCRICAO, EAN, VALOR, ESTOQUE) VALUES ('" + produtoNovo.getNome() + "',"
-				+ " '"+ produtoNovo.getDescricao() + "', "+ produtoNovo.getEan() + ", "+ produtoNovo.getValor() +", 0);";
+
+		String query = "INSERT INTO PRODUTO (NOME, DESCRICAO, EAN, VALOR, ESTOQUE) VALUES ('" + produtoNovo.getNome()
+				+ "'," + " '" + produtoNovo.getDescricao() + "', " + produtoNovo.getEan() + ", "
+				+ produtoNovo.getValor() + ", 0);";
 		Connection conn = Banco.getConnection();
 
 		PreparedStatement stmt = Banco.getPreparedStatement(conn, query);
 		try {
-			if(stmt.executeUpdate(query)== 1) {
+			if (stmt.executeUpdate(query) == 1) {
 				retorno = true;
 			}
 		} catch (Exception e) {
@@ -165,7 +166,6 @@ public class ProdutoDAO {
 		Connection conn = Banco.getConnection();
 		String query = " SELECT * FROM produto ";
 
-		
 		if (seletor.temFiltro()) {
 			query = preencherFiltros(query, seletor);
 		}
@@ -265,19 +265,32 @@ public class ProdutoDAO {
 			Banco.closeConnection(conn);
 		}
 		return quantidade;
-		
+
+	}
+
+	public boolean removerProduto(Produto produtoSelecionado) {
+
+		String query = "UPDATE produto set ativo = false where ID_PRODUTO = " + produtoSelecionado.getId();
+		Connection conn = Banco.getConnection();
+		PreparedStatement pstmt = Banco.getPreparedStatement(conn, query);
+
+		boolean resultado = false;
+		try {
+			resultado = (pstmt.executeUpdate() > 0);
+
+		} catch (SQLException e) {
+			System.out.println("Erro ao excluir produto.");
+			System.out.println("Erro: " + e.getMessage());
+		}
+		return resultado;
 	}
 
 	public boolean editarProduto(Produto p) {
 		Connection conn = Banco.getConnection();
-		String query = "UPDATE PRODUTO SET "
-				+ " NOME = ?,"
-				+ " DESCRICAO = ?,"
-				+ " EAN = ?,"
-				+ " VALOR = ?"
+		String query = "UPDATE PRODUTO SET " + " NOME = ?," + " DESCRICAO = ?," + " EAN = ?," + " VALOR = ?"
 				+ " WHERE ID_PRODUTO = ?";
 		PreparedStatement pstmt = Banco.getPreparedStatement(conn, query);
-		
+
 		boolean resultado = false;
 		try {
 			pstmt.setString(1, p.getNome());

@@ -163,6 +163,19 @@ public class PainelCadastrarProduto extends JPanel {
 							 if(txtDescricao.getText().isEmpty()) {
 								 throw new CampoInvalidoException("Descrição não informada");
 							 }
+							 if(txtProduto.getText().length() > 255) {
+								 throw new CampoInvalidoException("Tamanho maximo do nome atingido (255 caracteres)");
+							 }
+							  if(txtPreco.getText().length() > 11) {
+								 throw new CampoInvalidoException("Tamanho maximo do preço atingido (12 caracteres)");
+						    	}
+						    	 if(txtCodigo.getText().length() > 16) {
+									 throw new CampoInvalidoException("Tamanho maximo do codigo atingido (16 caracteres)");
+								 }
+										 if(txtDescricao.getText().length() > 255) {
+											 throw new CampoInvalidoException("Tamanho maximo da descrição atingido (255 caracteres)");
+										 }
+							 
 							 
 							 produtoNovo.setNome(txtProduto.getText());
 							 produtoNovo.setDescricao(txtDescricao.getText());

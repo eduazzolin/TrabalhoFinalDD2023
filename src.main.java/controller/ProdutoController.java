@@ -8,6 +8,7 @@ import model.vo.Produto;
 import model.exception.CampoInvalidoException;
 import model.exception.EstoqueInsuficienteException;
 import model.exception.ProdutoInvalidoException;
+import model.exception.VendaInvalidaException;
 import model.gerador.GeradorPlanilha;
 import model.seletor.ProdutoSeletor;
 
@@ -69,6 +70,11 @@ public class ProdutoController {
 		return gerador.gerarPlanilhaProdutos(produtos, destinoArquivo);
 	}
 
+
+	public boolean removerProduto(Produto produtoSelecionado) {
+		
+		return produtoBO.removerProduto(produtoSelecionado);
+	}
 	public boolean editarProduto(Produto produtoNovo) {
 		return produtoBO.editarProduto(produtoNovo);
 	}

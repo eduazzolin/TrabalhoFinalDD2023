@@ -36,5 +36,8 @@ public class ProdutoBO {
 	public boolean editarProduto(Produto produtoNovo) {
 		return produtoDAO.editarProduto(produtoNovo);
 	}
-
+	public boolean removerProduto(Produto produtoSelecionado) {
+		
+		return produtoDAO.removerProduto(produtoSelecionado);
+	}
 }
