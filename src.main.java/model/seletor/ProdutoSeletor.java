@@ -19,6 +19,21 @@ public class ProdutoSeletor extends BaseSeletor{
 				|| (this.nome != null && this.nome.trim().length() > 0);
 	}
 
+	// Construtores:
+	public ProdutoSeletor(String ean, Double valorMinimo, Double valorMaximo, String nome) {
+		super();
+		this.ean = ean;
+		this.valorMinimo = valorMinimo;
+		this.valorMaximo = valorMaximo;
+		this.nome = nome;
+	}
+
+	public ProdutoSeletor() {
+		super();
+
+	}
+	
+	// Getters e Setters:
 	public String getEan() {
 		return ean;
 	}
@@ -51,21 +66,9 @@ public class ProdutoSeletor extends BaseSeletor{
 		this.nome = nome;
 	}
 
-	public ProdutoSeletor(String ean, Double valorMinimo, Double valorMaximo, String nome) {
-		super();
-		this.ean = ean;
-		this.valorMinimo = valorMinimo;
-		this.valorMaximo = valorMaximo;
-		this.nome = nome;
-	}
 
-	public ProdutoSeletor() {
-		super();
-
-	}
 	
 	
-	// Construtores:
 
 
 	

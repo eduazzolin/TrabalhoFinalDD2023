@@ -18,10 +18,6 @@ public class VendaBO {
 	private ProdutoDAO produtoDAO = new ProdutoDAO();
 
 	public Venda cadastrarVenda(Venda venda) throws VendaInvalidaException, EstoqueInsuficienteException {
-		// verificando se a venda não está vazia:
-		if (venda.getListaItemVenda() == null && venda.getListaItemVenda().size() == 0) {
-			throw new VendaInvalidaException("Venda vazia");
-		}
 		// Verificando se todos os produtos tem estoque:
 		HashMap<Integer, Integer> produtosEQuantidadesAgrupados = new HashMap<Integer, Integer>();
 		for (ItemVenda iv : venda.getListaItemVenda()) {
@@ -68,6 +64,7 @@ public class VendaBO {
 	}
 
 	public ArrayList<Venda> buscarVendasSemPaginacaoComFiltros(VendaSeletor seletor) {
+		// tudo ok! passa adiante!   
 		return vendaDAO.buscarVendasSemPaginacaoComFiltros(seletor);
 	}
 

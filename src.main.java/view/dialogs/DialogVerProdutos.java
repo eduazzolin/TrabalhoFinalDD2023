@@ -93,14 +93,15 @@ public class DialogVerProdutos extends JDialog {
 				setVisible(false);
 			}
 		});
-		
-		
 	}
 
+	/*
+	 * Limpa a tabela e preenche com o cabeçalho e com os produtos
+	 * do ArrayList que for passado por parâmetro.
+	 */
 	public void atualizarTabelaELabel(Venda v) {
-		this.limparTabela();
+		tbVerProdutos.setModel(new DefaultTableModel(new Object[][] { }, nomesColunas));
 		DefaultTableModel model = (DefaultTableModel) tbVerProdutos.getModel();
-
 		for (ItemVenda iv : v.getListaItemVenda()) {
 			Object[] novaLinhaDaTabela = new Object[6];
 			novaLinhaDaTabela[0] = iv.getProduto().getEan();
@@ -114,8 +115,4 @@ public class DialogVerProdutos extends JDialog {
 		lblDescVenda.setText(v.toString());
 	}
 
-	private void limparTabela() {
-		tbVerProdutos.setModel(new DefaultTableModel(new Object[][] { }, nomesColunas));
-
-	}
 }

@@ -17,7 +17,6 @@ public class VendaController {
 	private VendaBO vendaBO = new VendaBO();
 
 	public Venda cadastrarVenda(Venda venda) throws VendaInvalidaException, EstoqueInsuficienteException {
-		// validações pré insert:
 		if (venda.getListaItemVenda() == null || venda.getListaItemVenda().size() == 0) {
 			throw new VendaInvalidaException("Erro: A venda não pode estar vazia!");
 		}
@@ -26,29 +25,14 @@ public class VendaController {
 				throw new VendaInvalidaException("Erro: A venda possui produtos desativados!");
 			}
 		}
-
-		// insert
-		venda = vendaBO.cadastrarVenda(venda);
-
-		// validações pós insert:
-		if (venda.getId() == 0) {
-			throw new VendaInvalidaException("Erro ao cadastrar venda!");
-		}
-		for (ItemVenda iv : venda.getListaItemVenda()) {
-			if (iv.getId() == 0) {
-				throw new VendaInvalidaException("Erro ao cadastrar venda!");
-			}
-		}
-		return venda;
+		return vendaBO.cadastrarVenda(venda);
 	}
 
 	public ArrayList<Venda> consultarComFiltros(VendaSeletor seletor) {
-		// tudo ok! passa adiante!
 		return vendaBO.consultarComFiltros(seletor);
 	}
 
 	public int contarTotalRegistrosComFiltros(VendaSeletor seletor) {
-		// tudo ok! passa adiante!
 		return vendaBO.contarTotalRegistrosComFiltros(seletor);
 	}
 

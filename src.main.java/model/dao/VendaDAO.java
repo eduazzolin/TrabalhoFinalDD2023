@@ -12,6 +12,7 @@ import model.bo.ItemVendaBO;
 import model.seletor.VendaSeletor;
 import model.vo.ItemVenda;
 import model.vo.Venda;
+import controller.ItemVendaController;
 
 public class VendaDAO {
 
@@ -40,8 +41,8 @@ public class VendaDAO {
 			resultado = pstmt.getGeneratedKeys();
 			if (resultado.next()) {
 				venda.setId(resultado.getInt(1));
-				ItemVendaBO itemVendaBO = new ItemVendaBO();
-				itemVendaBO.cadastrarMultiplosItemVenda(venda.getListaItemVenda(), venda.getId());
+				ItemVendaController itemVendaController = new ItemVendaController();
+				itemVendaController.cadastrarMultiplosItemVenda(venda.getListaItemVenda(), venda.getId());
 			}
 		} catch (SQLException erro) {
 			System.out.println("Erro ao cadastrar venda");
