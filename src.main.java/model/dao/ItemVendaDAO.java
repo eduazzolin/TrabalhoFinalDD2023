@@ -15,7 +15,7 @@ import model.vo.Produto;
 public class ItemVendaDAO {
 
 	ProdutoDAO produtoDAO = new ProdutoDAO();
-	
+
 	public ItemVenda cadastrarItemVenda(ItemVenda iv) {
 		String query = " INSERT INTO ITEM_VENDA (ID_VENDA, ID_PRODUTO, QTDE_PRODUTO, VALOR_UNITARIO) VALUES (?, ?, ?, ?) ";
 		Connection conn = Banco.getConnection();
@@ -30,7 +30,9 @@ public class ItemVendaDAO {
 			pstmt.execute();
 			resultado = pstmt.getGeneratedKeys();
 			if (resultado.next()) {
-				iv.setId(resultado.getInt(1));
+				if (produtoDAO.atualizarEstoque(iv.getQtde() * -1, iv.getProduto())) {
+					iv.setId(resultado.getInt(1));
+				}
 			}
 		} catch (SQLException erro) {
 			System.out.println("Erro ao cadastrar Item_Venda");
@@ -47,7 +49,7 @@ public class ItemVendaDAO {
 		String query = "DELETE FROM ITEM_VENDA WHERE ID_VENDA = " + id;
 		Connection conn = Banco.getConnection();
 		PreparedStatement pstmt = Banco.getPreparedStatement(conn, query);
-		
+
 		boolean resultado = false;
 		try {
 			resultado = (pstmt.executeUpdate() > 0);

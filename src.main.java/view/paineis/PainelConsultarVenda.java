@@ -87,7 +87,7 @@ public class PainelConsultarVenda extends JPanel {
 	public PainelConsultarVenda() {
 		setLayout(new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("max(35dlu;default):grow"),
+				ColumnSpec.decode("max(31dlu;default)"),
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("max(72dlu;default)"),
 				FormSpecs.RELATED_GAP_COLSPEC,
@@ -107,12 +107,11 @@ public class PainelConsultarVenda extends JPanel {
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("max(50dlu;default)"),
 				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("max(35dlu;default):grow"),},
+				ColumnSpec.decode("min(31dlu;default):grow"),},
 			new RowSpec[] {
 				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("14dlu"),
 				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("max(15dlu;default)"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("max(10dlu;default)"),
 				RowSpec.decode("max(20dlu;default)"),
@@ -135,7 +134,7 @@ public class PainelConsultarVenda extends JPanel {
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("max(22dlu;default)"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("max(23dlu;default):grow"),}));
+				RowSpec.decode("max(14dlu;default)"),}));
 		
 		
 		// Configurações da parte de DATAS do componente
@@ -144,57 +143,57 @@ public class PainelConsultarVenda extends JPanel {
 		
 		// declaração dos componentes visuais:
 		lbFiltrarConsulta = new JLabel("Filtrar consulta:");
-		add(lbFiltrarConsulta, "4, 4, left, bottom");
+		add(lbFiltrarConsulta, "4, 3, left, bottom");
 		
 		separator = new JSeparator();
-		add(separator, "4, 6, 17, 1, default, top");
+		add(separator, "4, 5, 17, 1, default, top");
 		
 		lbEan = new JLabel("EAN:");
-		add(lbEan, "4, 7, right, default");
+		add(lbEan, "4, 6, right, default");
 		
 		tfEan = new JTextField();
-		add(tfEan, "6, 7, 15, 1, fill, default");
+		add(tfEan, "6, 6, 15, 1, fill, default");
 		tfEan.setColumns(10);
 		
 		lbValorMinimo = new JLabel("Valor mínimo:");
-		add(lbValorMinimo, "4, 9, right, default");
+		add(lbValorMinimo, "4, 8, right, default");
 		
 		ftfValorMinimo = new JNumberFormatField(2);
-		add(ftfValorMinimo, "6, 9, 5, 1, fill, default");
+		add(ftfValorMinimo, "6, 8, 5, 1, fill, default");
 		
 		lbValorMaximo = new JLabel("Valor máximo:");
-		add(lbValorMaximo, "12, 9, right, default");
+		add(lbValorMaximo, "12, 8, right, default");
 		
 		ftfValorMaximo = new JNumberFormatField(2);
-		add(ftfValorMaximo, "14, 9, 7, 1, fill, default");
+		add(ftfValorMaximo, "14, 8, 7, 1, fill, default");
 		
 		lbDataInicial = new JLabel("Data inicial:");
-		add(lbDataInicial, "4, 11, right, default");
+		add(lbDataInicial, "4, 10, right, default");
 
 		lbPaginas = new JLabel("");
 		lbPaginas.setHorizontalAlignment(SwingConstants.CENTER);
-		add(lbPaginas, "6, 25");
+		add(lbPaginas, "6, 24");
 		
 		lbResultados = new JLabel("Resultados:");
-		add(lbResultados, "4, 17");
+		add(lbResultados, "4, 16");
 		
 		separator2 = new JSeparator();
-		add(separator2, "4, 19, 17, 1, default, top");
+		add(separator2, "4, 18, 17, 1, default, top");
 		
 		dtInicial = new DatePicker();
 		dtInicial.setBounds(160, 90, 515, 30);
-		add(dtInicial, "6, 11, 5, 1, fill, default");
+		add(dtInicial, "6, 10, 5, 1, fill, default");
 		
 		lbDataFinal = new JLabel("Data final:");
-		add(lbDataFinal, "12, 11, right, default");
+		add(lbDataFinal, "12, 10, right, default");
 		
 		dtFinal = new DatePicker();
 		dtFinal.setBounds(160, 90, 515, 30);
-		add(dtFinal, "14, 11, 7, 1, fill, default");
+		add(dtFinal, "14, 10, 7, 1, fill, default");
 		
 		btnConsultar = new JButton("Consultar");
 		btnConsultar.setMaximumSize(new Dimension(50, 21));
-		add(btnConsultar, "18, 13, 3, 1");
+		add(btnConsultar, "18, 12, 3, 1");
 		btnConsultar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				acaoBotaoConsultar();
@@ -204,7 +203,7 @@ public class PainelConsultarVenda extends JPanel {
 		table = new JTable();
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setModel(new DefaultTableModel(new Object[][] { nomesColunas, }, nomesColunas));
-		add(table, "4, 21, 17, 3, fill, fill");
+		add(table, "4, 20, 17, 3, fill, fill");
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -215,7 +214,7 @@ public class PainelConsultarVenda extends JPanel {
 		
 		btnVoltar = new JButton("<< Voltar");
 		btnVoltar.setEnabled(false);
-		add(btnVoltar, "4, 25");
+		add(btnVoltar, "4, 24");
 		btnVoltar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				acaoBotaoVoltar();
@@ -224,7 +223,7 @@ public class PainelConsultarVenda extends JPanel {
 		
 		btnAvancar = new JButton("Avançar >>");
 		btnAvancar.setEnabled(false);
-		add(btnAvancar, "8, 25");
+		add(btnAvancar, "8, 24");
 		btnAvancar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				acaoBotaoAvancar();
@@ -233,7 +232,7 @@ public class PainelConsultarVenda extends JPanel {
 		
 		btnVerProdutos = new JButton("Ver produtos");
 		btnVerProdutos.setEnabled(false);
-		add(btnVerProdutos, "18, 25");
+		add(btnVerProdutos, "18, 24");
 		btnVerProdutos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				acaoBotaoVerProdutos();
@@ -242,7 +241,7 @@ public class PainelConsultarVenda extends JPanel {
 		
 		btnRemover = new JButton("Remover");
 		btnRemover.setEnabled(false);
-		add(btnRemover, "16, 25");
+		add(btnRemover, "16, 24");
 		btnRemover.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				acaoBotaoRemover();
@@ -251,7 +250,7 @@ public class PainelConsultarVenda extends JPanel {
 		
 		btnExportar = new JButton("Exportar");
 		btnExportar.setEnabled(false);
-		add(btnExportar, "20, 25");
+		add(btnExportar, "20, 24");
 		btnExportar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				acaoBotaoExportar();

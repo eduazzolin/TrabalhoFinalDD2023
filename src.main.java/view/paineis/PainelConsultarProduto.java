@@ -84,7 +84,7 @@ public class PainelConsultarProduto extends JPanel {
 	public PainelConsultarProduto() {
 		setLayout(new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("max(35dlu;default):grow"),
+				ColumnSpec.decode("max(31dlu;default)"),
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("max(72dlu;default)"),
 				FormSpecs.RELATED_GAP_COLSPEC,
@@ -106,12 +106,11 @@ public class PainelConsultarProduto extends JPanel {
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("max(50dlu;default)"),
 				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("max(35dlu;default):grow"),},
+				ColumnSpec.decode("max(31dlu;default)"),},
 			new RowSpec[] {
 				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("14dlu"),
 				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("max(15dlu;default)"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("max(10dlu;default)"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
@@ -134,56 +133,56 @@ public class PainelConsultarProduto extends JPanel {
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("max(22dlu;default)"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("max(23dlu;default):grow"),}));
+				RowSpec.decode("max(23dlu;default)"),}));
 		
 		
 		// declaração dos componentes visuais:
 		
 		lbFiltrarConsulta = new JLabel("Filtrar consulta:");
-		add(lbFiltrarConsulta, "4, 4, left, bottom");
+		add(lbFiltrarConsulta, "4, 3, left, bottom");
 		
 		separator = new JSeparator();
-		add(separator, "4, 6, 19, 1, default, top");
+		add(separator, "4, 5, 19, 1, default, top");
 		
 		lbEan = new JLabel("EAN:");
-		add(lbEan, "4, 9, right, default");
+		add(lbEan, "4, 8, right, default");
 		
 		tfEan = new JTextField();
-		add(tfEan, "6, 9, 17, 1, fill, default");
+		add(tfEan, "6, 8, 17, 1, fill, default");
 		tfEan.setColumns(10);
 		
 		lbValorMinimo = new JLabel("Valor mínimo:");
-		add(lbValorMinimo, "4, 11, right, default");
+		add(lbValorMinimo, "4, 10, right, default");
 		
 		ftfValorMinimo = new JNumberFormatField(2);
-		add(ftfValorMinimo, "6, 11, 6, 1, fill, default");
+		add(ftfValorMinimo, "6, 10, 6, 1, fill, default");
 		
 		lbValorMaximo = new JLabel("Valor máximo:");
-		add(lbValorMaximo, "14, 11, right, default");
+		add(lbValorMaximo, "14, 10, right, default");
 		
 		ftfValorMaximo = new JNumberFormatField(2);
-		add(ftfValorMaximo, "16, 11, 7, 1, fill, default");
+		add(ftfValorMaximo, "16, 10, 7, 1, fill, default");
 		
 		lbNome = new JLabel("Nome do Produto:");
-		add(lbNome, "4, 8, right, default");
+		add(lbNome, "4, 7, right, default");
 		
 		txtProduto = new JTextField();
-		add(txtProduto, "6, 8, 17, 1, fill, default");
+		add(txtProduto, "6, 7, 17, 1, fill, default");
 		txtProduto.setColumns(10);
 
 		lbPaginas = new JLabel("");
 		lbPaginas.setHorizontalAlignment(SwingConstants.CENTER);
-		add(lbPaginas, "6, 25");
+		add(lbPaginas, "6, 24");
 		
 		lbResultados = new JLabel("Resultados:");
-		add(lbResultados, "4, 17");
+		add(lbResultados, "4, 16");
 		
 		separator2 = new JSeparator();
-		add(separator2, "4, 19, 19, 1, default, top");
+		add(separator2, "4, 18, 19, 1, default, top");
 		
 		btnConsultar = new JButton("Consultar");
 		btnConsultar.setMaximumSize(new Dimension(50, 21));
-		add(btnConsultar, "20, 13, 3, 1");
+		add(btnConsultar, "20, 12, 3, 1");
 		btnConsultar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				acaoBotaoConsultar();
@@ -193,7 +192,7 @@ public class PainelConsultarProduto extends JPanel {
 		table = new JTable();
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setModel(new DefaultTableModel(new Object[][] { nomesColunas, }, nomesColunas));
-		add(table, "4, 21, 19, 3, fill, fill");
+		add(table, "4, 20, 19, 3, fill, fill");
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -204,7 +203,7 @@ public class PainelConsultarProduto extends JPanel {
 		
 		btnVoltar = new JButton("<< Voltar");
 		btnVoltar.setEnabled(false);
-		add(btnVoltar, "4, 25");
+		add(btnVoltar, "4, 24");
 		btnVoltar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				acaoBotaoVoltar();
@@ -213,7 +212,7 @@ public class PainelConsultarProduto extends JPanel {
 		
 		btnAvancar = new JButton("Avançar >>");
 		btnAvancar.setEnabled(false);
-		add(btnAvancar, "8, 25");
+		add(btnAvancar, "8, 24");
 		btnAvancar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				acaoBotaoAvancar();
@@ -222,7 +221,7 @@ public class PainelConsultarProduto extends JPanel {
 		
 		btnRemover = new JButton("Remover");
 		btnRemover.setEnabled(false);
-		add(btnRemover, "18, 25");
+		add(btnRemover, "18, 24");
 		btnRemover.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -236,13 +235,13 @@ public class PainelConsultarProduto extends JPanel {
 		
 		btnEditar = new JButton("   Editar   ");
 		btnEditar.setEnabled(false);
-		add(btnEditar, "20, 25");
+		add(btnEditar, "20, 24");
 		// o action listener do botão editar está na tela principal
 		// para poder mandar o objeto para o painel "PainelCadastrarProduto"
 		
 		btnExportar = new JButton("Exportar");
 		btnExportar.setEnabled(false);
-		add(btnExportar, "22, 25");
+		add(btnExportar, "22, 24");
 		btnExportar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				acaoBotaoExportar();

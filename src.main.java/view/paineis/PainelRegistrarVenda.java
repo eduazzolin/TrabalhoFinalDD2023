@@ -109,8 +109,7 @@ public class PainelRegistrarVenda extends JPanel {
 				ColumnSpec.decode("right:31dlu"),},
 			new RowSpec[] {
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				new RowSpec(RowSpec.TOP, Sizes.bounded(Sizes.PREFERRED, Sizes.constant("10dlu", false), Sizes.constant("30dlu", false)), 0),
-				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("top:14dlu"),
 				FormSpecs.DEFAULT_ROWSPEC,
 				RowSpec.decode("max(8dlu;default)"),
 				RowSpec.decode("max(22dlu;default)"),
@@ -147,61 +146,61 @@ public class PainelRegistrarVenda extends JPanel {
 		
 		// declaração dos componentes visuais:
 		lbAdicionarProdutos = new JLabel("Adicionar produtos:");
-		add(lbAdicionarProdutos, "4, 4, 3, 1");
+		add(lbAdicionarProdutos, "4, 3, 3, 1");
 		
 		tpDescricaoProdutoSelecionado = new JTextPane();
 		tpDescricaoProdutoSelecionado.setText(VALOR_PADRAO_DESCRICAO_PRODUTO_SELECIONADO);
-		add(tpDescricaoProdutoSelecionado, "4, 10, 13, 1, left, fill");
+		add(tpDescricaoProdutoSelecionado, "4, 9, 13, 1, left, fill");
 		tpDescricaoProdutoSelecionado.setBackground(null);
 		
 		tfQuantidade = new JTextField();
-		add(tfQuantidade, "6, 12, fill, default");
+		add(tfQuantidade, "6, 11, fill, default");
 		tfQuantidade.setColumns(10);
 
 		lbQuantidade = new JLabel("Quantidade:");
-		add(lbQuantidade, "4, 12, right, default");
+		add(lbQuantidade, "4, 11, right, default");
 		
 		lbEstoque = new JLabel("");
 		lbEstoque.setForeground(new Color(128, 0, 0));
-		add(lbEstoque, "10, 12");
+		add(lbEstoque, "10, 11");
 		
 		lbResumoDaCompra = new JLabel("Resumo da compra:");
-		add(lbResumoDaCompra, "4, 16, 3, 1");
+		add(lbResumoDaCompra, "4, 15, 3, 1");
 		
 		separator_1 = new JSeparator();
-		add(separator_1, "4, 17, 13, 1, default, top");
+		add(separator_1, "4, 16, 13, 1, default, top");
 		
 		scrollPane = new JScrollPane();
-		add(scrollPane, "4, 18, 7, 17, fill, fill");
+		add(scrollPane, "4, 17, 7, 17, fill, fill");
 		
 		tpProdutosAdicionados = new JTextPane();
 		scrollPane.setViewportView(tpProdutosAdicionados);
 		
 		lbRemoverProduto = new JLabel("Remover Produto:");
-		add(lbRemoverProduto, "16, 20, center, default");
+		add(lbRemoverProduto, "16, 19, center, default");
 		
 		lbHashTag = new JLabel("#");
 		lbHashTag.setHorizontalAlignment(SwingConstants.RIGHT);
-		add(lbHashTag, "14, 22, right, default");
+		add(lbHashTag, "14, 21, right, default");
 		
 		tfRemoverProduto = new JTextField();
-		add(tfRemoverProduto, "16, 22, center, default");
+		add(tfRemoverProduto, "16, 21, center, default");
 		tfRemoverProduto.setColumns(10);
 		
 		separator = new JSeparator();
-		add(separator, "4, 5, 14, 1, default, top");
+		add(separator, "4, 4, 14, 1, default, top");
 		
 		lbValorTotal = new JLabel("Valor total:");
-		add(lbValorTotal, "16, 28, center, default");
+		add(lbValorTotal, "16, 27, center, default");
 		
 		tfValorTotal = new JTextField();
 		tfValorTotal.setEditable(false);
-		add(tfValorTotal, "16, 30, center, default");
+		add(tfValorTotal, "16, 29, center, default");
 		tfValorTotal.setColumns(10);
 		tfValorTotal.setBackground(null);
 		
 		cbSelecionarProduto = new JComboBox<Object>(new String[] {VALOR_PADRAO_COMBOBOX_SELECAO_PRODUTOS});
-		add(cbSelecionarProduto, "4, 8, 13, 1, fill, default");
+		add(cbSelecionarProduto, "4, 7, 13, 1, fill, default");
 		cbSelecionarProduto.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
 				acaoComboBoxSelecionarProduto();
@@ -210,7 +209,7 @@ public class PainelRegistrarVenda extends JPanel {
 		
 		tfTrecho = new JTextField(); 
 		tfTrecho.setText(VALOR_PADRAO_CAMPO_TRECHO);
-		add(tfTrecho, "4, 6, 7, 1, fill, default");
+		add(tfTrecho, "4, 5, 7, 1, fill, default");
 		tfTrecho.setColumns(10);
 		tfTrecho.addMouseListener(new MouseAdapter() {
 			@Override
@@ -221,7 +220,7 @@ public class PainelRegistrarVenda extends JPanel {
 		
 		btAdicionar = new JButton("Adicionar");
 		btAdicionar.setEnabled(false);
-		add(btAdicionar, "8, 12");
+		add(btAdicionar, "8, 11");
 		btAdicionar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -230,7 +229,7 @@ public class PainelRegistrarVenda extends JPanel {
 		});
 		
 		btnBuscar = new JButton("Buscar");
-		add(btnBuscar, "12, 6, 5, 1");
+		add(btnBuscar, "12, 5, 5, 1");
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				acaoBotaoBuscar();
@@ -239,7 +238,7 @@ public class PainelRegistrarVenda extends JPanel {
 
 		btnRemover = new JButton("Remover");
 		btnRemover.setEnabled(false);
-		add(btnRemover, "16, 24, center, default");
+		add(btnRemover, "16, 23, center, default");
 		btnRemover.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				acaoBotaoRemover();
@@ -248,7 +247,7 @@ public class PainelRegistrarVenda extends JPanel {
 		
 		btnConfirmar = new JButton("Confirmar");
 		btnConfirmar.setEnabled(false);
-		add(btnConfirmar, "16, 32, center, default");
+		add(btnConfirmar, "16, 31, center, default");
 		btnConfirmar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				acaoBotaoConfirmar();

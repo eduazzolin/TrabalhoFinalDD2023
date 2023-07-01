@@ -75,7 +75,7 @@ public class PainelCadastrarProduto extends JPanel {
 				RowSpec.decode("32px"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("25px"),
-				RowSpec.decode("max(27dlu;default)"),}));
+				RowSpec.decode("14dlu"),}));
 		
 		lbTitulo = new JLabel("Cadastrar produto");
 		lbTitulo.setVerticalAlignment(SwingConstants.BOTTOM);

@@ -35,7 +35,7 @@ public class VendaDAO {
 		try {
 			
 			pstmt.setString(1, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-			pstmt.setDouble(2, qtdeTotal);
+			pstmt.setDouble(2, valorTotal);
 			pstmt.setInt(3, qtdeTotal);
 			pstmt.execute();
 			resultado = pstmt.getGeneratedKeys();

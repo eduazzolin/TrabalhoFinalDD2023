@@ -22,6 +22,7 @@ import java.awt.BorderLayout;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 import java.awt.Color;
+import java.awt.Toolkit;
 
 public class TelaPrincipal extends JFrame {
 
@@ -64,6 +65,7 @@ public class TelaPrincipal extends JFrame {
 	}
 
 	public TelaPrincipal() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(TelaPrincipal.class.getResource("/view/img/icone.png")));
 		getContentPane().setBackground(new Color(255, 255, 255));
 		
 		setTitle("Sistema gerenciador de farmácia");
@@ -74,11 +76,11 @@ public class TelaPrincipal extends JFrame {
 		setJMenuBar(menuBar);
 
 		mnVendas = new JMenu("Vendas");
-		mnVendas.setIcon(new ImageIcon("C:\\Users\\kevin.raulino\\Desktop\\TrabalhoFinalDD2023-main\\src.main.java\\view\\Ativo 4.png"));
+		mnVendas.setIcon(new ImageIcon(TelaPrincipal.class.getResource("/view/img/Ativo 4.png")));
 		menuBar.add(mnVendas);
 
 		mntmRegistrarVendas = new JMenuItem("Registrar venda");
-		mntmRegistrarVendas.setIcon(new ImageIcon("C:\\Users\\kevin.raulino\\Desktop\\TrabalhoFinalDD2023-main\\src.main.java\\view\\plus.png"));
+		mntmRegistrarVendas.setIcon(new ImageIcon(TelaPrincipal.class.getResource("/view/img/plus.png")));
 		mnVendas.add(mntmRegistrarVendas);
 		mntmRegistrarVendas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -87,7 +89,7 @@ public class TelaPrincipal extends JFrame {
 		});
 
 		mntmConsultarVendas = new JMenuItem("Consultar vendas");
-		mntmConsultarVendas.setIcon(new ImageIcon("C:\\Users\\kevin.raulino\\Desktop\\TrabalhoFinalDD2023-main\\src.main.java\\view\\search.png"));
+		mntmConsultarVendas.setIcon(new ImageIcon(TelaPrincipal.class.getResource("/view/img/search.png")));
 		mnVendas.add(mntmConsultarVendas);
 		mntmConsultarVendas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -96,11 +98,11 @@ public class TelaPrincipal extends JFrame {
 		});
 
 		mnProdutosEstoque = new JMenu("Produtos e Estoque");
-		mnProdutosEstoque.setIcon(new ImageIcon("C:\\Users\\kevin.raulino\\Desktop\\TrabalhoFinalDD2023-main\\src.main.java\\view\\Ativo 5.png"));
+		mnProdutosEstoque.setIcon(new ImageIcon(TelaPrincipal.class.getResource("/view/img/Ativo 52.png")));
 		menuBar.add(mnProdutosEstoque);
 
 		mntmCadastrarProduto = new JMenuItem("Cadastrar produtos");
-		mntmCadastrarProduto.setIcon(new ImageIcon("C:\\Users\\kevin.raulino\\Desktop\\TrabalhoFinalDD2023-main\\src.main.java\\view\\plus.png"));
+		mntmCadastrarProduto.setIcon(new ImageIcon(TelaPrincipal.class.getResource("/view/img/plus.png")));
 		mnProdutosEstoque.add(mntmCadastrarProduto);
 		mntmCadastrarProduto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -109,7 +111,7 @@ public class TelaPrincipal extends JFrame {
 		});
 
 		mntmModificarEstoque = new JMenuItem("Gerenciar estoque");
-		mntmModificarEstoque.setIcon(new ImageIcon("C:\\Users\\kevin.raulino\\Desktop\\TrabalhoFinalDD2023-main\\src.main.java\\view\\ready-stock.png"));
+		mntmModificarEstoque.setIcon(new ImageIcon(TelaPrincipal.class.getResource("/view/img/ready-stock.png")));
 		mnProdutosEstoque.add(mntmModificarEstoque);
 		mntmModificarEstoque.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -118,13 +120,13 @@ public class TelaPrincipal extends JFrame {
 		});
 
 		mntmConsultarProdutos = new JMenuItem("Consultar produtos");
-		mntmConsultarProdutos.setIcon(new ImageIcon("C:\\Users\\kevin.raulino\\Desktop\\TrabalhoFinalDD2023-main\\src.main.java\\view\\search.png"));
+		mntmConsultarProdutos.setIcon(new ImageIcon(TelaPrincipal.class.getResource("/view/img/search.png")));
 		mnProdutosEstoque.add(mntmConsultarProdutos);
 		
 		lblNewLabel = new JLabel("");
 		lblNewLabel.setBackground(new Color(255, 255, 255));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\kevin.raulino\\Desktop\\TrabalhoFinalDD2023-main\\src.main.java\\view\\logo.jpeg"));
+		lblNewLabel.setIcon(new ImageIcon(TelaPrincipal.class.getResource("/view/img/logo.jpeg")));
 		getContentPane().add(lblNewLabel, BorderLayout.CENTER);
 		mntmConsultarProdutos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

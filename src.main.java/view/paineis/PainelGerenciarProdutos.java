@@ -50,7 +50,7 @@ public class PainelGerenciarProdutos extends JPanel {
 				ColumnSpec.decode("197px"),
 				ColumnSpec.decode("31dlu:grow"),},
 			new RowSpec[] {
-				RowSpec.decode("top:max(23dlu;default)"),
+				RowSpec.decode("top:14dlu"),
 				RowSpec.decode("14px"),
 				FormSpecs.UNRELATED_GAP_ROWSPEC,
 				RowSpec.decode("22px"),
