@@ -33,6 +33,7 @@ import controller.VendaController;
 import model.exception.CampoInvalidoException;
 import model.exception.VendaInvalidaException;
 import model.seletor.VendaSeletor;
+import model.vo.ItemVenda;
 import model.vo.Venda;
 import view.componentesExternos.JNumberFormatField;
 import view.dialogs.DialogVerProdutos;
@@ -79,7 +80,17 @@ public class PainelConsultarVenda extends JPanel {
 	private final int TAMANHO_PAGINA = 15;
 	private int paginaAtual = 1;
 	private int totalPaginas = 0;
+	private JLabel lbValorTotal;
+	private JLabel lbQuantidadeItens;
+	private JLabel lbQuantidadeVendas;
+	private ArrayList<Venda> vendasTodasAsPaginas;
+	private double valorTotal;
+	private int quantidadeItens;
 	
+	// atributos de valor padrão:
+	private static final String VALOR_PADRAO_QUANTIDADE_VENDAS = "Quantidade de vendas: ";
+	private static final String VALOR_PADRAO_QUANTIDADE_ITENS = "Quantidade de itens: ";
+	private static final String VALOR_PADRAO_VALOR_TOTAL = "Valor total: ";
 	
 	/**
 	 * Create the panel.
@@ -87,7 +98,7 @@ public class PainelConsultarVenda extends JPanel {
 	public PainelConsultarVenda() {
 		setLayout(new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("max(31dlu;default)"),
+				ColumnSpec.decode("31dlu"),
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("max(72dlu;default)"),
 				FormSpecs.RELATED_GAP_COLSPEC,
@@ -95,11 +106,13 @@ public class PainelConsultarVenda extends JPanel {
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("max(72dlu;default)"),
 				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("max(25dlu;default):grow"),
+				ColumnSpec.decode("83dlu:grow"),
+				FormSpecs.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("max(34dlu;default)"),
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("max(57dlu;default)"),
 				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("default:grow"),
+				ColumnSpec.decode("max(32dlu;default):grow"),
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("left:max(25dlu;default)"),
 				FormSpecs.RELATED_GAP_COLSPEC,
@@ -107,7 +120,7 @@ public class PainelConsultarVenda extends JPanel {
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("max(50dlu;default)"),
 				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("min(31dlu;default):grow"),},
+				ColumnSpec.decode("31dlu"),},
 			new RowSpec[] {
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("14dlu"),
@@ -123,6 +136,14 @@ public class PainelConsultarVenda extends JPanel {
 				RowSpec.decode("max(21dlu;default)"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("default:grow"),
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("max(7dlu;default)"),
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				FormSpecs.DEFAULT_ROWSPEC,
 				FormSpecs.RELATED_GAP_ROWSPEC,
@@ -146,54 +167,63 @@ public class PainelConsultarVenda extends JPanel {
 		add(lbFiltrarConsulta, "4, 3, left, bottom");
 		
 		separator = new JSeparator();
-		add(separator, "4, 5, 17, 1, default, top");
+		add(separator, "4, 5, 19, 1, default, top");
 		
 		lbEan = new JLabel("EAN:");
 		add(lbEan, "4, 6, right, default");
 		
 		tfEan = new JTextField();
-		add(tfEan, "6, 6, 15, 1, fill, default");
+		add(tfEan, "6, 6, 17, 1, fill, default");
 		tfEan.setColumns(10);
 		
-		lbValorMinimo = new JLabel("Valor mínimo:");
+		lbValorMinimo = new JLabel("Valor mínimo: R$");
 		add(lbValorMinimo, "4, 8, right, default");
 		
 		ftfValorMinimo = new JNumberFormatField(2);
 		add(ftfValorMinimo, "6, 8, 5, 1, fill, default");
 		
-		lbValorMaximo = new JLabel("Valor máximo:");
-		add(lbValorMaximo, "12, 8, right, default");
+		lbValorMaximo = new JLabel("Valor máximo: R$");
+		add(lbValorMaximo, "12, 8, 3, 1, right, default");
 		
 		ftfValorMaximo = new JNumberFormatField(2);
-		add(ftfValorMaximo, "14, 8, 7, 1, fill, default");
+		add(ftfValorMaximo, "16, 8, 7, 1, fill, default");
 		
 		lbDataInicial = new JLabel("Data inicial:");
 		add(lbDataInicial, "4, 10, right, default");
+		
+		lbValorTotal = new JLabel(VALOR_PADRAO_VALOR_TOTAL);
+		add(lbValorTotal, "4, 20, 5, 1");
+		
+		lbQuantidadeVendas = new JLabel(VALOR_PADRAO_QUANTIDADE_VENDAS);
+		add(lbQuantidadeVendas, "4, 22, 5, 1");
+		
+		lbQuantidadeItens = new JLabel(VALOR_PADRAO_QUANTIDADE_ITENS);
+		add(lbQuantidadeItens, "4, 24, 5, 1");
 
 		lbPaginas = new JLabel("");
 		lbPaginas.setHorizontalAlignment(SwingConstants.CENTER);
-		add(lbPaginas, "6, 24");
+		add(lbPaginas, "6, 32");
 		
 		lbResultados = new JLabel("Resultados:");
 		add(lbResultados, "4, 16");
 		
 		separator2 = new JSeparator();
-		add(separator2, "4, 18, 17, 1, default, top");
+		add(separator2, "4, 18, 19, 1, default, top");
 		
 		dtInicial = new DatePicker();
 		dtInicial.setBounds(160, 90, 515, 30);
 		add(dtInicial, "6, 10, 5, 1, fill, default");
 		
 		lbDataFinal = new JLabel("Data final:");
-		add(lbDataFinal, "12, 10, right, default");
+		add(lbDataFinal, "12, 10, 3, 1, right, default");
 		
 		dtFinal = new DatePicker();
 		dtFinal.setBounds(160, 90, 515, 30);
-		add(dtFinal, "14, 10, 7, 1, fill, default");
+		add(dtFinal, "16, 10, 7, 1, fill, default");
 		
 		btnConsultar = new JButton("Consultar");
 		btnConsultar.setMaximumSize(new Dimension(50, 21));
-		add(btnConsultar, "18, 12, 3, 1");
+		add(btnConsultar, "20, 12, 3, 1");
 		btnConsultar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				acaoBotaoConsultar();
@@ -203,7 +233,7 @@ public class PainelConsultarVenda extends JPanel {
 		table = new JTable();
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setModel(new DefaultTableModel(new Object[][] { nomesColunas, }, nomesColunas));
-		add(table, "4, 20, 17, 3, fill, fill");
+		add(table, "4, 28, 19, 3, fill, fill");
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -214,7 +244,7 @@ public class PainelConsultarVenda extends JPanel {
 		
 		btnVoltar = new JButton("<< Voltar");
 		btnVoltar.setEnabled(false);
-		add(btnVoltar, "4, 24");
+		add(btnVoltar, "4, 32");
 		btnVoltar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				acaoBotaoVoltar();
@@ -223,7 +253,7 @@ public class PainelConsultarVenda extends JPanel {
 		
 		btnAvancar = new JButton("Avançar >>");
 		btnAvancar.setEnabled(false);
-		add(btnAvancar, "8, 24");
+		add(btnAvancar, "8, 32");
 		btnAvancar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				acaoBotaoAvancar();
@@ -232,7 +262,7 @@ public class PainelConsultarVenda extends JPanel {
 		
 		btnVerProdutos = new JButton("Ver produtos");
 		btnVerProdutos.setEnabled(false);
-		add(btnVerProdutos, "18, 24");
+		add(btnVerProdutos, "20, 32");
 		btnVerProdutos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				acaoBotaoVerProdutos();
@@ -241,7 +271,7 @@ public class PainelConsultarVenda extends JPanel {
 		
 		btnRemover = new JButton("Remover");
 		btnRemover.setEnabled(false);
-		add(btnRemover, "16, 24");
+		add(btnRemover, "18, 32");
 		btnRemover.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				acaoBotaoRemover();
@@ -250,7 +280,7 @@ public class PainelConsultarVenda extends JPanel {
 		
 		btnExportar = new JButton("Exportar");
 		btnExportar.setEnabled(false);
-		add(btnExportar, "20, 24");
+		add(btnExportar, "22, 32");
 		btnExportar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				acaoBotaoExportar();
@@ -369,18 +399,40 @@ public class PainelConsultarVenda extends JPanel {
 	 * @throws CampoInvalidoException;
 	 */
 	private void buscarVendasComFiltrosEAtualizarTabela() throws CampoInvalidoException {
-		// criação do seletor e validação:
+		
+		// busca no banco com paginação:
 		seletor = new VendaSeletor();
 		seletor.setLimite(TAMANHO_PAGINA);
 		seletor.setPagina(paginaAtual);
 		preencherSeletor(seletor);
-		
-		// busca no banco e atualização:
 		vendas = vendaController.consultarComFiltros(seletor);
+		
+		// busca no banco da lista sem paginação:
+		VendaSeletor seletorSemPaginacao = new VendaSeletor();
+		preencherSeletor(seletorSemPaginacao);
+		vendasTodasAsPaginas = vendaController.consultarComFiltros(seletorSemPaginacao);
+		
+		// atualizações
 		atualizarTabela();
+		atualizarLabelsTotais();
 		atualizarQuantidadePaginas();
 		ativarOuDesativarBotoesVoltarAvancar();
 		btnExportar.setEnabled(vendas != null && vendas.size()>0);
+	}
+
+	private void atualizarLabelsTotais() {
+		valorTotal = 0;
+		quantidadeItens = 0;
+		for (Venda v : vendasTodasAsPaginas) {
+			for (ItemVenda iv : v.getListaItemVenda()) {
+				quantidadeItens += iv.getQtde();
+				valorTotal += (iv.getValorUnitario() * iv.getQtde());
+			}
+		}
+		lbQuantidadeVendas.setText(VALOR_PADRAO_QUANTIDADE_VENDAS +  vendasTodasAsPaginas.size());
+		lbQuantidadeItens.setText(VALOR_PADRAO_QUANTIDADE_ITENS +  quantidadeItens);
+		lbValorTotal.setText(VALOR_PADRAO_VALOR_TOTAL +  String.format("R$ %.2f", valorTotal));
+		
 	}
 
 	private void preencherSeletor(VendaSeletor s) throws CampoInvalidoException {
@@ -483,14 +535,11 @@ public class PainelConsultarVenda extends JPanel {
 				String caminhoEscolhido = janelaSelecaoDestinoArquivo.getSelectedFile().getAbsolutePath();
 				String resultado = "Erro ao gerar relatório.";
 				try {
-					VendaSeletor seletorParaExportar = new VendaSeletor();
-					preencherSeletor(seletorParaExportar);
-					ArrayList<Venda> vendasParaExportar = vendaController.consultarComFiltros(seletorParaExportar);
 					if (escolhaTipoRelatorio == 0) {
-						resultado = vendaController.gerarPlanilhaSomenteVendas(vendasParaExportar, caminhoEscolhido);
+						resultado = vendaController.gerarPlanilhaSomenteVendas(vendasTodasAsPaginas, caminhoEscolhido);
 					} 
 					if (escolhaTipoRelatorio == 1) {
-						resultado = vendaController.gerarPlanilhaVendasComProdutos(vendasParaExportar, caminhoEscolhido);
+						resultado = vendaController.gerarPlanilhaVendasComProdutos(vendasTodasAsPaginas, caminhoEscolhido);
 					}
 					JOptionPane.showMessageDialog(null, resultado);
 				} catch (CampoInvalidoException e1) {

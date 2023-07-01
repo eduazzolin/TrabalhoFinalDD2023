@@ -40,4 +40,7 @@ public class ProdutoBO {
 		
 		return produtoDAO.removerProduto(produtoSelecionado);
 	}
+	public ArrayList<Produto> buscarTodosProdutosAtivados() {
+		return produtoDAO.buscarTodosProdutosAtivados();
+	}
 }

@@ -14,6 +14,7 @@ import model.vo.Venda;
 public class ProdutoDAO {
 
 	public ArrayList<Produto> buscarProdutosAtivosPorNomeOuEan(String nomeOuEan) {
+		nomeOuEan = nomeOuEan.replace("'", "''");
 		ArrayList<Produto> produtos = new ArrayList<>();
 		Connection conn = Banco.getConnection();
 		String query = " select * from produto where ativo = TRUE and (nome like '%" + nomeOuEan + "%' or ean like '%"
@@ -142,6 +143,10 @@ public class ProdutoDAO {
 	public boolean criarProduto(Produto produtoNovo) {
 		boolean retorno = false;
 
+		produtoNovo.setDescricao(produtoNovo.getDescricao().replace("'", "''"));
+		produtoNovo.setNome(produtoNovo.getNome().replace("'", "''"));
+		produtoNovo.setEan(produtoNovo.getEan().replace("'", "''"));
+		
 		String query = "INSERT INTO PRODUTO (NOME, DESCRICAO, EAN, VALOR, ESTOQUE) VALUES ('" + produtoNovo.getNome()
 				+ "'," + " '" + produtoNovo.getDescricao() + "', '" + produtoNovo.getEan() + "', "
 				+ produtoNovo.getValor() + ", 0);";
@@ -162,6 +167,7 @@ public class ProdutoDAO {
 	}
 
 	public ArrayList<Produto> consultarComFiltos(ProdutoSeletor seletor) {
+		
 		ArrayList<Produto> produtos = new ArrayList<Produto>();
 		Connection conn = Banco.getConnection();
 		String query = " SELECT * FROM produto ";
@@ -201,6 +207,10 @@ public class ProdutoDAO {
 	}
 
 	private String preencherFiltros(String query, ProdutoSeletor seletor) {
+		
+		seletor.setNome(seletor.getNome().replace("'", "''"));
+		seletor.setEan(seletor.getEan().replace("'", "''"));
+		
 		boolean primeiro = true;
 		if (seletor.getEan() != null && seletor.getEan().trim().length() > 0) {
 			if (primeiro) {
@@ -286,6 +296,11 @@ public class ProdutoDAO {
 	}
 
 	public boolean editarProduto(Produto p) {
+		
+		p.setDescricao(p.getDescricao().replace("'", "''"));
+		p.setNome(p.getNome().replace("'", "''"));
+		p.setEan(p.getEan().replace("'", "''"));
+		
 		Connection conn = Banco.getConnection();
 		String query = "UPDATE PRODUTO SET " + " NOME = ?," + " DESCRICAO = ?," + " EAN = ?," + " VALOR = ?"
 				+ " WHERE ID_PRODUTO = ?";
@@ -304,6 +319,34 @@ public class ProdutoDAO {
 			System.out.println("Erro: " + e.getMessage());
 		}
 		return resultado;
+	}
+
+	public ArrayList<Produto> buscarTodosProdutosAtivados() {
+		ArrayList<Produto> produtos = new ArrayList<>();
+		Connection conn = Banco.getConnection();
+		String query = " select * from produto where ativo = true";
+
+		PreparedStatement stmt = Banco.getPreparedStatement(conn, query);
+		try {
+			ResultSet resultado = stmt.executeQuery();
+			while (resultado.next()) {
+				Produto produtoBuscado = new Produto();
+				produtoBuscado.setId(resultado.getInt("ID_PRODUTO"));
+				produtoBuscado.setNome(resultado.getString("NOME"));
+				produtoBuscado.setDescricao(resultado.getString("DESCRICAO"));
+				produtoBuscado.setEan(resultado.getString("EAN"));
+				produtoBuscado.setEstoque(resultado.getInt("ESTOQUE"));
+				produtoBuscado.setValor(resultado.getDouble("VALOR"));
+				produtoBuscado.setAtivo(resultado.getBoolean("ATIVO"));
+				produtos.add(produtoBuscado);
+			}
+		} catch (Exception e) {
+			System.out.println("Erro ao buscar produtos. \n Causa:" + e.getMessage());
+		} finally {
+			Banco.closePreparedStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return produtos;
 	}
 
 }

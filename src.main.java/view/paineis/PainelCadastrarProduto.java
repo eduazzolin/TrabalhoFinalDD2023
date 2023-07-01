@@ -112,7 +112,7 @@ public class PainelCadastrarProduto extends JPanel {
 		txtPreco.setHorizontalAlignment(SwingConstants.LEFT);
 		add(txtPreco, "5, 5, fill, fill");
 		
-		lbPreco = new JLabel("Preço:");
+		lbPreco = new JLabel("Preço: R$");
 		add(lbPreco, "2, 5, fill, center");
 		
 		lbCodigo = new JLabel("Codigo do Produto:");
@@ -195,10 +195,10 @@ public class PainelCadastrarProduto extends JPanel {
 										 }
 							 
 							 
-							 produtoNovo.setNome(txtProduto.getText());
-							 produtoNovo.setDescricao(txtDescricao.getText());
+							 produtoNovo.setNome(txtProduto.getText().trim());
+							 produtoNovo.setDescricao(txtDescricao.getText().trim());
 							 produtoNovo.setValor(txtPreco.getValue().doubleValue());
-							 produtoNovo.setEan(txtCodigo.getText());
+							 produtoNovo.setEan(txtCodigo.getText().trim());
 							
 								if(produtoNovo.getId() == 0) {
 									if(produtoController.criarProduto(produtoNovo)) {

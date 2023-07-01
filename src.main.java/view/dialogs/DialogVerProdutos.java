@@ -102,6 +102,7 @@ public class DialogVerProdutos extends JDialog {
 	public void atualizarTabelaELabel(Venda v) {
 		tbVerProdutos.setModel(new DefaultTableModel(new Object[][] { }, nomesColunas));
 		DefaultTableModel model = (DefaultTableModel) tbVerProdutos.getModel();
+		
 		for (ItemVenda iv : v.getListaItemVenda()) {
 			Object[] novaLinhaDaTabela = new Object[6];
 			novaLinhaDaTabela[0] = iv.getProduto().getEan();
@@ -112,6 +113,15 @@ public class DialogVerProdutos extends JDialog {
 			novaLinhaDaTabela[5] = (iv.getProduto().isAtivo()) ? "Ativo" : "Desativado";
 			model.addRow(novaLinhaDaTabela);
 		}
+		
+		tbVerProdutos.setRowHeight(20);
+		tbVerProdutos.getColumnModel().getColumn(0).setMaxWidth(100);
+		tbVerProdutos.getColumnModel().getColumn(1).setMaxWidth(600);
+		tbVerProdutos.getColumnModel().getColumn(2).setMaxWidth(100);
+		tbVerProdutos.getColumnModel().getColumn(3).setMaxWidth(200);
+		tbVerProdutos.getColumnModel().getColumn(4).setMaxWidth(200);
+		tbVerProdutos.getColumnModel().getColumn(5).setMaxWidth(100);
+		
 		lblDescVenda.setText(v.toString());
 	}
 

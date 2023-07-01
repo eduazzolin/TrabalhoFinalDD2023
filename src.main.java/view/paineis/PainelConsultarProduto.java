@@ -76,6 +76,7 @@ public class PainelConsultarProduto extends JPanel {
 	private int paginaAtual = 1;
 	private int totalPaginas = 0;
 	private Produto produtoSelecionado;
+	private JButton btnEstoque;
 	
 	
 	/**
@@ -96,9 +97,7 @@ public class PainelConsultarProduto extends JPanel {
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("max(25dlu;default):grow(50)"),
 				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("max(57dlu;default)"),
-				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("default:grow"),
+				ColumnSpec.decode("max(42dlu;default)"),
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("left:max(25dlu;default)"),
 				FormSpecs.RELATED_GAP_COLSPEC,
@@ -142,32 +141,32 @@ public class PainelConsultarProduto extends JPanel {
 		add(lbFiltrarConsulta, "4, 3, left, bottom");
 		
 		separator = new JSeparator();
-		add(separator, "4, 5, 19, 1, default, top");
+		add(separator, "4, 5, 17, 1, default, top");
 		
 		lbEan = new JLabel("EAN:");
 		add(lbEan, "4, 8, right, default");
 		
 		tfEan = new JTextField();
-		add(tfEan, "6, 8, 17, 1, fill, default");
+		add(tfEan, "6, 8, 15, 1, fill, default");
 		tfEan.setColumns(10);
 		
-		lbValorMinimo = new JLabel("Valor mínimo:");
+		lbValorMinimo = new JLabel("Valor mínimo: R$");
 		add(lbValorMinimo, "4, 10, right, default");
 		
 		ftfValorMinimo = new JNumberFormatField(2);
 		add(ftfValorMinimo, "6, 10, 6, 1, fill, default");
 		
-		lbValorMaximo = new JLabel("Valor máximo:");
+		lbValorMaximo = new JLabel("Valor máximo: R$");
 		add(lbValorMaximo, "14, 10, right, default");
 		
 		ftfValorMaximo = new JNumberFormatField(2);
-		add(ftfValorMaximo, "16, 10, 7, 1, fill, default");
+		add(ftfValorMaximo, "16, 10, 5, 1, fill, default");
 		
 		lbNome = new JLabel("Nome do Produto:");
 		add(lbNome, "4, 7, right, default");
 		
 		txtProduto = new JTextField();
-		add(txtProduto, "6, 7, 17, 1, fill, default");
+		add(txtProduto, "6, 7, 15, 1, fill, default");
 		txtProduto.setColumns(10);
 
 		lbPaginas = new JLabel("");
@@ -178,11 +177,11 @@ public class PainelConsultarProduto extends JPanel {
 		add(lbResultados, "4, 16");
 		
 		separator2 = new JSeparator();
-		add(separator2, "4, 18, 19, 1, default, top");
+		add(separator2, "4, 18, 17, 1, default, top");
 		
 		btnConsultar = new JButton("Consultar");
 		btnConsultar.setMaximumSize(new Dimension(50, 21));
-		add(btnConsultar, "20, 12, 3, 1");
+		add(btnConsultar, "18, 12, 3, 1");
 		btnConsultar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				acaoBotaoConsultar();
@@ -192,7 +191,7 @@ public class PainelConsultarProduto extends JPanel {
 		table = new JTable();
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setModel(new DefaultTableModel(new Object[][] { nomesColunas, }, nomesColunas));
-		add(table, "4, 20, 19, 3, fill, fill");
+		add(table, "4, 20, 17, 3, fill, fill");
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -219,9 +218,13 @@ public class PainelConsultarProduto extends JPanel {
 			}
 		});
 		
+		btnEstoque = new JButton("Estoque");
+		btnEstoque.setEnabled(false);
+		add(btnEstoque, "14, 24");
+		
 		btnRemover = new JButton("Remover");
 		btnRemover.setEnabled(false);
-		add(btnRemover, "18, 24");
+		add(btnRemover, "16, 24");
 		btnRemover.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -235,13 +238,13 @@ public class PainelConsultarProduto extends JPanel {
 		
 		btnEditar = new JButton("   Editar   ");
 		btnEditar.setEnabled(false);
-		add(btnEditar, "20, 24");
+		add(btnEditar, "18, 24");
 		// o action listener do botão editar está na tela principal
 		// para poder mandar o objeto para o painel "PainelCadastrarProduto"
 		
 		btnExportar = new JButton("Exportar");
 		btnExportar.setEnabled(false);
-		add(btnExportar, "22, 24");
+		add(btnExportar, "20, 24");
 		btnExportar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				acaoBotaoExportar();
@@ -281,6 +284,7 @@ public class PainelConsultarProduto extends JPanel {
 			acaoBotaoConsultar();
 			btnRemover.setEnabled(false);
 			btnEditar.setEnabled(false);
+			btnEstoque.setEnabled(false);
 		} else {
 			JOptionPane.showMessageDialog(btnRemover, "Erro ao remover venda", "Erro", 1);
 		}
@@ -430,10 +434,12 @@ public class PainelConsultarProduto extends JPanel {
 		if (indiceSelecionado > 0) {
 			btnEditar.setEnabled(true);
 			btnRemover.setEnabled(true);
+			btnEstoque.setEnabled(true);
 			produtoSelecionado = produtos.get(indiceSelecionado - 1);
 		} else {
 			btnEditar.setEnabled(false);
 			btnRemover.setEnabled(false);
+			btnEstoque.setEnabled(false);
 		}
 	}
 
@@ -489,6 +495,14 @@ public class PainelConsultarProduto extends JPanel {
 
 	public void setProdutoSelecionado(Produto produtoSelecionado) {
 		this.produtoSelecionado = produtoSelecionado;
+	}
+
+	public JButton getBtnEstoque() {
+		return btnEstoque;
+	}
+
+	public void setBtnEstoque(JButton btnEstoque) {
+		this.btnEstoque = btnEstoque;
 	}
 	
 }

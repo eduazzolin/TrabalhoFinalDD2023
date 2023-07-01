@@ -29,7 +29,7 @@ public class VendaDAO {
 		int qtdeTotal = 0;
 		for (ItemVenda iv : venda.getListaItemVenda()) {
 				qtdeTotal += iv.getQtde();
-				valorTotal += (iv.getValorUnitario() * qtdeTotal);
+				valorTotal += (iv.getValorUnitario() * iv.getQtde());
 		}
 		
 		try {

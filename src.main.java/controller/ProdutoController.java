@@ -15,9 +15,9 @@ import model.seletor.ProdutoSeletor;
 public class ProdutoController {
 
 	private ProdutoBO produtoBO = new ProdutoBO();
-	
-	public ArrayList<Produto> buscarProdutosAtivosPorNomeOuEan(String nomeOuEan) throws CampoInvalidoException{
-		
+
+	public ArrayList<Produto> buscarProdutosAtivosPorNomeOuEan(String nomeOuEan) throws CampoInvalidoException {
+
 		// verificar se o nome é válido:
 		if (nomeOuEan.trim().length() == 0) {
 			throw new CampoInvalidoException("Campo inválido");
@@ -26,30 +26,31 @@ public class ProdutoController {
 	}
 
 	public ArrayList<Produto> buscarTodosProdutos() {
-		
+
 		return produtoBO.buscarTodosProdutos();
 	}
 
 	public int consultarEstoque(int id) {
-		
+
 		return produtoBO.consultarEstoque(id);
 	}
 
-	public boolean atualizarEstoque(int quantidadeDigitada, Produto produtoSelecionado) throws EstoqueInsuficienteException {
-		
-		if( produtoSelecionado.getEstoque() + quantidadeDigitada < 0) {
+	public boolean atualizarEstoque(int quantidadeDigitada, Produto produtoSelecionado)
+			throws EstoqueInsuficienteException {
+
+		if (produtoSelecionado.getEstoque() + quantidadeDigitada < 0) {
 			throw new EstoqueInsuficienteException("Estoque insuficiente");
 		}
-			return produtoBO.atualizarEstoque(quantidadeDigitada , produtoSelecionado);
+		return produtoBO.atualizarEstoque(quantidadeDigitada, produtoSelecionado);
 	}
 
 	public boolean criarProduto(Produto produtoNovo) {
-		
+
 		return produtoBO.criarProduto(produtoNovo);
 	}
 
 	public ArrayList<Produto> consultarComFiltros(ProdutoSeletor seletor) {
-		
+
 		return produtoBO.consultarComFiltros(seletor);
 	}
 
@@ -58,7 +59,8 @@ public class ProdutoController {
 		return produtoDAO.contarTotalRegistrosComFiltros(seletor);
 	}
 
-	public String gerarPlanilhaProdutos(ArrayList<Produto> produtos, String destinoArquivo) throws CampoInvalidoException, ProdutoInvalidoException {
+	public String gerarPlanilhaProdutos(ArrayList<Produto> produtos, String destinoArquivo)
+			throws CampoInvalidoException, ProdutoInvalidoException {
 		if (destinoArquivo == null || destinoArquivo.trim().isEmpty()) {
 			throw new CampoInvalidoException("Preencha todos os campos");
 		}
@@ -70,12 +72,16 @@ public class ProdutoController {
 		return gerador.gerarPlanilhaProdutos(produtos, destinoArquivo);
 	}
 
-
 	public boolean removerProduto(Produto produtoSelecionado) {
-		
+
 		return produtoBO.removerProduto(produtoSelecionado);
 	}
+
 	public boolean editarProduto(Produto produtoNovo) {
 		return produtoBO.editarProduto(produtoNovo);
+	}
+
+	public ArrayList<Produto> buscarTodosProdutosAtivados() {
+		return produtoBO.buscarTodosProdutosAtivados();
 	}
 }

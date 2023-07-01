@@ -35,11 +35,13 @@ public class PainelGerenciarProdutos extends JPanel {
 	private JLabel lbQuantidadeAtual;
     ProdutoController produtoController = new ProdutoController();
 	private ArrayList<Produto> produtoscombo;
+	protected Produto produtoSelecionado;
 
 	/**
 	 * Create the panel.
 	 */
-	public PainelGerenciarProdutos() {
+	public PainelGerenciarProdutos(Produto produtoQueVeioDaConsulta) {
+		produtoSelecionado = produtoQueVeioDaConsulta;
 		setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("31px"),
 				ColumnSpec.decode("96px"),
@@ -83,7 +85,11 @@ public class PainelGerenciarProdutos extends JPanel {
 		produtoscombo = produtoController.buscarTodosProdutos();
 		// busca os produtos no banco e armazena em um ArrayList
 		comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(produtoscombo.toArray()));
+		if (produtoSelecionado == null) {
+			comboBox.setModel(new DefaultComboBoxModel(produtoscombo.toArray()));
+		} else {
+			comboBox.setModel(new DefaultComboBoxModel(new Produto[] {produtoQueVeioDaConsulta}));
+		}
 		add(comboBox, "2, 4, 6, 1, fill, fill");
 		comboBox.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -115,7 +121,7 @@ public class PainelGerenciarProdutos extends JPanel {
 					if(quantidadeDigitada <= 0) {
 						throw new CampoInvalidoException("Quantidade inválida");
 					}
-					Produto produtoSelecionado = (Produto) comboBox.getSelectedItem();
+					produtoSelecionado = (Produto) comboBox.getSelectedItem();
 					boolean atualizacao = produtoController.atualizarEstoque(quantidadeDigitada, produtoSelecionado);
 					if(atualizacao) {
 						JOptionPane.showMessageDialog(btAdicionar, "Produto atualizado com sucesso");

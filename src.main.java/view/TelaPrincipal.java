@@ -43,6 +43,7 @@ public class TelaPrincipal extends JFrame {
 	protected PainelGerenciarProdutos painelGerenciarProdutos;
 	private PainelConsultarProduto painelConsultarProduto;
 	private JLabel lblNewLabel;
+	protected Produto produtoSelecionado;
 
 
 	public static void main(String[] args) {
@@ -70,7 +71,7 @@ public class TelaPrincipal extends JFrame {
 		
 		setTitle("Sistema gerenciador de farmácia");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 887, 782);
+		setBounds(100, 100, 1049, 782);
 
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -168,7 +169,7 @@ public class TelaPrincipal extends JFrame {
 	 * Instancia o PainelGerenciarProdutos e define como contentPane;
 	 */
 	private void acaoMenuGerenciarEstoque() {
-		painelGerenciarProdutos = new PainelGerenciarProdutos();
+		painelGerenciarProdutos = new PainelGerenciarProdutos(produtoSelecionado);
 		setContentPane(painelGerenciarProdutos);
 		revalidate();
 	}
@@ -184,10 +185,20 @@ public class TelaPrincipal extends JFrame {
 		painelConsultarProduto.getBtnEditar().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Produto produtoSelecionado = painelConsultarProduto.getProdutoSelecionado();
+				produtoSelecionado = painelConsultarProduto.getProdutoSelecionado();
 				painelCadastrarProduto = new PainelCadastrarProduto(produtoSelecionado);
 				painelCadastrarProduto.setVisible(true);
 				setContentPane(painelCadastrarProduto);
+				revalidate();
+			}
+		});
+		painelConsultarProduto.getBtnEstoque().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Produto produtoSelecionado = painelConsultarProduto.getProdutoSelecionado();
+				painelGerenciarProdutos = new PainelGerenciarProdutos(produtoSelecionado);
+				painelGerenciarProdutos.setVisible(true);
+				setContentPane(painelGerenciarProdutos);
 				revalidate();
 			}
 		});
