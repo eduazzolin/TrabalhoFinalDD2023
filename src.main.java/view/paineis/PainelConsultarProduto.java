@@ -19,27 +19,26 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
-import com.github.lgooddatepicker.components.DatePickerSettings;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
 
-import controller.ItemVendaController;
 import controller.ProdutoController;
-import controller.VendaController;
 import model.exception.CampoInvalidoException;
 import model.exception.ProdutoInvalidoException;
-import model.exception.VendaInvalidaException;
 import model.seletor.ProdutoSeletor;
 import model.vo.Produto;
 import model.vo.Venda;
 import view.componentesExternos.JNumberFormatField;
 
 public class PainelConsultarProduto extends JPanel {
+	private static final long serialVersionUID = 6738959749427589665L;
 	
 	// componentes visuais:
-	private JTable table;
+	private JNumberFormatField ftfValorMinimo;
+	private JNumberFormatField ftfValorMaximo;
+	private JTextField txtProduto;
 	private JTextField tfEan;
 	private JLabel lbFiltrarConsulta;
 	private JLabel lbEan;
@@ -48,40 +47,37 @@ public class PainelConsultarProduto extends JPanel {
 	private JLabel lbNome;
 	private JLabel lbResultados;
 	private JLabel lbPaginas;
-	private JNumberFormatField ftfValorMinimo;
-	private JNumberFormatField ftfValorMaximo;
 	private JButton btnConsultar;
 	private JButton btnEditar;
 	private JButton btnExportar;
 	private JButton btnVoltar;
 	private JButton btnAvancar;
 	private JButton btnRemover;
+	private JButton btnEstoque;
 	private JSeparator separator;
 	private JSeparator separator2;
-	private JTextField txtProduto;
+	private JTable table;
 	
 	// classes mvc:
+	protected Venda vendaSelecionada;
 	protected ProdutoSeletor seletor;
+	private Produto produtoSelecionado;
 	private ProdutoController produtoController = new ProdutoController();
 	
 	// atributos simples:
 	private Double valorMaximo;
 	private Double valorMinimo;
-	private String[] nomesColunas = {  "ID", "NOME", "DESCRIÇÃO", "EAN" , "VALOR", "ESTOQUE","ATIVO"};
-	protected Venda vendaSelecionada;
 	private ArrayList<Produto> produtos;
 	
 	// atributos da paginação
 	private final int TAMANHO_PAGINA = 15;
 	private int paginaAtual = 1;
 	private int totalPaginas = 0;
-	private Produto produtoSelecionado;
-	private JButton btnEstoque;
+
+	// atributos de valor padrão:
+	private String[] nomesColunas = {  "ID", "NOME", "DESCRIÇÃO", "EAN" , "VALOR", "ESTOQUE","ATIVO"};
 	
-	
-	/**
-	 * Create the panel.
-	 */
+
 	public PainelConsultarProduto() {
 		setLayout(new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
@@ -134,8 +130,6 @@ public class PainelConsultarProduto extends JPanel {
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("max(23dlu;default)"),}));
 		
-		
-		// declaração dos componentes visuais:
 		
 		lbFiltrarConsulta = new JLabel("Filtrar consulta:");
 		add(lbFiltrarConsulta, "4, 3, left, bottom");
@@ -200,6 +194,19 @@ public class PainelConsultarProduto extends JPanel {
 		});
 		limparTabela();
 		
+		btnEstoque = new JButton("Estoque");
+		btnEstoque.setEnabled(false);
+		add(btnEstoque, "14, 24");
+		// o action listener do botão estoque está na tela principal
+		// para poder mandar o objeto para o painel "PainelCadastrarProduto"
+		
+		
+		btnEditar = new JButton("   Editar   ");
+		btnEditar.setEnabled(false);
+		add(btnEditar, "18, 24");
+		// o action listener do botão editar está na tela principal
+		// para poder mandar o objeto para o painel "PainelCadastrarProduto"
+		
 		btnVoltar = new JButton("<< Voltar");
 		btnVoltar.setEnabled(false);
 		add(btnVoltar, "4, 24");
@@ -218,10 +225,6 @@ public class PainelConsultarProduto extends JPanel {
 			}
 		});
 		
-		btnEstoque = new JButton("Estoque");
-		btnEstoque.setEnabled(false);
-		add(btnEstoque, "14, 24");
-		
 		btnRemover = new JButton("Remover");
 		btnRemover.setEnabled(false);
 		add(btnRemover, "16, 24");
@@ -235,12 +238,6 @@ public class PainelConsultarProduto extends JPanel {
 				}
 			}
 		});
-		
-		btnEditar = new JButton("   Editar   ");
-		btnEditar.setEnabled(false);
-		add(btnEditar, "18, 24");
-		// o action listener do botão editar está na tela principal
-		// para poder mandar o objeto para o painel "PainelCadastrarProduto"
 		
 		btnExportar = new JButton("Exportar");
 		btnExportar.setEnabled(false);
@@ -276,7 +273,7 @@ public class PainelConsultarProduto extends JPanel {
 	 * 
 	 * Valida se a seleção está funcionando;
 	 * Marca como false o atributo "ativo" no banco de dados;
-	 * Atualiza a tabela e os botões "remover" e "ver produtos".
+	 * Atualiza a tabela e os botões.
 	 */
 	protected void acaoBotaoRemover() throws ProdutoInvalidoException {
 		if(produtoController.removerProduto(produtoSelecionado)) {
@@ -360,7 +357,7 @@ public class PainelConsultarProduto extends JPanel {
 		seletor.setValorMaximo(valorMaximo > 0 ? valorMaximo : null);
 		seletor.setValorMinimo(valorMinimo > 0 ? valorMinimo : null);
 		
-		// busca no banco e atualização:
+		// busca no banco e atualiza:
 		produtos = produtoController.consultarComFiltros(seletor);
 		atualizarTabela();
 		atualizarQuantidadePaginas();
@@ -427,7 +424,7 @@ public class PainelConsultarProduto extends JPanel {
 	 * 
 	 * Valida se a seleção não está no cabeçalho (índice 0);
 	 * Atribui o produto selecionado ao objeto "produtoSelecionado" através do índice da linha e do índice do array "produtos";
-	 * Atualiza os botões "remover" e "editar";
+	 * Atualiza os botões "remover", "editar" e "estoque";
 	 */
 	private void acaoCliqueTabela() {
 		int indiceSelecionado = table.getSelectedRow();
@@ -447,8 +444,8 @@ public class PainelConsultarProduto extends JPanel {
 	 * Exporta os resultados para uma planilha excel .xlsx:
 	 * 
 	 * Exibe um JOptionPane perguntando onde quer salvar;
-	 * Busca no banco os resultados com os filtros porém sem paginação
-	 * Valida se o destino foi escolhido e se a consulta não está vazia;
+	 * Busca no banco os resultados com os filtros porém sem paginação;
+	 * (controller) Valida se o destino foi escolhido e se a consulta não está vazia;
 	 * Exporta a planilha;
 	 */
 	private void acaoBotaoExportar() {
@@ -481,6 +478,7 @@ public class PainelConsultarProduto extends JPanel {
 		}
 	}
 
+	// Getters e setters:
 	public JButton getBtnEditar() {
 		return btnEditar;
 	}

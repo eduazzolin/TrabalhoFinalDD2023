@@ -1,45 +1,50 @@
 package view.paineis;
 
-import javax.swing.JPanel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.awt.event.ActionEvent;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.FormSpecs;
+import com.jgoodies.forms.layout.RowSpec;
 
 import controller.ProdutoController;
 import model.exception.CampoInvalidoException;
 import model.exception.EstoqueInsuficienteException;
 import model.vo.Produto;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeEvent;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.FormSpecs;
-import com.jgoodies.forms.layout.RowSpec;
-import javax.swing.JSeparator;
-
 public class PainelGerenciarProdutos extends JPanel {
+	private static final long serialVersionUID = 4895845442353238363L;
 	
+	// componentes visuais:
+	@SuppressWarnings("rawtypes")
+	private JComboBox comboBox;
 	private JTextField tfQuantidade;
 	private JLabel lblQuantidade;
-	private JComboBox comboBox;
 	private JLabel lbSelecionarProduto;
 	private JLabel lbSelecionarQuantidade;
-	private JButton btSubtrair;
 	private JLabel lbQuantidadeAtual;
+	private JButton btSubtrair;
+	
+	// classes mvc:
     ProdutoController produtoController = new ProdutoController();
-	private ArrayList<Produto> produtoscombo;
 	protected Produto produtoSelecionado;
 
-	/**
-	 * Create the panel.
-	 */
+	// atributos simples:
+	private ArrayList<Produto> produtoscombo;
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public PainelGerenciarProdutos(Produto produtoQueVeioDaConsulta) {
 		produtoSelecionado = produtoQueVeioDaConsulta;
 		setLayout(new FormLayout(new ColumnSpec[] {
@@ -82,12 +87,14 @@ public class PainelGerenciarProdutos extends JPanel {
 		add(lbQuantidadeAtual, "7, 6, left, fill");
 		
 		
-		produtoscombo = produtoController.buscarTodosProdutos();
 		// busca os produtos no banco e armazena em um ArrayList
+		produtoscombo = produtoController.buscarTodosProdutos();
+		
 		comboBox = new JComboBox();
 		if (produtoSelecionado == null) {
 			comboBox.setModel(new DefaultComboBoxModel(produtoscombo.toArray()));
 		} else {
+			// verifica se veio produto do painel consulta
 			comboBox.setModel(new DefaultComboBoxModel(new Produto[] {produtoQueVeioDaConsulta}));
 		}
 		add(comboBox, "2, 4, 6, 1, fill, fill");
@@ -183,8 +190,6 @@ public class PainelGerenciarProdutos extends JPanel {
 				}catch (EstoqueInsuficienteException e1) {
 					JOptionPane.showMessageDialog(btAdicionar, e1.getMessage(), "Aviso", 1);
 				}
-				
-				
 			}
 		});
 		

@@ -1,42 +1,37 @@
 package view.dialogs;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JPanel;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.border.EmptyBorder;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.FormSpecs;
+import com.jgoodies.forms.layout.RowSpec;
+
 import model.vo.ItemVenda;
-import model.vo.Produto;
 import model.vo.Venda;
 
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
-import com.jgoodies.forms.layout.FormSpecs;
-import javax.swing.UIManager;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-
 public class DialogVerProdutos extends JDialog {
-	private String[] nomesColunas = { "EAN", "Produto", "Qtde", "Valor Unitário", "Valor Total", "Status" };
+	private static final long serialVersionUID = -6403302323574939908L;
+	
+	// Componentes visuais:
 	private JTable tbVerProdutos;
 	private JScrollPane scrollPane;
 	private JButton cancelButton;
 	private JLabel lblDescVenda;
+	
+	// Atributos de valor padrão:
+	private String[] nomesColunas = { "EAN", "Produto", "Qtde", "Valor Unitário", "Valor Total", "Status" };
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -52,9 +47,6 @@ public class DialogVerProdutos extends JDialog {
 		}
 	}
 
-	/**
-	 * Create the dialog.
-	 */
 	public DialogVerProdutos() {
 		setTitle("Produtos incluídos");
 		setBounds(100, 100, 943, 460);

@@ -1,14 +1,19 @@
 package view;
 
-import java.awt.Container;
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 import model.vo.Produto;
@@ -17,14 +22,9 @@ import view.paineis.PainelConsultarProduto;
 import view.paineis.PainelConsultarVenda;
 import view.paineis.PainelGerenciarProdutos;
 import view.paineis.PainelRegistrarVenda;
-import javax.swing.JLabel;
-import java.awt.BorderLayout;
-import javax.swing.ImageIcon;
-import javax.swing.SwingConstants;
-import java.awt.Color;
-import java.awt.Toolkit;
 
 public class TelaPrincipal extends JFrame {
+	private static final long serialVersionUID = -7862364356785145045L;
 
 	// componentes visuais
 	private JMenuBar menuBar;
@@ -35,6 +35,7 @@ public class TelaPrincipal extends JFrame {
 	private JMenuItem mntmCadastrarProduto;
 	private JMenuItem mntmModificarEstoque;
 	private JMenuItem mntmConsultarProdutos;
+	private JLabel planoDeFundo;
 	
 	// painéis
 	private PainelConsultarVenda painelConsultarVenda;
@@ -42,7 +43,8 @@ public class TelaPrincipal extends JFrame {
 	protected PainelCadastrarProduto painelCadastrarProduto;
 	protected PainelGerenciarProdutos painelGerenciarProdutos;
 	private PainelConsultarProduto painelConsultarProduto;
-	private JLabel lblNewLabel;
+	
+	// classes MVC:
 	protected Produto produtoSelecionado;
 
 
@@ -124,11 +126,11 @@ public class TelaPrincipal extends JFrame {
 		mntmConsultarProdutos.setIcon(new ImageIcon(TelaPrincipal.class.getResource("/view/img/search.png")));
 		mnProdutosEstoque.add(mntmConsultarProdutos);
 		
-		lblNewLabel = new JLabel("");
-		lblNewLabel.setBackground(new Color(255, 255, 255));
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setIcon(new ImageIcon(TelaPrincipal.class.getResource("/view/img/logo.jpeg")));
-		getContentPane().add(lblNewLabel, BorderLayout.CENTER);
+		planoDeFundo = new JLabel("");
+		planoDeFundo.setBackground(new Color(255, 255, 255));
+		planoDeFundo.setHorizontalAlignment(SwingConstants.CENTER);
+		planoDeFundo.setIcon(new ImageIcon(TelaPrincipal.class.getResource("/view/img/logo.jpeg")));
+		getContentPane().add(planoDeFundo, BorderLayout.CENTER);
 		mntmConsultarProdutos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				acaoMenuConsultarProdutos();

@@ -4,18 +4,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-import model.bo.ItemVendaBO;
 import model.vo.ItemVenda;
-import model.vo.Produto;
 
 public class ItemVendaDAO {
 
 	ProdutoDAO produtoDAO = new ProdutoDAO();
 
+	/**
+	 * Cadastra o item na tabela ITEM_VENDA e atualiza o estoque do produto;
+	 * Retorna o objeto ItemVenda com ID preenchido;
+	 */
 	public ItemVenda cadastrarItemVenda(ItemVenda iv) {
 		String query = " INSERT INTO ITEM_VENDA (ID_VENDA, ID_PRODUTO, QTDE_PRODUTO, VALOR_UNITARIO) VALUES (?, ?, ?, ?) ";
 		Connection conn = Banco.getConnection();
@@ -45,6 +45,10 @@ public class ItemVendaDAO {
 		return iv;
 	}
 
+	/**
+	 * Remove do banco os registros da tabela ITEM_VENDA com o ID_VENDA passado como parâmetro;
+	 * Retorna um boolean do resultado das remoções;
+	 */
 	public boolean removerItemVendaPorIdVenda(int id) {
 		String query = "DELETE FROM ITEM_VENDA WHERE ID_VENDA = " + id;
 		Connection conn = Banco.getConnection();
@@ -60,6 +64,10 @@ public class ItemVendaDAO {
 		return resultado;
 	}
 
+	/**
+	 * Consulta no banco os registros da tabela ITEM_VENDA com o ID_VENDA passado como parâmetro;
+	 * Retorna um ArrayList dos ItemVenda encontrados;
+	 */
 	public ArrayList<ItemVenda> consultarPorIdVenda(int idVenda) {
 		ArrayList<ItemVenda> itemVendas = new ArrayList<>();
 		Connection conn = Banco.getConnection();

@@ -8,16 +8,19 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-import model.bo.ItemVendaBO;
+import controller.ItemVendaController;
 import model.seletor.VendaSeletor;
 import model.vo.ItemVenda;
 import model.vo.Venda;
-import controller.ItemVendaController;
 
 public class VendaDAO {
 
 	ItemVendaDAO itemVendaDAO = new ItemVendaDAO();
 	
+	/**
+	 * Cadastra no banco na tabela VENDA a venda passada como parâmetro;
+	 * Retorna um objeto Venda com o ID preenchido;
+	 */
 	public Venda cadastrarVenda(Venda venda) {
 
 		String query = " INSERT INTO VENDA (DATA_VENDA, VALOR_TOTAL, QTDE_ITENS) VALUES (?, ?, ?) ";
@@ -56,15 +59,17 @@ public class VendaDAO {
 
 	}
 
+	/**
+	 * Consulta no banco os registros da tabela VENDA com os atributos passados como parâmetro;
+	 * Retorna um ArrayList das Vendas encontradas;
+	 * Os joins foram em função do filtro de ean
+	 */
 	public ArrayList<Venda> consultarComFiltros(VendaSeletor seletor) {
 		ArrayList<Venda> vendas = new ArrayList<Venda>();
 		Connection conn = Banco.getConnection();
 		String query = " SELECT VENDA.ID_VENDA, VENDA.DATA_VENDA, VENDA.VALOR_TOTAL, VENDA.QTDE_ITENS FROM VENDA "
 				+ " LEFT JOIN ITEM_VENDA ON ITEM_VENDA.ID_VENDA = VENDA.ID_VENDA "
 				+ " LEFT JOIN PRODUTO ON ITEM_VENDA.ID_PRODUTO = PRODUTO.ID_PRODUTO ";
-		
-		// os joins foram em função do filtro de ean
-		
 		
 		if (seletor.temFiltro()) {
 			query = preencherFiltros(query, seletor);
@@ -94,7 +99,10 @@ public class VendaDAO {
 
 	}
 	
-	
+	/**
+	 * Conta no banco os registros da tabela VENDA com os atributos passados como parâmetro;
+	 * Retorna um int da quantidade de registros encontrados;
+	 */
 	public int contarTotalRegistrosComFiltros(VendaSeletor seletor) {
 		int total = 0;
 		Connection conexao = Banco.getConnection();
@@ -124,6 +132,9 @@ public class VendaDAO {
 		return total;
 	}
 
+	/**
+	 * Retorna um objeto Venda preenchido com o conteúdo de um ResultSet; 
+	 */
 	private Venda montarVendaPeloResultSet(ResultSet resultado) throws SQLException {
 		Venda v = new Venda();
 		v.setId(resultado.getInt("ID_VENDA"));
@@ -134,6 +145,9 @@ public class VendaDAO {
 		return v;
 	}
 
+	/**
+	 * Preenche a cláusura where com os filtros do seletor;
+	 */
 	private String preencherFiltros(String query, VendaSeletor seletor) {
 		boolean primeiro = true;
 		if (seletor.getEan() != null && seletor.getEan().trim().length() > 0) {
@@ -185,6 +199,10 @@ public class VendaDAO {
 		return query;
 	}
 
+	/**
+	 * Remove do banco o registro da tabela VENDA da Venda passada como parâmetro;
+	 * Retorna um boolean do resultado da remoção;
+	 */
 	public boolean removerVenda(Venda v) {
 		Connection conn = Banco.getConnection();
 		String query = "DELETE FROM VENDA WHERE ID_VENDA = " + v.getId();
@@ -203,23 +221,23 @@ public class VendaDAO {
 		return resultado;
 	}
 
-	public ArrayList<Venda> buscarVendasSemPaginacaoComFiltros(VendaSeletor seletor) {
+	/**
+	 * Consulta no banco os registros da tabela VENDA com os atributos passados como parâmetro;
+	 * Ignora a paginação;
+	 * Retorna um ArrayList das Vendas encontradas;
+	 * Os joins foram em função do filtro de ean
+	 */
+	public ArrayList<Venda> consultarComFiltrosSemPaginacao(VendaSeletor seletor) {
 		ArrayList<Venda> vendas = new ArrayList<Venda>();
 		Connection conn = Banco.getConnection();
 		String query = " SELECT VENDA.ID_VENDA, VENDA.DATA_VENDA, VENDA.VALOR_TOTAL, VENDA.QTDE_ITENS FROM VENDA "
 				+ " LEFT JOIN ITEM_VENDA ON ITEM_VENDA.ID_VENDA = VENDA.ID_VENDA "
 				+ " LEFT JOIN PRODUTO ON ITEM_VENDA.ID_PRODUTO = PRODUTO.ID_PRODUTO ";
 		
-		// os joins foram em função do filtro de ean
-		
-		
 		if (seletor.temFiltro()) {
 			query = preencherFiltros(query, seletor);
 		}
 		query += "  GROUP BY ID_VENDA ORDER BY 1 DESC ";
-		if (seletor.temPaginacao()) {
-			query += " LIMIT " + seletor.getLimite() + " OFFSET " + seletor.getOffset();
-		}
 
 		PreparedStatement pstmt = Banco.getPreparedStatementWithPk(conn, query);
 		ResultSet resultado = null;

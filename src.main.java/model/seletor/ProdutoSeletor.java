@@ -1,7 +1,5 @@
 package model.seletor;
 
-import java.time.LocalDate;
-
 public class ProdutoSeletor extends BaseSeletor{
 	
 	// Atributos:
@@ -65,12 +63,5 @@ public class ProdutoSeletor extends BaseSeletor{
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
-
-	
-	
-
-
-	
 
 }

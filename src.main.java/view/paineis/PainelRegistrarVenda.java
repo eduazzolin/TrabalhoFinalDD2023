@@ -26,9 +26,7 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
-import com.jgoodies.forms.layout.Sizes;
 
-import controller.ItemVendaController;
 import controller.ProdutoController;
 import controller.VendaController;
 import model.exception.CampoInvalidoException;
@@ -39,8 +37,11 @@ import model.vo.Produto;
 import model.vo.Venda;
 
 public class PainelRegistrarVenda extends JPanel {
+	private static final long serialVersionUID = 3077408170057789433L;
 	
 	// componentes visuais:
+	@SuppressWarnings("rawtypes")
+	private JComboBox cbSelecionarProduto;
 	private JTextField tfTrecho;
 	private JTextField tfRemoverProduto;
 	private JTextField tfValorTotal;
@@ -56,7 +57,6 @@ public class PainelRegistrarVenda extends JPanel {
 	private JButton btnBuscar;
 	private JButton btnRemover;
 	private JButton btnConfirmar;
-	private JComboBox cbSelecionarProduto;
 	private JTextPane tpDescricaoProdutoSelecionado;
 	private JTextPane tpProdutosAdicionados;
 	private JSeparator separator;
@@ -66,7 +66,6 @@ public class PainelRegistrarVenda extends JPanel {
 	// classes mvc:
 	private ProdutoController produtoController = new ProdutoController();
 	private VendaController vendaController = new VendaController();
-	private ItemVendaController itemVendaController = new ItemVendaController();
 
 	// atributos simples:
 	private Venda venda = new Venda();
@@ -83,10 +82,7 @@ public class PainelRegistrarVenda extends JPanel {
 			+ "EAN:\n"
 			+ "Valor unitário: R$\n";
 	
-	/**
-	 * Create the panel.
-	 */
-	@SuppressWarnings("unchecked")
+
 	public PainelRegistrarVenda() {
 		setLayout(new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
@@ -271,6 +267,7 @@ public class PainelRegistrarVenda extends JPanel {
 	 * Atribui o ArrayList "listaProdutosComboBox" ao comboBox;
 	 * Se não retornar nada, exibe mensagem;
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void acaoBotaoBuscar() {
 		try {
 			if (tfTrecho.getText().equals(VALOR_PADRAO_CAMPO_TRECHO) || tfTrecho.getText().isEmpty()) {
@@ -279,7 +276,7 @@ public class PainelRegistrarVenda extends JPanel {
 				listaProdutosComboBox = produtoController.buscarProdutosAtivosPorNomeOuEan(tfTrecho.getText());
 			}
 			if (listaProdutosComboBox.size() > 0) {
-				// subtraindo do estoque dos produtos da lista, os itens do carrinho:
+				// subtraindo do estoque dos produtos da lista os itens do carrinho:
 				for(Produto pCombo : listaProdutosComboBox) {
 					for(ItemVenda iv : venda.getListaItemVenda()) {
 						if (pCombo.getId() == iv.getProduto().getId()) {
@@ -341,6 +338,7 @@ public class PainelRegistrarVenda extends JPanel {
 	/**
 	 * Atribui o valor padrão ao textField do trecho e ao comboBox;
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void limparSelecao() {
 		tfTrecho.setText(VALOR_PADRAO_CAMPO_TRECHO);
 		cbSelecionarProduto.setModel(new DefaultComboBoxModel(new String[] {VALOR_PADRAO_COMBOBOX_SELECAO_PRODUTOS}));

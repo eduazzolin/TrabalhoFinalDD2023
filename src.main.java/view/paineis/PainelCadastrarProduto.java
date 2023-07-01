@@ -1,57 +1,53 @@
 package view.paineis;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.FormSpecs;
+import com.jgoodies.forms.layout.RowSpec;
 
 import controller.ProdutoController;
 import model.exception.CampoInvalidoException;
 import model.vo.Produto;
 import view.componentesExternos.JNumberFormatField;
 
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
-import com.jgoodies.forms.layout.FormSpecs;
-import javax.swing.SwingConstants;
-import javax.swing.JSeparator;
-import javax.swing.JTextArea;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
 public class PainelCadastrarProduto extends JPanel {
+	private static final long serialVersionUID = 8488266604176894743L;
+	
+	// componentes visuais:
+	private JNumberFormatField txtPreco;
 	private JTextField txtProduto;
 	private JTextField txtCodigo;
-	private ProdutoController produtoController = new ProdutoController();
 	private JTextArea txtDescricao;
 	private JButton btnConfirmar;
-	private Component lbCodigo;
-	private Component lbPreco;
+	private JLabel lbCodigo;
+	private JLabel lbPreco;
 	private JLabel lbDescricao;
 	private JLabel lbNomeProduto;
-	private JSeparator separator;
 	private JLabel lbTitulo;
+	private JSeparator separator;
 	
+	// atributos MVC: 
+	private ProdutoController produtoController = new ProdutoController();
 	protected Produto produtoNovo = new Produto();
-	private JNumberFormatField txtPreco;
 	
-	/**
-	 * Create the panel.
-	 * @param produto 
-	 */
 	
 	/*
-	 * esse produto passado por parametro pode ser o que vem da classe PainelConsultarEstoque quando a pessoa clica em editar
+	 * Este produto passado por parâmetro vem da classe PainelConsultarEstoque quando a pessoa clica em editar
 	 * ou pode ser um produto vazio de quando a pessoa abre este painel pelo menu.
-	 * para saber se vai ser cadastro ou edição, é só ver se ele veio com id.
-	 * se ele tiver id tem que atualizar, se ele não tiver daí é para cadastrar
-	 * se for pra atualizar da para preencher já os campos com os atributos dele.
 	 */
 	public PainelCadastrarProduto(Produto produto) {
 		produtoNovo = produto;
@@ -82,28 +78,8 @@ public class PainelCadastrarProduto extends JPanel {
 		lbTitulo.setHorizontalAlignment(SwingConstants.LEFT);
 		add(lbTitulo, "2, 1, 4, 1");
 		
-		separator = new JSeparator();
-		add(separator, "2, 2, 4, 1");
-		
-		txtDescricao = new JTextArea();
-		txtDescricao.setLineWrap(true);
-		add(txtDescricao, "5, 9, fill, fill");
-		
-		txtProduto = new JTextField(" --Produto-- ");
-		txtProduto.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (txtProduto.getText().equals(" --Produto-- ")) {
-					txtProduto.setText("");
-				}
-			}
-		});
-		add(txtProduto, "5, 3, fill, fill");
-		txtProduto.setColumns(10);
-		
 		lbNomeProduto = new JLabel("Nome do Produto:");
 		add(lbNomeProduto, "2, 3, fill, center");
-		
 
 		lbDescricao = new JLabel("Descrição:");
 		add(lbDescricao, "2, 9, fill, top");
@@ -118,7 +94,28 @@ public class PainelCadastrarProduto extends JPanel {
 		lbCodigo = new JLabel("Codigo do Produto:");
 		add(lbCodigo, "2, 7, fill, center");
 		
+		separator = new JSeparator();
+		add(separator, "2, 2, 4, 1");
+		
+		txtDescricao = new JTextArea();
+		txtDescricao.setLineWrap(true);
+		add(txtDescricao, "5, 9, fill, fill");
+		
+		txtProduto = new JTextField(" --Produto-- ");
+		add(txtProduto, "5, 3, fill, fill");
+		txtProduto.setColumns(10);
+		txtProduto.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (txtProduto.getText().equals(" --Produto-- ")) {
+					txtProduto.setText("");
+				}
+			}
+		});
+		
 		txtCodigo = new JTextField(" --EAN-- ");
+		txtCodigo.setColumns(10);
+		add(txtCodigo, "5, 7, fill, fill");
 		txtCodigo.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -127,10 +124,9 @@ public class PainelCadastrarProduto extends JPanel {
 				}
 			}
 		});
-		txtCodigo.setColumns(10);
-		add(txtCodigo, "5, 7, fill, fill");
 		
 		btnConfirmar = new JButton("Confirmar");
+		add(btnConfirmar, "5, 12, right, fill");
 		btnConfirmar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -142,9 +138,6 @@ public class PainelCadastrarProduto extends JPanel {
 
 		});
 		
-
-		add(btnConfirmar, "5, 12, right, fill");
-		
 		preencherCamposQuandoForEdicao(produto);
 
 	}
@@ -154,7 +147,6 @@ public class PainelCadastrarProduto extends JPanel {
 	 * Confere se o produto do construtor tem id ou não
 	 * Se tiver, significa que é edição então os campos 
 	 * da tela são preenchidos.
-	 * @param produto 
 	 */
 	private void preencherCamposQuandoForEdicao(Produto p) {
 		if (p.getId() > 0) {
@@ -165,8 +157,14 @@ public class PainelCadastrarProduto extends JPanel {
 		}
 	}
 
-
-
+	/**
+	 * Confirma o cadastro ou a edição:
+	 * 
+	 * Valida se os campos estão preenchidos e se estão no tamanho máximo do banco;
+	 * Preenche um objeto Produto com os campos digitados;
+	 * Verifica se tem ID preenchido, se tiver, edita, caso contrário, cadastra;
+	 * Exibe mensagem do resultado e limpa os campos.
+	 */
 	private void acaoBotaoConfirmar() throws CampoInvalidoException {
 	
 			 if(txtProduto.getText().isEmpty()) {
@@ -182,16 +180,16 @@ public class PainelCadastrarProduto extends JPanel {
 								 throw new CampoInvalidoException("Descrição não informada");
 							 }
 							 if(txtProduto.getText().length() > 255) {
-								 throw new CampoInvalidoException("Tamanho maximo do nome atingido (255 caracteres)");
+								 throw new CampoInvalidoException("Tamanho máximo do nome atingido (255 caracteres)");
 							 }
-							  if(txtPreco.getText().length() > 11) {
-								 throw new CampoInvalidoException("Tamanho maximo do preço atingido (12 caracteres)");
+							  if(txtPreco.getValue().toString().length() > 13) {
+								 throw new CampoInvalidoException("Tamanho máximo do preço atingido (12 caracteres)");
 						    	}
 						    	 if(txtCodigo.getText().length() > 16) {
-									 throw new CampoInvalidoException("Tamanho maximo do codigo atingido (16 caracteres)");
+									 throw new CampoInvalidoException("Tamanho máximo do codigo atingido (16 caracteres)");
 								 }
 										 if(txtDescricao.getText().length() > 255) {
-											 throw new CampoInvalidoException("Tamanho maximo da descrição atingido (255 caracteres)");
+											 throw new CampoInvalidoException("Tamanho máximo da descrição atingido (255 caracteres)");
 										 }
 							 
 							 

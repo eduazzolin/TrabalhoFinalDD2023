@@ -16,6 +16,12 @@ public class VendaController {
 
 	private VendaBO vendaBO = new VendaBO();
 
+	/**
+	 * Validações:
+	 * 1. Se a lista de ItemVenda não está vazia;
+	 * 2. Se todos os produtos estão ativos;
+	 * 3. (BO) Se todos os protudos estão em estoque;
+	 */
 	public Venda cadastrarVenda(Venda venda) throws VendaInvalidaException, EstoqueInsuficienteException {
 		if (venda.getListaItemVenda() == null || venda.getListaItemVenda().size() == 0) {
 			throw new VendaInvalidaException("Erro: A venda não pode estar vazia!");
@@ -28,14 +34,10 @@ public class VendaController {
 		return vendaBO.cadastrarVenda(venda);
 	}
 
-	public ArrayList<Venda> consultarComFiltros(VendaSeletor seletor) {
-		return vendaBO.consultarComFiltros(seletor);
-	}
-
-	public int contarTotalRegistrosComFiltros(VendaSeletor seletor) {
-		return vendaBO.contarTotalRegistrosComFiltros(seletor);
-	}
-
+	/**
+	 * Validações:
+	 * 1. Se a venda passada por parâmetro está preenchida;
+	 */
 	public boolean removerVenda(Venda v) throws VendaInvalidaException {
 		if (v == null || v.getId() == 0) {
 			throw new VendaInvalidaException("Venda inválida, selecione novamente.");
@@ -43,12 +45,17 @@ public class VendaController {
 		return vendaBO.removerVenda(v);
 	}
 
+	/**
+	 * Validações:
+	 * 1. Se o destino não está em branco;
+	 * 2. Se a lista de vendas não está vazia;
+	 */
 	public String gerarPlanilhaSomenteVendas(ArrayList<Venda> vendas, String destinoArquivo)
 			throws CampoInvalidoException, VendaInvalidaException {
 		if (destinoArquivo == null || destinoArquivo.trim().isEmpty()) {
 			throw new CampoInvalidoException("Preencha todos os campos");
 		}
-		if (vendas == null) {
+		if (vendas == null || vendas.size() == 0) {
 			throw new VendaInvalidaException("Erro: a venda está vazia");
 		}
 
@@ -56,12 +63,17 @@ public class VendaController {
 		return gerador.gerarPlanilhaSomenteVendas(vendas, destinoArquivo);
 	}
 
+	/**
+	 * Validações:
+	 * 1. Se o destino não está em branco;
+	 * 2. Se a lista de vendas não está vazia;
+	 */
 	public String gerarPlanilhaVendasComProdutos(ArrayList<Venda> vendas, String destinoArquivo)
 			throws CampoInvalidoException, VendaInvalidaException {
 		if (destinoArquivo == null || destinoArquivo.trim().isEmpty()) {
 			throw new CampoInvalidoException("Preencha todos os campos");
 		}
-		if (vendas == null) {
+		if (vendas == null || vendas.size() == 0) {
 			throw new VendaInvalidaException("Erro: a consulta está vazia");
 		}
 
@@ -69,8 +81,16 @@ public class VendaController {
 		return gerador.gerarPlanilhaVendasComProdutos(vendas, destinoArquivo);
 	}
 
-	public ArrayList<Venda> buscarVendasSemPaginacaoComFiltros(VendaSeletor seletor) {
-		return vendaBO.buscarVendasSemPaginacaoComFiltros(seletor);
+	public ArrayList<Venda> consultarComFiltrosSemPaginacao(VendaSeletor seletor) {
+		return vendaBO.consultarComFiltrosSemPaginacao(seletor);
 	}
 
+	public ArrayList<Venda> consultarComFiltros(VendaSeletor seletor) {
+		return vendaBO.consultarComFiltros(seletor);
+	}
+
+	public int contarTotalRegistrosComFiltros(VendaSeletor seletor) {
+		return vendaBO.contarTotalRegistrosComFiltros(seletor);
+	}
+	
 }

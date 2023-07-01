@@ -2,24 +2,28 @@ package model.seletor;
 
 public abstract class BaseSeletor {
 
+	// Atributos:
 	private int pagina;
 	private int limite;
-	
-	public BaseSeletor() {
-		this.limite = 0;
-		this.pagina = 0;
-	}
+
+	// Métodos:
+	public abstract boolean temFiltro();
 	
 	public boolean temPaginacao() {
-		return this.limite > 0 && this.pagina > 0;	
+		return this.limite > 0 && this.pagina > 0;
 	}
 	
 	public int getOffset() {
 		return this.limite * (this.pagina - 1);
 	}
 	
-	public abstract boolean temFiltro();
+	// Construtores:
+	public BaseSeletor() {
+		this.limite = 0;
+		this.pagina = 0;
+	}
 
+	// Getters e Setters:
 	public int getPagina() {
 		return pagina;
 	}
@@ -35,4 +39,5 @@ public abstract class BaseSeletor {
 	public void setLimite(int limite) {
 		this.limite = limite;
 	}
+
 }

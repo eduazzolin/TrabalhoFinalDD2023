@@ -78,7 +78,4 @@ public class VendaSeletor extends BaseSeletor{
 		this.dataFinal = dataFinal;
 	}
 
-
-	
-
 }

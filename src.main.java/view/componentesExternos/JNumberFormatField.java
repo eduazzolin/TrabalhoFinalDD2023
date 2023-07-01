@@ -165,6 +165,7 @@ public class JNumberFormatField extends JTextField {
 	}
 
 	// testes, pode ser removido
+	@SuppressWarnings("serial")
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("Teste do campo");
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

@@ -27,8 +27,6 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
 
-import controller.ItemVendaController;
-import controller.ProdutoController;
 import controller.VendaController;
 import model.exception.CampoInvalidoException;
 import model.exception.VendaInvalidaException;
@@ -39,12 +37,14 @@ import view.componentesExternos.JNumberFormatField;
 import view.dialogs.DialogVerProdutos;
 
 public class PainelConsultarVenda extends JPanel {
+	private static final long serialVersionUID = -4902755455242384274L;
 	
 	// componentes visuais:
-	private JTable table;
-	private JTextField tfEan;
 	private DatePicker dtInicial;
 	private DatePicker dtFinal;
+	private JNumberFormatField ftfValorMinimo;
+	private JNumberFormatField ftfValorMaximo;
+	private JTextField tfEan;
 	private JLabel lbFiltrarConsulta;
 	private JLabel lbEan;
 	private JLabel lbValorMinimo;
@@ -53,8 +53,9 @@ public class PainelConsultarVenda extends JPanel {
 	private JLabel lbDataFinal;
 	private JLabel lbResultados;
 	private JLabel lbPaginas;
-	private JNumberFormatField ftfValorMinimo;
-	private JNumberFormatField ftfValorMaximo;
+	private JLabel lbValorTotal;
+	private JLabel lbQuantidadeItens;
+	private JLabel lbQuantidadeVendas;
 	private JButton btnConsultar;
 	private JButton btnVerProdutos;
 	private JButton btnExportar;
@@ -63,38 +64,33 @@ public class PainelConsultarVenda extends JPanel {
 	private JButton btnRemover;
 	private JSeparator separator;
 	private JSeparator separator2;
+	private JTable table;
 	
 	// classes mvc:
 	protected VendaSeletor seletor;
 	private VendaController vendaController = new VendaController();
-	private ProdutoController produtoController = new ProdutoController();
+	protected Venda vendaSelecionada;
 	
 	// atributos simples:
 	private Double valorMaximo;
 	private Double valorMinimo;
-	private String[] nomesColunas = {  "Código", "Data", "Quantidade de itens", "Valor total" };
 	protected ArrayList<Venda> vendas;
-	protected Venda vendaSelecionada;
+	private ArrayList<Venda> vendasTodasAsPaginas;
+	private double valorTotal;
+	private int quantidadeItens;
 	
 	// atributos da paginação
 	private final int TAMANHO_PAGINA = 15;
 	private int paginaAtual = 1;
 	private int totalPaginas = 0;
-	private JLabel lbValorTotal;
-	private JLabel lbQuantidadeItens;
-	private JLabel lbQuantidadeVendas;
-	private ArrayList<Venda> vendasTodasAsPaginas;
-	private double valorTotal;
-	private int quantidadeItens;
 	
 	// atributos de valor padrão:
+	private String[] nomesColunas = {  "Código", "Data", "Quantidade de itens", "Valor total" };
 	private static final String VALOR_PADRAO_QUANTIDADE_VENDAS = "Quantidade de vendas: ";
 	private static final String VALOR_PADRAO_QUANTIDADE_ITENS = "Quantidade de itens: ";
 	private static final String VALOR_PADRAO_VALOR_TOTAL = "Valor total: ";
 	
-	/**
-	 * Create the panel.
-	 */
+
 	public PainelConsultarVenda() {
 		setLayout(new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
@@ -162,7 +158,6 @@ public class PainelConsultarVenda extends JPanel {
 		DatePickerSettings dateSettings = new DatePickerSettings();
 		dateSettings.setAllowKeyboardEditing(false);
 		
-		// declaração dos componentes visuais:
 		lbFiltrarConsulta = new JLabel("Filtrar consulta:");
 		add(lbFiltrarConsulta, "4, 3, left, bottom");
 		
@@ -310,7 +305,7 @@ public class PainelConsultarVenda extends JPanel {
 	/**
 	 * Remove do banco de dados a venda selecionada e seus respectivos ITEM_VENDAs:
 	 * 
-	 * Valida se a seleção está funcionando;
+	 * (controller) Valida se a seleção está funcionando;
 	 * Remove do banco de dados;
 	 * Atualiza a tabela e os botões "remover" e "ver produtos".
 	 */
@@ -375,7 +370,6 @@ public class PainelConsultarVenda extends JPanel {
 		}
 		lbPaginas.setText(paginaAtual + " / " + totalPaginas);
 		ativarOuDesativarBotoesVoltarAvancar();
-		
 	}
 	
 	/**
@@ -386,8 +380,6 @@ public class PainelConsultarVenda extends JPanel {
 		btnAvancar.setEnabled(paginaAtual < totalPaginas);
 	}
 
-
-
 	/**
 	 * Busca vendas no banco com os filtros e atribui o resultado à tabela:
 	 * 
@@ -395,22 +387,20 @@ public class PainelConsultarVenda extends JPanel {
 	 * Valida os valores máximos dos filtros para confirmar se eles não são menores que os mínimos;
 	 * Se os campos de valor estiverem com 0 (valor padrão) atribui "null";
 	 * Busca no banco com os filtros e atribui o resultado ao ArrayList "vendas";
+	 * Busca no banco com os filtros porém sem paginação e atribui o resultado ao ArrayList "vendasTodasAsPaginas";
+	 * "vendasTodasAsPaginas" será usado para relatórios e valores totais;
 	 * Atualiza a tabela, a paginação e os botões de navegação e exportar;
-	 * @throws CampoInvalidoException;
 	 */
 	private void buscarVendasComFiltrosEAtualizarTabela() throws CampoInvalidoException {
 		
-		// busca no banco com paginação:
 		seletor = new VendaSeletor();
-		seletor.setLimite(TAMANHO_PAGINA);
-		seletor.setPagina(paginaAtual);
 		preencherSeletor(seletor);
+		
+		// busca no banco com paginação:
 		vendas = vendaController.consultarComFiltros(seletor);
 		
 		// busca no banco da lista sem paginação:
-		VendaSeletor seletorSemPaginacao = new VendaSeletor();
-		preencherSeletor(seletorSemPaginacao);
-		vendasTodasAsPaginas = vendaController.consultarComFiltros(seletorSemPaginacao);
+		vendasTodasAsPaginas = vendaController.consultarComFiltrosSemPaginacao(seletor);
 		
 		// atualizações
 		atualizarTabela();
@@ -420,6 +410,12 @@ public class PainelConsultarVenda extends JPanel {
 		btnExportar.setEnabled(vendas != null && vendas.size()>0);
 	}
 
+	/**
+	 * Atualiza os labels de valor total:
+	 * 
+	 * Conta e soma os valores do ArrayList "vendasTodasAsPaginas";
+	 * Atribui os valores aos labels correspondentes; 
+	 */
 	private void atualizarLabelsTotais() {
 		valorTotal = 0;
 		quantidadeItens = 0;
@@ -435,7 +431,12 @@ public class PainelConsultarVenda extends JPanel {
 		
 	}
 
+	/**
+	 * Atribui os valores de paginação e dos campos ao seletor do parâmetro;
+	 */
 	private void preencherSeletor(VendaSeletor s) throws CampoInvalidoException {
+		s.setLimite(TAMANHO_PAGINA);
+		s.setPagina(paginaAtual);
 		valorMinimo = ftfValorMinimo.getValue().doubleValue();
 		valorMaximo = ftfValorMaximo.getValue().doubleValue();
 		if (dtFinal.getDate() != null && dtInicial.getDate() != null && dtFinal.getDate().isBefore(dtInicial.getDate())) {
@@ -452,7 +453,7 @@ public class PainelConsultarVenda extends JPanel {
 	}
 
 	/**
-	 * Deixa a tabela somente com o cabeçalho padrão;
+	 * Deixa a tabela somente com o cabeçalho e tamanho de linhas padrão;
 	 */
 	private void limparTabela() {
 		table.setModel(new DefaultTableModel(new Object[][] { nomesColunas }, nomesColunas));
@@ -462,7 +463,7 @@ public class PainelConsultarVenda extends JPanel {
 	/**
 	 * Atualiza a tabela baseada no ArrayList "vendas":
 	 * 
-	 * Limpa a tabela deixando somente o cabeçalho padrão;
+	 * Limpa a tabela;
 	 * Pega a referência do model da tabela e adiciona nele uma linha para cada Venda no ArrayList vendas;
 	 */
 	private void atualizarTabela() {
@@ -520,17 +521,24 @@ public class PainelConsultarVenda extends JPanel {
 	 * Exibe um JOptionPane perguntando o tipo do relatório;
 	 * Exibe um JOptionPane perguntando onde quer salvar;
 	 * Busca no banco os resultados com os filtros porém sem paginação
-	 * Valida se o destino foi escolhido e se a consulta não está vazia;
+	 * (Controller) Valida se o destino foi escolhido e se a consulta não está vazia;
 	 * Exporta a planilha;
 	 */
 	private void acaoBotaoExportar() {
+		
+		// escolhendo o tipo:
 		int escolhaTipoRelatorio = JOptionPane.showOptionDialog(null, "Qual tipo de relatório você deseja gerar?", "Tipo de relatório", 
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null,  
 				new String[] {"Relatório somente com vendas", "Relatório com vendas e lista de produtos"}, null);
+		
 		if (escolhaTipoRelatorio >= 0) {
+			
+			// escolhendo o local de salvamento:
 			JFileChooser janelaSelecaoDestinoArquivo = new JFileChooser();
 			janelaSelecaoDestinoArquivo.setDialogTitle("Selecione um destino para a planilha...");
 			int opcaoSelecionada = janelaSelecaoDestinoArquivo.showSaveDialog(null);
+			
+			// gerando relatório:
 			if (opcaoSelecionada == JFileChooser.APPROVE_OPTION) {
 				String caminhoEscolhido = janelaSelecaoDestinoArquivo.getSelectedFile().getAbsolutePath();
 				String resultado = "Erro ao gerar relatório.";

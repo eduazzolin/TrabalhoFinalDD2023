@@ -7,7 +7,6 @@ import java.util.Iterator;
 import model.dao.ProdutoDAO;
 import model.dao.VendaDAO;
 import model.exception.EstoqueInsuficienteException;
-import model.exception.VendaInvalidaException;
 import model.seletor.VendaSeletor;
 import model.vo.ItemVenda;
 import model.vo.Venda;
@@ -17,8 +16,14 @@ public class VendaBO {
 	private VendaDAO vendaDAO = new VendaDAO();
 	private ProdutoDAO produtoDAO = new ProdutoDAO();
 
-	public Venda cadastrarVenda(Venda venda) throws VendaInvalidaException, EstoqueInsuficienteException {
-		// Verificando se todos os produtos tem estoque:
+	/**
+	 * Validações:
+	 * 1. Se todos os protudos estão em estoque;
+	 * -> Cria um hashMap agrupando os produtos adicionados pelo id e somando as quantidades; 
+	 * -> Percorre o hashMap consultando no estoque se cada produto tem estoque para cada quantidade;
+	 */
+	public Venda cadastrarVenda(Venda venda) throws EstoqueInsuficienteException {
+		
 		HashMap<Integer, Integer> produtosEQuantidadesAgrupados = new HashMap<Integer, Integer>();
 		for (ItemVenda iv : venda.getListaItemVenda()) {
 			int id = iv.getProduto().getId();
@@ -34,7 +39,7 @@ public class VendaBO {
 		while (itr.hasNext()) {
 			int id = itr.next();
 			int qtdNaVenda = produtosEQuantidadesAgrupados.get(id);
-			int qtdNoEstoque = produtoDAO.ConstularEstoque(id);
+			int qtdNoEstoque = produtoDAO.consultarEstoque(id);
 			if (qtdNoEstoque < qtdNaVenda) {
 				for (ItemVenda iv : venda.getListaItemVenda()) {
 					if (iv.getProduto().getId() == id) {
@@ -49,23 +54,19 @@ public class VendaBO {
 	}
 
 	public ArrayList<Venda> consultarComFiltros(VendaSeletor seletor) {
-		// tudo ok! passa adiante!
 		return vendaDAO.consultarComFiltros(seletor);
 	}
 
 	public int contarTotalRegistrosComFiltros(VendaSeletor seletor) {
-		// tudo ok! passa adiante!
 		return vendaDAO.contarTotalRegistrosComFiltros(seletor);
 	}
 
 	public boolean removerVenda(Venda v) {
-		// tudo ok! passa adiante!
 		return vendaDAO.removerVenda(v);
 	}
 
-	public ArrayList<Venda> buscarVendasSemPaginacaoComFiltros(VendaSeletor seletor) {
-		// tudo ok! passa adiante!   
-		return vendaDAO.buscarVendasSemPaginacaoComFiltros(seletor);
+	public ArrayList<Venda> consultarComFiltrosSemPaginacao(VendaSeletor seletor) {
+		return vendaDAO.consultarComFiltrosSemPaginacao(seletor);
 	}
 
 }
