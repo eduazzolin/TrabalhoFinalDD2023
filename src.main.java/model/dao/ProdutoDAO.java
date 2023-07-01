@@ -139,11 +139,11 @@ public class ProdutoDAO {
 		return retorno;
 	}
 
-	public Produto criarProduto(Produto produtoNovo) {
+	public boolean criarProduto(Produto produtoNovo) {
 		boolean retorno = false;
 
 		String query = "INSERT INTO PRODUTO (NOME, DESCRICAO, EAN, VALOR, ESTOQUE) VALUES ('" + produtoNovo.getNome()
-				+ "'," + " '" + produtoNovo.getDescricao() + "', " + produtoNovo.getEan() + ", "
+				+ "'," + " '" + produtoNovo.getDescricao() + "', '" + produtoNovo.getEan() + "', "
 				+ produtoNovo.getValor() + ", 0);";
 		Connection conn = Banco.getConnection();
 
@@ -153,12 +153,12 @@ public class ProdutoDAO {
 				retorno = true;
 			}
 		} catch (Exception e) {
-			System.out.println("Erro ao atualizar os produtos. \n Causa:" + e.getMessage());
+			System.out.println("Erro ao cadastrar os produtos. \n Causa:" + e.getMessage());
 		} finally {
 			Banco.closePreparedStatement(stmt);
 			Banco.closeConnection(conn);
 		}
-		return null;
+		return retorno;
 	}
 
 	public ArrayList<Produto> consultarComFiltos(ProdutoSeletor seletor) {

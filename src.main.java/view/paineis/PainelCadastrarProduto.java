@@ -22,6 +22,8 @@ import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.SwingConstants;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class PainelCadastrarProduto extends JPanel {
 	private JTextField txtProduto;
@@ -87,7 +89,15 @@ public class PainelCadastrarProduto extends JPanel {
 		txtDescricao.setLineWrap(true);
 		add(txtDescricao, "5, 9, fill, fill");
 		
-		txtProduto = new JTextField();
+		txtProduto = new JTextField(" --Produto-- ");
+		txtProduto.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (txtProduto.getText().equals(" --Produto-- ")) {
+					txtProduto.setText("");
+				}
+			}
+		});
 		add(txtProduto, "5, 3, fill, fill");
 		txtProduto.setColumns(10);
 		
@@ -108,7 +118,15 @@ public class PainelCadastrarProduto extends JPanel {
 		lbCodigo = new JLabel("Codigo do Produto:");
 		add(lbCodigo, "2, 7, fill, center");
 		
-		txtCodigo = new JTextField();
+		txtCodigo = new JTextField(" --EAN-- ");
+		txtCodigo.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (txtCodigo.getText().equals(" --EAN-- ")) {
+					txtCodigo.setText("");
+				}
+			}
+		});
 		txtCodigo.setColumns(10);
 		add(txtCodigo, "5, 7, fill, fill");
 		
@@ -183,7 +201,11 @@ public class PainelCadastrarProduto extends JPanel {
 							 produtoNovo.setEan(txtCodigo.getText());
 							
 								if(produtoNovo.getId() == 0) {
-									produtoNovo = produtoController.criarProduto(produtoNovo);
+									if(produtoController.criarProduto(produtoNovo)) {
+										JOptionPane.showMessageDialog(null, "Produto Cadastrado com sucesos!", "Cadastrar", 1);
+									} else {
+										JOptionPane.showMessageDialog(null, "Erro ao Cadastrar produto!", "Erro", 1);
+									}
 								} else {
 									if(produtoController.editarProduto(produtoNovo)) {
 										JOptionPane.showMessageDialog(null, "Produto atualizado com sucesos!", "Atualização", 1);
@@ -191,6 +213,10 @@ public class PainelCadastrarProduto extends JPanel {
 										JOptionPane.showMessageDialog(null, "Erro ao atualizar produto!", "Erro", 1);
 									}
 								}
-							 
+								txtProduto.setText("");
+								txtPreco.setText("");
+								txtCodigo.setText("");
+								txtDescricao.setText("");
+								produtoNovo = new Produto();
 	}
 }

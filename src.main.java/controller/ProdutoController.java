@@ -43,7 +43,7 @@ public class ProdutoController {
 			return produtoBO.atualizarEstoque(quantidadeDigitada , produtoSelecionado);
 	}
 
-	public Produto criarProduto(Produto produtoNovo) {
+	public boolean criarProduto(Produto produtoNovo) {
 		
 		return produtoBO.criarProduto(produtoNovo);
 	}

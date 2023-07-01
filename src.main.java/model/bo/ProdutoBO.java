@@ -25,7 +25,7 @@ public class ProdutoBO {
 		
 		return produtoDAO.atualizarEstoque(quantidadeDigitada , produtoSelecionado);
 	}
-	public Produto criarProduto(Produto produtoNovo) {
+	public boolean criarProduto(Produto produtoNovo) {
 		
 		return produtoDAO.criarProduto(produtoNovo);
 	}

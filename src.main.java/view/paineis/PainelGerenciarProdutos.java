@@ -80,7 +80,8 @@ public class PainelGerenciarProdutos extends JPanel {
 		add(lbQuantidadeAtual, "7, 6, left, fill");
 		
 		
-		produtoscombo = produtoController.buscarTodosProdutos(); // busca os produtos no banco e armazena em um ArrayList
+		produtoscombo = produtoController.buscarTodosProdutos();
+		// busca os produtos no banco e armazena em um ArrayList
 		comboBox = new JComboBox();
 		comboBox.setModel(new DefaultComboBoxModel(produtoscombo.toArray()));
 		add(comboBox, "2, 4, 6, 1, fill, fill");

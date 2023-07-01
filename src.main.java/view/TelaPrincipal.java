@@ -17,6 +17,11 @@ import view.paineis.PainelConsultarProduto;
 import view.paineis.PainelConsultarVenda;
 import view.paineis.PainelGerenciarProdutos;
 import view.paineis.PainelRegistrarVenda;
+import javax.swing.JLabel;
+import java.awt.BorderLayout;
+import javax.swing.ImageIcon;
+import javax.swing.SwingConstants;
+import java.awt.Color;
 
 public class TelaPrincipal extends JFrame {
 
@@ -36,6 +41,7 @@ public class TelaPrincipal extends JFrame {
 	protected PainelCadastrarProduto painelCadastrarProduto;
 	protected PainelGerenciarProdutos painelGerenciarProdutos;
 	private PainelConsultarProduto painelConsultarProduto;
+	private JLabel lblNewLabel;
 
 
 	public static void main(String[] args) {
@@ -58,6 +64,7 @@ public class TelaPrincipal extends JFrame {
 	}
 
 	public TelaPrincipal() {
+		getContentPane().setBackground(new Color(255, 255, 255));
 		
 		setTitle("Sistema gerenciador de farmácia");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -67,9 +74,11 @@ public class TelaPrincipal extends JFrame {
 		setJMenuBar(menuBar);
 
 		mnVendas = new JMenu("Vendas");
+		mnVendas.setIcon(new ImageIcon("C:\\Users\\kevin.raulino\\Desktop\\TrabalhoFinalDD2023-main\\src.main.java\\view\\Ativo 4.png"));
 		menuBar.add(mnVendas);
 
 		mntmRegistrarVendas = new JMenuItem("Registrar venda");
+		mntmRegistrarVendas.setIcon(new ImageIcon("C:\\Users\\kevin.raulino\\Desktop\\TrabalhoFinalDD2023-main\\src.main.java\\view\\plus.png"));
 		mnVendas.add(mntmRegistrarVendas);
 		mntmRegistrarVendas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -78,6 +87,7 @@ public class TelaPrincipal extends JFrame {
 		});
 
 		mntmConsultarVendas = new JMenuItem("Consultar vendas");
+		mntmConsultarVendas.setIcon(new ImageIcon("C:\\Users\\kevin.raulino\\Desktop\\TrabalhoFinalDD2023-main\\src.main.java\\view\\search.png"));
 		mnVendas.add(mntmConsultarVendas);
 		mntmConsultarVendas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -86,9 +96,11 @@ public class TelaPrincipal extends JFrame {
 		});
 
 		mnProdutosEstoque = new JMenu("Produtos e Estoque");
+		mnProdutosEstoque.setIcon(new ImageIcon("C:\\Users\\kevin.raulino\\Desktop\\TrabalhoFinalDD2023-main\\src.main.java\\view\\Ativo 5.png"));
 		menuBar.add(mnProdutosEstoque);
 
 		mntmCadastrarProduto = new JMenuItem("Cadastrar produtos");
+		mntmCadastrarProduto.setIcon(new ImageIcon("C:\\Users\\kevin.raulino\\Desktop\\TrabalhoFinalDD2023-main\\src.main.java\\view\\plus.png"));
 		mnProdutosEstoque.add(mntmCadastrarProduto);
 		mntmCadastrarProduto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -97,6 +109,7 @@ public class TelaPrincipal extends JFrame {
 		});
 
 		mntmModificarEstoque = new JMenuItem("Gerenciar estoque");
+		mntmModificarEstoque.setIcon(new ImageIcon("C:\\Users\\kevin.raulino\\Desktop\\TrabalhoFinalDD2023-main\\src.main.java\\view\\ready-stock.png"));
 		mnProdutosEstoque.add(mntmModificarEstoque);
 		mntmModificarEstoque.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -105,7 +118,14 @@ public class TelaPrincipal extends JFrame {
 		});
 
 		mntmConsultarProdutos = new JMenuItem("Consultar produtos");
+		mntmConsultarProdutos.setIcon(new ImageIcon("C:\\Users\\kevin.raulino\\Desktop\\TrabalhoFinalDD2023-main\\src.main.java\\view\\search.png"));
 		mnProdutosEstoque.add(mntmConsultarProdutos);
+		
+		lblNewLabel = new JLabel("");
+		lblNewLabel.setBackground(new Color(255, 255, 255));
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\kevin.raulino\\Desktop\\TrabalhoFinalDD2023-main\\src.main.java\\view\\logo.jpeg"));
+		getContentPane().add(lblNewLabel, BorderLayout.CENTER);
 		mntmConsultarProdutos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				acaoMenuConsultarProdutos();
