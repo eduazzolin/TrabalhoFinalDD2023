@@ -178,9 +178,9 @@ public class TelaPrincipal extends JFrame {
 
 	/**
 	 * Instancia o PainelConsultarProduto e define como contentPane;
-	 * Adiciona um action listener no botão "editar" do painel:
-	 * Quando pressionado deve instanciar um PainelCadastrarProduto
-	 * Com o produto selecionado na tabela como parâmetro
+	 * Adiciona action listeners nos botões "editar" e "estoque" do painel:
+	 * "editar" instancia um painel CadastrarProduto passando o produto selecionado como parâmetro;
+	 * "estoque" instancia um painel GerenciarProdutos passando o produto selecionado como parâmetro;
 	 */
 	private void acaoMenuConsultarProdutos() {
 		painelConsultarProduto = new PainelConsultarProduto();
