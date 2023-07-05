@@ -312,15 +312,15 @@ public class PainelConsultarVenda extends JPanel {
 	protected void acaoBotaoRemover() {
 		try {
 			if(vendaController.removerVenda(vendaSelecionada)) {
-				JOptionPane.showMessageDialog(btnRemover, "Venda removida com sucesso!", "Sucesso", 1);
+				JOptionPane.showMessageDialog(null, "Venda removida com sucesso!", "Sucesso", 1);
 				acaoBotaoConsultar();
 				btnRemover.setEnabled(false);
 				btnVerProdutos.setEnabled(false);
 			} else {
-				JOptionPane.showMessageDialog(btnRemover, "Erro ao remover venda", "Erro", 1);
+				JOptionPane.showMessageDialog(null, "Erro ao remover venda", "Erro", 1);
 			}
 		} catch (VendaInvalidaException e) {
-			JOptionPane.showMessageDialog(btnRemover, e.getMessage(), "Erro", 1);
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", 1);
 		}
 		
 	}

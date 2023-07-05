@@ -7,13 +7,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import model.seletor.ProdutoSeletor;
+import model.vo.ItemVenda;
 import model.vo.Produto;
 
 public class ProdutoDAO {
 
 	/**
-	 * Consulta no banco na tabela PRODUTOS com o trecho do nome ou EAN passado como parâmetro;
-	 * Retorna um ArrayList dos Produtos encontrados;
+	 * Consulta no banco na tabela PRODUTOS com o trecho do nome ou EAN passado como
+	 * parâmetro; Retorna um ArrayList dos Produtos encontrados;
 	 */
 	public ArrayList<Produto> buscarProdutosAtivosPorNomeOuEan(String nomeOuEan) {
 		nomeOuEan = nomeOuEan.replace("'", "''");
@@ -46,8 +47,8 @@ public class ProdutoDAO {
 	}
 
 	/**
-	 * Consulta no banco todos os registros da tabela PRODUTO;
-	 * Retorna um ArrayList dos Produtos encontrados;
+	 * Consulta no banco todos os registros da tabela PRODUTO; Retorna um ArrayList
+	 * dos Produtos encontrados;
 	 */
 	public ArrayList<Produto> buscarTodosProdutos() {
 		ArrayList<Produto> produtos = new ArrayList<>();
@@ -78,8 +79,8 @@ public class ProdutoDAO {
 	}
 
 	/**
-	 * Consulta no banco o registro da tabela PRODUTO com o ID_PRODUTO passado como parâmetro;
-	 * Retorna um objeto Produto do produto encontrado;
+	 * Consulta no banco o registro da tabela PRODUTO com o ID_PRODUTO passado como
+	 * parâmetro; Retorna um objeto Produto do produto encontrado;
 	 */
 	public Produto buscarProdutoPorId(int id) {
 		Produto produtoBuscado = null;
@@ -109,8 +110,8 @@ public class ProdutoDAO {
 	}
 
 	/**
-	 * Consulta no banco o estoque da tabela PRODUTO com o ID_PRODUTO passado como parâmetro;
-	 * Retorna um int do estoque encontrado;
+	 * Consulta no banco o estoque da tabela PRODUTO com o ID_PRODUTO passado como
+	 * parâmetro; Retorna um int do estoque encontrado;
 	 */
 	public int consultarEstoque(int id) {
 		int estoque = 0;
@@ -133,8 +134,8 @@ public class ProdutoDAO {
 	}
 
 	/**
-	 * Atualiza no banco o estoque da tabela PRODUTO para o produto e quantidade passados como parâmetro;
-	 * Retorna um boolean do resultado da atualização;
+	 * Atualiza no banco o estoque da tabela PRODUTO para o produto e quantidade
+	 * passados como parâmetro; Retorna um boolean do resultado da atualização;
 	 */
 	public boolean atualizarEstoque(int quantidadeDigitada, Produto produtoSelecionado) {
 		boolean retorno = false;
@@ -159,8 +160,8 @@ public class ProdutoDAO {
 	}
 
 	/**
-	 * Cadastra no banco na tabela PRODUTO o produto passado como parâmetro;
-	 * Retorna um boolean do resultado da inserção;
+	 * Cadastra no banco na tabela PRODUTO o produto passado como parâmetro; Retorna
+	 * um boolean do resultado da inserção;
 	 */
 	public boolean criarProduto(Produto produtoNovo) {
 		boolean retorno = false;
@@ -168,7 +169,7 @@ public class ProdutoDAO {
 		produtoNovo.setDescricao(produtoNovo.getDescricao().replace("'", "''"));
 		produtoNovo.setNome(produtoNovo.getNome().replace("'", "''"));
 		produtoNovo.setEan(produtoNovo.getEan().replace("'", "''"));
-		
+
 		String query = "INSERT INTO PRODUTO (NOME, DESCRICAO, EAN, VALOR, ESTOQUE) VALUES ('" + produtoNovo.getNome()
 				+ "'," + " '" + produtoNovo.getDescricao() + "', '" + produtoNovo.getEan() + "', "
 				+ produtoNovo.getValor() + ", 0);";
@@ -189,11 +190,11 @@ public class ProdutoDAO {
 	}
 
 	/**
-	 * Consulta no banco os registros da tabela PRODUTO com os atributos passados como parâmetro;
-	 * Retorna um ArrayList dos Produtos encontrados;
+	 * Consulta no banco os registros da tabela PRODUTO com os atributos passados
+	 * como parâmetro; Retorna um ArrayList dos Produtos encontrados;
 	 */
 	public ArrayList<Produto> consultarComFiltos(ProdutoSeletor seletor) {
-		
+
 		ArrayList<Produto> produtos = new ArrayList<Produto>();
 		Connection conn = Banco.getConnection();
 		String query = " SELECT * FROM produto ";
@@ -236,10 +237,10 @@ public class ProdutoDAO {
 	 * Preenche a cláusura where com os filtros do seletor;
 	 */
 	private String preencherFiltros(String query, ProdutoSeletor seletor) {
-		
+
 		seletor.setNome(seletor.getNome().replace("'", "''"));
 		seletor.setEan(seletor.getEan().replace("'", "''"));
-		
+
 		boolean primeiro = true;
 		if (seletor.getEan() != null && seletor.getEan().trim().length() > 0) {
 			if (primeiro) {
@@ -282,8 +283,8 @@ public class ProdutoDAO {
 	}
 
 	/**
-	 * Conta no banco os registros da tabela PRODUTO com os atributos passados como parâmetro;
-	 * Retorna um int da quantidade de registros encontrados;
+	 * Conta no banco os registros da tabela PRODUTO com os atributos passados como
+	 * parâmetro; Retorna um int da quantidade de registros encontrados;
 	 */
 	public int contarTotalRegistrosComFiltros(ProdutoSeletor seletor) {
 		int quantidade = 0;
@@ -312,8 +313,9 @@ public class ProdutoDAO {
 	}
 
 	/**
-	 * Atualiza no banco o atributo ativo da tabela PRODUTO para false para o ID_PRODUTO passado como parâmetro;
-	 * Retorna um boolean do resultado da atualização;
+	 * Atualiza no banco o atributo ativo da tabela PRODUTO para false para o
+	 * ID_PRODUTO passado como parâmetro; Retorna um boolean do resultado da
+	 * atualização;
 	 */
 	public boolean removerProduto(Produto produtoSelecionado) {
 		String query = "UPDATE produto set ativo = false where ID_PRODUTO = " + produtoSelecionado.getId();
@@ -332,15 +334,15 @@ public class ProdutoDAO {
 	}
 
 	/**
-	 * Atualiza no banco o produto passado como parâmetro;
-	 * Retorna um boolean do resultado da atualização;
+	 * Atualiza no banco o produto passado como parâmetro; Retorna um boolean do
+	 * resultado da atualização;
 	 */
 	public boolean editarProduto(Produto p) {
-		
+
 		p.setDescricao(p.getDescricao().replace("'", "''"));
 		p.setNome(p.getNome().replace("'", "''"));
 		p.setEan(p.getEan().replace("'", "''"));
-		
+
 		Connection conn = Banco.getConnection();
 		String query = "UPDATE PRODUTO SET " + " NOME = ?," + " DESCRICAO = ?," + " EAN = ?," + " VALOR = ?"
 				+ " WHERE ID_PRODUTO = ?";
@@ -362,7 +364,7 @@ public class ProdutoDAO {
 	}
 
 	/**
-	 * Consulta no banco os registros da tabela PRODUTOS com o atributo ATIVO true; 
+	 * Consulta no banco os registros da tabela PRODUTOS com o atributo ATIVO true;
 	 * Retorna um ArrayList dos Produtos encontrados;
 	 */
 	public ArrayList<Produto> buscarTodosProdutosAtivados() {
@@ -391,6 +393,32 @@ public class ProdutoDAO {
 			Banco.closeConnection(conn);
 		}
 		return produtos;
+	}
+
+	
+	/**
+	 * Devolve ao estoque os produtos de uma lista de ItemVenda
+	 */
+	public boolean devolverProdutos(ArrayList<ItemVenda> listaItemVenda) {
+		Connection conn = Banco.getConnection();
+		PreparedStatement stmt = null;
+		try {
+			for (ItemVenda iv : listaItemVenda) {
+				String query = "update produto set estoque = estoque + " + iv.getQtde() + " where id_produto = "
+						+ iv.getProduto().getId();
+				stmt = Banco.getPreparedStatement(conn, query);
+				if (stmt.executeUpdate(query) == 0) {
+					return false;
+				}
+			}
+
+		} catch (Exception e) {
+			System.out.println("Erro ao devolver os produtos. \n Causa:" + e.getMessage());
+		} finally {
+			Banco.closePreparedStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return true;
 	}
 
 }

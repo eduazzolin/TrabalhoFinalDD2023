@@ -16,6 +16,7 @@ import model.vo.Venda;
 public class VendaDAO {
 
 	ItemVendaDAO itemVendaDAO = new ItemVendaDAO();
+	ProdutoDAO produtoDAO = new ProdutoDAO();
 	
 	/**
 	 * Cadastra no banco na tabela VENDA a venda passada como parâmetro;
@@ -201,6 +202,7 @@ public class VendaDAO {
 
 	/**
 	 * Remove do banco o registro da tabela VENDA da Venda passada como parâmetro;
+	 * Remove os registros da tabela Item_venda relacionados à venda e reestabelece o estoque dos produtos;
 	 * Retorna um boolean do resultado da remoção;
 	 */
 	public boolean removerVenda(Venda v) {
@@ -210,7 +212,7 @@ public class VendaDAO {
 		
 		boolean resultado = false;
 		try {
-			if (itemVendaDAO.removerItemVendaPorIdVenda(v.getId())) {
+			if (itemVendaDAO.removerItemVendaPorIdVenda(v.getId()) && produtoDAO.devolverProdutos(v.getListaItemVenda())) {
 				resultado = (pstmt.executeUpdate() > 0);
 			}
 		} catch (SQLException e) {
