@@ -308,30 +308,32 @@ public class PainelRegistrarVenda extends JPanel {
 	 */
 	protected void acaoBotaoAdicionar() {
 		int quantidadeDigitada = 0;
-		try {
-			quantidadeDigitada = Integer.parseInt(tfQuantidade.getText());
-			if (cbSelecionarProduto.getSelectedItem() == null) {
-				throw new ClassCastException();
+		if (btAdicionar.isEnabled()) {
+			try {
+				quantidadeDigitada = Integer.parseInt(tfQuantidade.getText());
+				if (cbSelecionarProduto.getSelectedItem() == null) {
+					throw new ClassCastException();
+				}
+				if (quantidadeDigitada > ((Produto) cbSelecionarProduto.getSelectedItem()).getEstoque()){
+					throw new EstoqueInsuficienteException("");
+				}
+				if(quantidadeDigitada <= 0) {
+					throw new CampoInvalidoException("Quantidade inválida");
+				}
+				ItemVenda itemVenda = new ItemVenda(produtoSelecionado, quantidadeDigitada, produtoSelecionado.getValor());
+				venda.getListaItemVenda().add(itemVenda);
+				atualizarTpProdutosAdicionadosEValorTotal();
+				limparSelecao();
+			} catch (NumberFormatException e1) {
+				JOptionPane.showMessageDialog(btAdicionar, "Informe um número válido.", "Aviso", 1);
+			} catch (CampoInvalidoException e1) {
+				JOptionPane.showMessageDialog(btAdicionar, e1.getMessage(), "Aviso", 1);
+			} catch (EstoqueInsuficienteException e1) {
+				JOptionPane.showMessageDialog(btAdicionar, "Estoque insuficiente", "Aviso", 1);
+			} catch (ClassCastException e1) {
+				JOptionPane.showMessageDialog(btAdicionar, "Selecione um produto válido.", "Aviso", 1);
+				
 			}
-			if (quantidadeDigitada > ((Produto) cbSelecionarProduto.getSelectedItem()).getEstoque()){
-				throw new EstoqueInsuficienteException("");
-			}
-			if(quantidadeDigitada <= 0) {
-				throw new CampoInvalidoException("Quantidade inválida");
-			}
-			ItemVenda itemVenda = new ItemVenda(produtoSelecionado, quantidadeDigitada, produtoSelecionado.getValor());
-			venda.getListaItemVenda().add(itemVenda);
-			atualizarTpProdutosAdicionadosEValorTotal();
-			limparSelecao();
-		} catch (NumberFormatException e1) {
-			JOptionPane.showMessageDialog(btAdicionar, "Informe um número válido.", "Aviso", 1);
-		} catch (CampoInvalidoException e1) {
-			JOptionPane.showMessageDialog(btAdicionar, e1.getMessage(), "Aviso", 1);
-		} catch (EstoqueInsuficienteException e1) {
-			JOptionPane.showMessageDialog(btAdicionar, "Estoque insuficiente", "Aviso", 1);
-		} catch (ClassCastException e1) {
-			JOptionPane.showMessageDialog(btAdicionar, "Selecione um produto válido.", "Aviso", 1);
-			
 		}
 	}
 

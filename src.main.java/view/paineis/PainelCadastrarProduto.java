@@ -85,6 +85,17 @@ public class PainelCadastrarProduto extends JPanel {
 		add(lbDescricao, "2, 9, fill, top");
 		
 		txtPreco = new JNumberFormatField(2);
+		txtPreco.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (txtCodigo.getText().equals("")) {
+					txtCodigo.setText(" --EAN-- ");
+				}
+				if (txtProduto.getText().equals("")) {
+					txtProduto.setText(" --Produto-- ");
+			}
+			}
+		});
 		txtPreco.setHorizontalAlignment(SwingConstants.LEFT);
 		add(txtPreco, "5, 5, fill, fill");
 		
@@ -99,6 +110,17 @@ public class PainelCadastrarProduto extends JPanel {
 		
 		txtDescricao = new JTextArea();
 		txtDescricao.setLineWrap(true);
+		txtDescricao.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (txtCodigo.getText().equals("")) {
+					txtCodigo.setText(" --EAN-- ");
+				}
+				if (txtProduto.getText().equals("")) {
+					txtProduto.setText(" --Produto-- ");
+			}
+			}
+		});
 		add(txtDescricao, "5, 9, fill, fill");
 		
 		txtProduto = new JTextField(" --Produto-- ");
@@ -109,6 +131,9 @@ public class PainelCadastrarProduto extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 				if (txtProduto.getText().equals(" --Produto-- ")) {
 					txtProduto.setText("");
+				}
+				if (txtCodigo.getText().equals("")) {
+					txtCodigo.setText(" --EAN-- ");
 				}
 			}
 		});
@@ -122,6 +147,9 @@ public class PainelCadastrarProduto extends JPanel {
 				if (txtCodigo.getText().equals(" --EAN-- ")) {
 					txtCodigo.setText("");
 				}
+				if (txtProduto.getText().equals("")) {
+					txtProduto.setText(" --Produto-- ");
+			}
 			}
 		});
 		

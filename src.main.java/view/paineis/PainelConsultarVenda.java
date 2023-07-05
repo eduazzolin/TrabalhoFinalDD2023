@@ -310,17 +310,22 @@ public class PainelConsultarVenda extends JPanel {
 	 * Atualiza a tabela e os botões "remover" e "ver produtos".
 	 */
 	protected void acaoBotaoRemover() {
-		try {
-			if(vendaController.removerVenda(vendaSelecionada)) {
-				JOptionPane.showMessageDialog(null, "Venda removida com sucesso!", "Sucesso", 1);
-				acaoBotaoConsultar();
-				btnRemover.setEnabled(false);
-				btnVerProdutos.setEnabled(false);
-			} else {
-				JOptionPane.showMessageDialog(null, "Erro ao remover venda", "Erro", 1);
+		int confirmacao = JOptionPane.showOptionDialog(null, "Tem certeza que deseja remover venda?", "Confirmação", 
+				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,  
+				new String[] {"Remover", "Cancelar"}, null);
+		if(confirmacao == 0) {
+			try {
+				if(vendaController.removerVenda(vendaSelecionada)) {
+					JOptionPane.showMessageDialog(null, "Venda removida com sucesso!", "Sucesso", 1);
+					acaoBotaoConsultar();
+					btnRemover.setEnabled(false);
+					btnVerProdutos.setEnabled(false);
+				} else {
+					JOptionPane.showMessageDialog(null, "Erro ao remover venda", "Erro", 1);
+				}
+			} catch (VendaInvalidaException e) {
+				JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", 1);
 			}
-		} catch (VendaInvalidaException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", 1);
 		}
 		
 	}
@@ -445,7 +450,7 @@ public class PainelConsultarVenda extends JPanel {
 		if (valorMinimo > valorMaximo && valorMaximo != 0) {
 			throw new CampoInvalidoException("Valor mínimo não pode ser maior que o valor máximo.");
 		}
-		s.setDataFinal(dtFinal.getDate());
+		s.setDataFinal((dtFinal.getDate() == null) ? null : dtFinal.getDate().plusDays(1));
 		s.setDataInicial(dtInicial.getDate());
 		s.setEan(tfEan.getText());
 		s.setValorMaximo(valorMaximo > 0 ? valorMaximo : null);
