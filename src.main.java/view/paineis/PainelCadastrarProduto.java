@@ -234,7 +234,8 @@ public class PainelCadastrarProduto extends JPanel {
 									}
 								} else {
 									if(produtoController.editarProduto(produtoNovo)) {
-										JOptionPane.showMessageDialog(null, "Produto atualizado com sucesos!", "Atualização", 1);
+										JOptionPane.showMessageDialog(null, 
+												"Produto " + (produtoNovo.isAtivo() ? "atualizado" : "reativado/atualizado") +  " com sucesso!", "Atualização", 1);
 									} else {
 										JOptionPane.showMessageDialog(null, "Erro ao atualizar produto!", "Erro", 1);
 									}

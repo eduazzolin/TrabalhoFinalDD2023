@@ -344,7 +344,7 @@ public class ProdutoDAO {
 		p.setEan(p.getEan().replace("'", "''"));
 
 		Connection conn = Banco.getConnection();
-		String query = "UPDATE PRODUTO SET " + " NOME = ?," + " DESCRICAO = ?," + " EAN = ?," + " VALOR = ?"
+		String query = "UPDATE PRODUTO SET " + " NOME = ?," + " DESCRICAO = ?," + " EAN = ?," + " VALOR = ?, ATIVO = TRUE"
 				+ " WHERE ID_PRODUTO = ?";
 		PreparedStatement pstmt = Banco.getPreparedStatement(conn, query);
 
