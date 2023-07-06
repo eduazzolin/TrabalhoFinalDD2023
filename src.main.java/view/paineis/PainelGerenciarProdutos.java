@@ -177,18 +177,18 @@ public class PainelGerenciarProdutos extends JPanel {
 					Produto produtoSelecionado = (Produto) comboBox.getSelectedItem();
 					boolean atualizacao = produtoController.atualizarEstoque(quantidadeDigitada,produtoSelecionado);
 					if(atualizacao) {
-						JOptionPane.showMessageDialog(btAdicionar, "Produto atualizado com sucesso");
+						JOptionPane.showMessageDialog(btSubtrair, "Produto atualizado com sucesso");
 						int quantidadeEstoque = 0;
 						quantidadeEstoque = produtoController.consultarEstoque(((Produto) comboBox.getSelectedItem()).getId());
 						lblQuantidade.setText(String.valueOf(quantidadeEstoque));
 					}
 					
 				} catch (NumberFormatException e1) {
-					JOptionPane.showMessageDialog(btAdicionar, "Informe um número válido.", "Aviso", 1);
+					JOptionPane.showMessageDialog(btSubtrair, "Informe um número válido.", "Aviso", 1);
 				} catch (CampoInvalidoException e1) {
-					JOptionPane.showMessageDialog(btAdicionar, e1.getMessage(), "Aviso", 1);
+					JOptionPane.showMessageDialog(btSubtrair, e1.getMessage(), "Aviso", 1);
 				}catch (EstoqueInsuficienteException e1) {
-					JOptionPane.showMessageDialog(btAdicionar, e1.getMessage(), "Aviso", 1);
+					JOptionPane.showMessageDialog(btSubtrair, e1.getMessage(), "Aviso", 1);
 				}
 			}
 		});

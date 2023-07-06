@@ -53,7 +53,7 @@ public class ProdutoController {
 	public boolean atualizarEstoque(int quantidadeDigitada, Produto produtoSelecionado)
 			throws EstoqueInsuficienteException {
 		if (produtoSelecionado.getEstoque() + quantidadeDigitada < 0) {
-			throw new EstoqueInsuficienteException("Estoque insuficiente");
+			throw new EstoqueInsuficienteException("Quantidade inválida!");
 		}
 		return produtoBO.atualizarEstoque(quantidadeDigitada, produtoSelecionado);
 	}

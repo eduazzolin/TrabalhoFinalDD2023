@@ -276,19 +276,24 @@ public class PainelConsultarProduto extends JPanel {
 	 * Atualiza a tabela e os botões.
 	 */
 	protected void acaoBotaoRemover() throws ProdutoInvalidoException {
-		int confirmacao = JOptionPane.showOptionDialog(null, "Tem certeza que deseja remover produto?", "Confirmação", 
-				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,  
-				new String[] {"Remover", "Cancelar"}, null);
-		if(confirmacao == 0) {
-			if(produtoController.removerProduto(produtoSelecionado)) {
-				JOptionPane.showMessageDialog(btnRemover, "Produto removido com sucesso!", "Sucesso", 1);
-				acaoBotaoConsultar();
-				btnRemover.setEnabled(false);
-				btnEditar.setEnabled(false);
-				btnEstoque.setEnabled(false);
-			} else {
-				JOptionPane.showMessageDialog(btnRemover, "Erro ao remover venda", "Erro", 1);
+		
+		if (produtoSelecionado.isAtivo()) {
+			int confirmacao = JOptionPane.showOptionDialog(null, "Tem certeza que deseja remover produto?", "Confirmação", 
+					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,  
+					new String[] {"Remover", "Cancelar"}, null);
+			if(confirmacao == 0) {
+				if(produtoController.removerProduto(produtoSelecionado)) {
+					JOptionPane.showMessageDialog(null, "Produto removido com sucesso!", "Sucesso", 1);
+					acaoBotaoConsultar();
+					btnRemover.setEnabled(false);
+					btnEditar.setEnabled(false);
+					btnEstoque.setEnabled(false);
+				} else {
+					JOptionPane.showMessageDialog(null, "Erro ao remover venda", "Erro", 1);
+				}
 			}
+		} else {
+			JOptionPane.showMessageDialog(null, "Erro: Produto já está desativado", "Aviso", 1);
 		}
 	}
 
